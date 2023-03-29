@@ -1,0 +1,30 @@
+{
+  "name": "lwm2m-device-simulator",
+  "version": "1.0.0",
+  "description": "A LwM2M device simulator who send objects to a server over CoAP",
+  "main": "src/index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npx ts-node ./src/index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MLopezJ/LwM2M-device-simulator.git"
+  },
+  "keywords": [
+    "LwM2M",
+    "CoAP",
+    "device",
+    "simulator"
+  ],
+  "author": "Mauro Lopez",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MLopezJ/LwM2M-device-simulator/issues"
+  },
+  "homepage": "https://github.com/MLopezJ/LwM2M-device-simulator#readme",
+  "devDependencies": {
+    "@types/node": "18.15.11",
+    "typescript": "5.0.2"
+  }
+}
