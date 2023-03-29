@@ -1,0 +1,7 @@
+{
+    "port": 5683,
+    "host": "eu.iot.avsystem.cloud",
+    "lifetime": 300,
+    "lwm2mV": 1.2,
+    "biding": "U"
+}
