@@ -1,4 +1,5 @@
 {
+    "deviceName": "urn:imei:000000000000004",
     "port": 5683,
     "host": "eu.iot.avsystem.cloud",
     "lifetime": 300,
