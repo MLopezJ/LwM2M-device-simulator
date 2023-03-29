@@ -1,2 +1,4 @@
-# LwM2M-device-simulator
-a LwM2M device simulator
+# LwM2M Device Simulator
+
+This is a device simulator who pretends to connect to Coiote using CoAP. This device is going to send and update LwM2M objects. 
+
