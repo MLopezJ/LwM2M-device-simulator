@@ -1,9 +1,9 @@
+// import coap from 'coap'
+const coap = require('coap')  // import type generate a TypeError. TODO: solve it
 import config from "../config.json"
 import type { CoapRequestParams} from 'coap'
 // npx ts-node ./src/index.ts
 
-
-import coap from 'coap'
 const server = coap.createServer()
 
 server.listen(() => {
@@ -18,7 +18,7 @@ server.listen(() => {
 
     const req = coap.request(creationRequest)
 
-    req.on('response', (res) => {
+    req.on('response', (res: { code: string; payload: object }) => {
         console.log(`Response: ${res.code} ${res.payload.toString()}`);
         console.log(res);
     })
