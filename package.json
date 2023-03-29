@@ -26,5 +26,8 @@
   "devDependencies": {
     "@types/node": "18.15.11",
     "typescript": "5.0.2"
+  },
+  "dependencies": {
+    "coap": "1.3.0"
   }
 }
