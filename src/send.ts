@@ -22,7 +22,8 @@ const payload = [
 ]
 
 console.log("send request")
-req.write(payload, () =>{
+console.log(JSON.stringify(payload))
+req.write(JSON.stringify(payload), () =>{
     console.log("Payload sent: ", payload)
 })
 
