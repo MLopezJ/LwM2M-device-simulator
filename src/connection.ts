@@ -1,3 +1,7 @@
+/**
+ * Registrate Device
+ */
+
 // import coap from 'coap'
 const coap = require('coap')  // import type generate a TypeError. TODO: solve it
 import config from "../config.json"
