@@ -11,7 +11,7 @@ const creationRequest: CoapRequestParams = {
     port: 5683,
     method: "POST",
     pathname: '/dp',
-    query: 'ep=' + config.deviceName + "&content" + "application/senml+json" 
+    query: 'ep=' + config.deviceName + '&lt=' + config.lifetime + '&lwm2m=' + config.lwm2mV + '&b=' + config.biding + "&content=" + "application/senml+json" 
 }
 
 const req = coap.request(creationRequest)
@@ -21,6 +21,7 @@ const payload = [
     {"n":"/6/0/1", "v":3.87723}
 ]
 
+console.log("send request")
 req.write(payload, () =>{
     console.log("Payload sent: ", payload)
 })
