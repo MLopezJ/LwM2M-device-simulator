@@ -1,6 +1,7 @@
 # LwM2M Device Simulator
 
-This is a LwM2M Client who pretends to emulate the behavior of a Thingy:91 with nRF Asset Tracker firmware and connect with a LwM2M Server. 
+This is a LwM2M Client who pretends to emulate the behavior of a Thingy:91 with nRF Asset Tracker firmware and connect with a LwM2M Server. The main propose of this proyect is to facilitate the testing process of [LwM2M Asset Tracker](https://github.com/MLopezJ/LwM2M-Asset-Tracker)
+
 
 ## 1 - About LwM2M
 > notes from https://www.avsystem.com/crashcourse/lwm2m/ . First documented here: https://github.com/MLopezJ/trace-anjay/issues/5
