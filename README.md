@@ -2,16 +2,16 @@
 
 This is a LwM2M Client who pretends to emulate the behavior of a Thingy:91 with nRF Asset Tracker firmware and connect with a LwM2M Server. 
 
-## About LwM2M
+## 1 - About LwM2M
 > notes from https://www.avsystem.com/crashcourse/lwm2m/ . First documented here: https://github.com/MLopezJ/trace-anjay/issues/5
 
-### Actors 
+### 1.1 Actors 
 
 - Bootstrap Server
 - Client
 - Server
 
-### Interfaces
+### 1.2 Interfaces
 > highways or bridges that goverment the communication between actos
 
 - Bootstrap
@@ -24,14 +24,14 @@ This is a LwM2M Client who pretends to emulate the behavior of a Thingy:91 with 
 > **Information Reporting** -- >  enables LwM2M server to receive periodic updates of LwM2M client resources
 
 
-### CoAP
+### 1.3 CoAP
 LwM2M is a protocol on top of CoAP. I'm simplifying a lot here but CoAP is like HTTP for resource constrained devices. CoAP uses UDP.
 
-### LwM2M Benefits 
+### 1.4 LwM2M Benefits 
 Allows to manage devices that have very little power over really low bandwidth networks.  
 
 
-## Solution Steps
+## 2 - Solution Steps
 1. Uses Coiote as the LwM2M Server
 2. Hard code LwM2M Security object and LwM2M Server object to perform Factory Bootstrap
 3. Perform Client Registration
