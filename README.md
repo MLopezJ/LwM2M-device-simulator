@@ -1,6 +1,43 @@
 # LwM2M Device Simulator
 
-This is a device simulator who pretends to connect to Coiote using CoAP. This device is going to send and update LwM2M objects. 
+This is a LwM2M Client who pretends to emulate the behavior of a Thingy:91 with nRF Asset Tracker firmware and connect with a LwM2M Server. 
+
+## About LwM2M
+> notes from https://www.avsystem.com/crashcourse/lwm2m/ . First documented here: https://github.com/MLopezJ/trace-anjay/issues/5
+
+### Actors 
+
+- Bootstrap Server
+- Client
+- Server
+
+### Interfaces
+> highways or bridges that goverment the communication between actos
+
+- Bootstrap
+- Client Registration
+- Device Managment and Service Enable
+- Information Reporting
+
+> **Device Management and Service Enable** -- >  where actual device management occurs. 
+
+> **Information Reporting** -- >  enables LwM2M server to receive periodic updates of LwM2M client resources
+
+
+### CoAP
+LwM2M is a protocol on top of CoAP. I'm simplifying a lot here but CoAP is like HTTP for resource constrained devices. CoAP uses UDP.
+
+### LwM2M Benefits 
+Allows to manage devices that have very little power over really low bandwidth networks.  
+
+
+## Solution Steps
+1. Uses Coiote as the LwM2M Server
+2. Hard code LwM2M Security object and LwM2M Server object to perform Factory Bootstrap
+3. Perform Client Registration
+4. Perform Device Managment and Service Enable
+5. Perform Information Reporting
+
 
 ## Install
 ```
