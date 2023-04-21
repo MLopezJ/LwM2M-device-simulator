@@ -1,8 +1,8 @@
 {
-    "deviceName": "urn:imei:000000000000004",
+    "deviceName": "urn:imei:000000000000005",
     "port": 5683,
     "host": "eu.iot.avsystem.cloud",
-    "lifetime": 300,
-    "lwm2mV": 1.2,
+    "lifetime": 60,
+    "lwm2mV": 1.1,
     "biding": "U"
 }
