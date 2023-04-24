@@ -4,6 +4,10 @@ import {serverReqParser} from '../1.1/utils'
 import config from "../../config.json"
 
 const defaultType = "udp4"
+const contentFormat = {
+    'IANA-media-type': 'application/vnd.oma.lwm2m+json',
+    'numericId': '11543'
+}
 
 const createAgent = () => new coap.Agent({type:defaultType})
 
@@ -12,8 +16,9 @@ const register = (agent: { request: (arg0: CoapRequestParams) => any }) => {
     const query = 'ep=' + config.deviceName 
     + '&lt=' + config.lifetime + '&lwm2m=' + config.lwm2mV + '&b=' + config.biding 
 
-    const payload = '</>;ct=0 40 42 11542 11543 60 110 112 TBD 320 322;hb,</1/0>,</3/0>,</4/0>'
-    
+    const LwM2MObjects = '</1/0>,</3/0>,</4/0>' // TODO: generate list from LwM2MObjects.ts file
+    const payload = `</>;ct=${contentFormat.numericId};hb,${LwM2MObjects}`
+
     const params: CoapRequestParams = {
         host: "eu.iot.avsystem.cloud",
         port: 5683,
@@ -77,7 +82,7 @@ const listenToCoiote = (connectionPort: number | string) => {
         // response to Coiote request
         const data = responseToCoiote(request as any)
         //response.setOption('Content-Format', 'application/json');
-        response.setOption('Content-Format', 'application/vnd.oma.lwm2m+json');
+        response.setOption('Content-Format', contentFormat["IANA-media-type"]);
         response.end(data);
     });
 
