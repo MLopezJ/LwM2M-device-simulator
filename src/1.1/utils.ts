@@ -1,3 +1,4 @@
+// TODO: add description
 export const serverReqParser = (req: { code: string; _packet: { confirmable: unknown; }; payload: string | unknown[]; method: unknown; headers: { [x: string]: unknown; Observe: number; Accept: string; }; url: string; }): string => {
     let optType;
 
