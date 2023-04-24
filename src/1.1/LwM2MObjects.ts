@@ -23,7 +23,7 @@ const security = {
  * Server
  */
 const serverr = {
-    '0':{
+    '1':{
         '0': {
             '0': 1, // Short Server ID
             '1': 60, // Lifetime --> During "Register" or "Update" operations, the parameter Lifetime – if present – MUST match the current value of the Mandatory Lifetime Resource of the LwM2M Server Object Instance
