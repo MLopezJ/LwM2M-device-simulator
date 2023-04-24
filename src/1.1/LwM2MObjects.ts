@@ -66,3 +66,11 @@ const temp = {
         }
     }
 }
+
+// TODO: add complete list of LwM2M objects
+export const assetTracker = {
+    security,
+    serverr,
+    device,
+    temp
+}
