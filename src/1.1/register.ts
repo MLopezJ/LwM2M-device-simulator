@@ -18,7 +18,6 @@ const register = (agent: { request: (arg0: CoapRequestParams) => any }) => {
     + '&lt=' + config.lifetime + '&lwm2m=' + config.lwm2mV + '&b=' + config.biding 
 
     const LwM2MObjects = registrationObject(assetTracker)
-    console.log(LwM2MObjects, '!!! ')
     const payload = `</>;ct=${contentFormat.numericId};hb,${LwM2MObjects}`
 
     const params: CoapRequestParams = {
@@ -36,19 +35,6 @@ const register = (agent: { request: (arg0: CoapRequestParams) => any }) => {
         console.log('register response: ', response)
 
         if (response.code = "2.01"){
-
-            const serversInfo = { 
-                shortServerId: 1,
-                ip: response.rsinfo.address,
-                port: response.rsinfo.port,
-                locationPath: '/rd/' + response.headers['Location-Path'],
-                registered: true,
-                lfsecs: 0,
-                repAttrs: {},
-                reporters: {},
-                hbPacemaker: null,
-                hbStream: { stream: null, port: null, finishCb: null }
-            }
 
             const coiote = {
                 ip: response.outSocket.address,
@@ -70,7 +56,7 @@ const register = (agent: { request: (arg0: CoapRequestParams) => any }) => {
 }
 
 const listenToCoiote = (connectionPort: number | string) => {
-    console.log("LISTENING TO COIOTE")
+    console.log("LISTENING TO COIOTE on port: ", connectionPort)
     
     const server = coap.createServer({
         type:defaultType,
