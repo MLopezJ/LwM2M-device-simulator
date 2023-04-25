@@ -1,7 +1,8 @@
 const coap = require('coap')
 import { CoapRequestParams } from "coap"
-import {serverReqParser} from '../1.1/utils'
+import {registrationObject, serverReqParser} from '../1.1/utils'
 import config from "../../config.json"
+import { assetTracker } from "./LwM2MObjects"
 
 const defaultType = "udp4"
 const contentFormat = {
@@ -16,7 +17,8 @@ const register = (agent: { request: (arg0: CoapRequestParams) => any }) => {
     const query = 'ep=' + config.deviceName 
     + '&lt=' + config.lifetime + '&lwm2m=' + config.lwm2mV + '&b=' + config.biding 
 
-    const LwM2MObjects = '</1/0>,</3/0>,</4/0>' // TODO: generate list from LwM2MObjects.ts file
+    const LwM2MObjects = registrationObject(assetTracker)
+    console.log(LwM2MObjects, '!!! ')
     const payload = `</>;ct=${contentFormat.numericId};hb,${LwM2MObjects}`
 
     const params: CoapRequestParams = {
