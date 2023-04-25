@@ -50,6 +50,7 @@ export const serverReqParser = (req: {
 /**
  * Generate the list of LwM2M objects that are goint to be send in the registration interface
  * example: <LwM2M Object id/ instance id>, <LwM2M Object id/ instance id>
+ * // TODO: update method with new asset tracker v2 object struct
  */
 export const getObjectsToRegister = (LwM2MObjects: {}): string => {
   const registerObject = Object.entries(LwM2MObjects).reduce(
@@ -74,19 +75,46 @@ export const getObjectsToRegister = (LwM2MObjects: {}): string => {
   return registerObject;
 };
 
+interface value {
+  n: string;
+}
 
-/*
+interface stringValue extends value {
+  sv: string;
+  v?: never;
+}
 
-const objectId = object[0];
-    const instances = Object.keys(object[1] as {});
+interface numericValue extends value {
+  sv?: never;
+  v: number;
+}
 
+type e = stringValue | numericValue;
 
-if (objectId !== "0") {
-      const objectString = `<${objectId}`;
-      return instances.reduce((previus, instanceId) => {
-        //              < object id  / instance id >
-        const struct = `${objectString}/ ${instanceId}>`;
-        return previus !== "" ? `${previus}, ${struct}` : struct;
-      }, "");
-    }
-*/
+export type read = {
+  bn: string;
+  e: e[];
+};
+
+/**
+ * Read current rersource values from LwM2M Object
+ */
+export const readObject = (lwM2MObjects: {}, objectId: string): read => {
+
+    //const object = lwM2MObjects[`${objectId}`]
+
+  return {
+    bn: "/3",
+    e: [
+      { n: "0/0", sv: "Mauro L" },
+      { n: "0/1", sv: "00010" },
+      { n: "0/2", sv: "00000" },
+      { n: "0/3", sv: "0.0" },
+      { n: "0/6", sv: "1" },
+      { n: "0/9", v: 80 },
+      { n: "0/16", sv: "U" },
+      { n: "0/18", sv: "0.0" },
+      { n: "0/19", sv: "0.0" },
+    ],
+  };
+};
