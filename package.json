@@ -4,7 +4,7 @@
   "description": "A LwM2M device simulator who send objects to a server over CoAP",
   "main": "src/index.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "start": "npx ts-node ./src/index.ts"
   },
   "repository": {
@@ -24,7 +24,10 @@
   },
   "homepage": "https://github.com/MLopezJ/LwM2M-device-simulator#readme",
   "devDependencies": {
+    "@types/jest": "29.5.1",
     "@types/node": "18.15.11",
+    "jest": "29.5.0",
+    "ts-jest": "29.1.0",
     "typescript": "5.0.2"
   },
   "dependencies": {
