@@ -51,24 +51,25 @@ export const serverReqParser = (req: {
  * Generate the list of LwM2M objects that are goint to be send in the registration interface
  * example: <LwM2M Object id/ instance id>, <LwM2M Object id/ instance id>
  */
-export const registrationObject = (LwM2MObjects: {}): string => {
+export const getObjectsToRegister = (LwM2MObjects: {}): string => {
+  const registerObject = Object.entries(LwM2MObjects).reduce(
+    (previus: string, current: any) => {
+      const objectId = current[0];
 
-  const registerObject = Object.entries(LwM2MObjects).reduce((previus: string, current: any)=> {
+      if (objectId === "0") return previus;
 
-    const objectId = current[0];
-
-    if (objectId === '0') return previus
-
-    const objectString = `<${objectId}`;
-    const instances = Object.keys(current[1] as {});
-    const value = instances.reduce((prev, instanceId) => {
+      const objectString = `<${objectId}`;
+      const instances = Object.keys(current[1] as {});
+      const value = instances.reduce((prev, instanceId) => {
         //              < object id  / instance id >
         const struct = `${objectString}/${instanceId}>`;
         return prev !== "" ? `${prev}, ${struct}` : struct;
       }, "");
 
       return previus !== "" ? `${previus}, ${value}` : value;
-  }, '')
+    },
+    ""
+  );
 
   return registerObject;
 };

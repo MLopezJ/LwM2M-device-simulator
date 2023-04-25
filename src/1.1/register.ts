@@ -1,8 +1,8 @@
 const coap = require('coap')
 import { CoapRequestParams } from "coap"
-import {registrationObject, serverReqParser} from '../1.1/utils'
+import {getObjectsToRegister, serverReqParser} from '../1.1/utils'
 import config from "../../config.json"
-import { assetTracker } from "./LwM2MObjects"
+import { assetTrackerFirmwareV2 } from "./assetTrackerV2"
 
 const defaultType = "udp4"
 const contentFormat = {
@@ -17,8 +17,8 @@ const register = (agent: { request: (arg0: CoapRequestParams) => any }) => {
     const query = 'ep=' + config.deviceName 
     + '&lt=' + config.lifetime + '&lwm2m=' + config.lwm2mV + '&b=' + config.biding 
 
-    const LwM2MObjects = registrationObject(assetTracker)
-    const payload = `</>;ct=${contentFormat.numericId};hb,${LwM2MObjects}`
+    const registrationString = getObjectsToRegister(assetTrackerFirmwareV2)
+    const payload = `</>;ct=${contentFormat.numericId};hb,${registrationString}`
 
     const params: CoapRequestParams = {
         host: "eu.iot.avsystem.cloud",
@@ -64,9 +64,11 @@ const listenToCoiote = (connectionPort: number | string) => {
     });
 
     server.on('request', function (request: unknown, response: { setOption: (arg0: string, arg1: string) => void; end: (arg0: string | Buffer | undefined) => void }) {        
+        /*
         console.log('catching listening')
         console.log('request', request)
         console.log('response', response)
+        */
         // response to Coiote request
         const data = responseToCoiote(request as any)
         //response.setOption('Content-Format', 'application/json');
