@@ -34,10 +34,34 @@ import {
  */
 
 /**
- * Security
- * TODO: add type from lwm2m-types lib
+ * LwM2M Security
+ *
+ * This LwM2M Object provides the keying material of a LwM2M Client appropriate to access a specified LwM2M Server.
+ *
+ * @see https://github.com/OpenMobileAlliance/lwm2m-registry/raw/prod/0.xml
+ *
+ * ID: 0
+ * LWM2MVersion: 1.1
+ * ObjectVersion: 1.2
+ * MultipleInstances: true
+ * Mandatory: true
  */
-const security = [
+type Security_0 = Readonly<
+  Array<{
+    "0": string;
+    "1": boolean;
+    "2": number;
+    "3": string;
+    "4": string;
+    "5": string;
+    "10"?: number;
+  }>
+>;
+
+/**
+ * Security
+ */
+const security: Security_0 = [
   {
     "0": "coap://eu.iot.avsystem.cloud:5683", // LWM2M  Server URI  - Coiote
     "1": false, // Bootstrap-Server
@@ -194,16 +218,22 @@ const signalMeasurementInfo: ECID_SignalMeasurementInformation_10256 = [
 // TODO: Location Assistance (50001) and Config are missing (50009)
 
 // TODO: add complete list of LwM2M objects
-export const assetTrackerFirmwareV2 = {
-  "0": security,
-  "1": server,
-  "3": device,
-  "4": connectMonitoring,
-  "5": firmawareUpdate,
-  "6": location,
-  "3303": temp,
-  '3304': humidity,
-  '3323': pressure,
-  '3347': pushButton,
-  '10256': signalMeasurementInfo
+export const lwm2mObjects: LwM2MDocument = {
+  [LwM2MServer_1_urn]: server,
+  [Device_3_urn]: device,
+  [ConnectivityMonitoring_4_urn]: connectMonitoring,
+  [FirmwareUpdate_5_urn]: firmawareUpdate,
+  [Location_6_urn]: location,
+  [Temperature_3303_urn]: temp,
+  [Humidity_3304_urn]: humidity,
+  [Pressure_3323_urn]: pressure,
+  [Pushbutton_3347_urn]: pushButton,
+  [ECID_SignalMeasurementInformation_10256_urn]: signalMeasurementInfo,
+};
+
+type assetTracker = { '0': Security_0 } &  LwM2MDocument
+
+export const assetTrackerFirmwareV2: assetTracker = {
+  '0': security,
+  ...lwm2mObjects,
 };
