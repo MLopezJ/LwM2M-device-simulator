@@ -1,4 +1,5 @@
 import type {
+  LwM2MDocument,
   LwM2MServer_1,
   Device_3,
   ConnectivityMonitoring_4,
@@ -9,6 +10,19 @@ import type {
   Pressure_3323,
   Pushbutton_3347,
   ECID_SignalMeasurementInformation_10256,
+} from "@nordicsemiconductor/lwm2m-types";
+
+import {
+  LwM2MServer_1_urn,
+  Device_3_urn,
+  ConnectivityMonitoring_4_urn,
+  FirmwareUpdate_5_urn,
+  Location_6_urn,
+  Temperature_3303_urn,
+  Humidity_3304_urn,
+  Pressure_3323_urn,
+  Pushbutton_3347_urn,
+  ECID_SignalMeasurementInformation_10256_urn,
 } from "@nordicsemiconductor/lwm2m-types";
 
 /**
