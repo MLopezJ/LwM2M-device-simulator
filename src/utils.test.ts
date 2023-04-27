@@ -1,5 +1,11 @@
 import { assetTrackerFirmwareV2 } from "./assetTrackerV2.js";
-import { read, readObject, getObjectsToRegister } from "./utils.js";
+import { read, readObject, getObjectsToRegister, getURN } from "./utils.js";
+import {
+  Device_3_urn,
+  ConnectivityMonitoring_4_urn,
+  Temperature_3303_urn,
+  ECID_SignalMeasurementInformation_10256_urn
+} from "@nordicsemiconductor/lwm2m-types";
 
 describe("getObjectsToRegister", () => {
   it("Should generate the list of the objects to be used in the register interface", () => {
@@ -120,6 +126,16 @@ describe("getObjectsToRegister", () => {
   });
 });
 
+
+describe('', () =>{
+  it.only('Should return the object URN given the URL', () => {
+    
+    expect(getURN('/3', assetTrackerFirmwareV2)).toBe(Device_3_urn)
+    expect(getURN('/10256', assetTrackerFirmwareV2)).toBe(ECID_SignalMeasurementInformation_10256_urn)
+    expect(getURN('/3303', assetTrackerFirmwareV2)).toBe(Temperature_3303_urn)
+    expect(getURN('/4', assetTrackerFirmwareV2)).toBe(ConnectivityMonitoring_4_urn)
+  })
+})
 
 describe("readObject", () => {
     it("Should read current value of object and return in expected format", () => {

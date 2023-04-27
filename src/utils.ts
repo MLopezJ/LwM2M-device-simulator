@@ -78,6 +78,15 @@ export const getObjectsToRegister = (objectList: assetTracker): string => {
   }, '')
 };
 
+
+/**
+ * Given the LwM2M url of the object should return its URN used in assetTracker def
+ */
+export const getURN = (url: string, objectsList: assetTracker): string => {
+  const result = Object.keys(objectsList).filter(element => element.split(':')[0] === url.split('/')[1])[0]
+  return result !== undefined ? result : ''
+}
+
 type value = {
   n: string
 }
@@ -102,9 +111,9 @@ export type read = {
 /**
  * Read current rersource values from LwM2M Object
  */
-export const readObject = (lwM2MObjects: object, objectId: string): read => {
+export const readObject = (objectList: assetTracker, objectId: string): read => {
 
-    //const object = lwM2MObjects[`${objectId}`]
+    console.log(objectList)
 
   return {
     bn: "/3",
