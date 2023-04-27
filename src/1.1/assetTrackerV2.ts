@@ -48,13 +48,13 @@ import {
  */
 type Security_0 = Readonly<
   Array<{
-    "0": string;
-    "1": boolean;
-    "2": number;
-    "3": string;
-    "4": string;
-    "5": string;
-    "10"?: number;
+    "0": string
+    "1": boolean
+    "2": number
+    "3": string
+    "4": string
+    "5": string
+    "10"?: number
   }>
 >;
 

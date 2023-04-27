@@ -1,17 +1,17 @@
 // TODO: add description
 export const serverReqParser = (req: {
-  code: string;
-  _packet: { confirmable: unknown };
-  payload: string | unknown[];
-  method: unknown;
-  headers: { [x: string]: unknown; Observe: number; Accept: string };
-  url: string;
+  code: string
+  _packet: { confirmable: unknown }
+  payload: string | unknown[]
+  method: unknown
+  headers: { [x: string]: unknown; Observe: number; Accept: string }
+  url: string
 }): string => {
   let optType;
 
   if (
     req.code === "0.00" &&
-    req._packet.confirmable &&
+    (Boolean(req._packet.confirmable)) &&
     req.payload.length === 0
   ) {
     optType = "empty";
@@ -25,14 +25,14 @@ export const serverReqParser = (req: {
         else optType = "read";
         break;
       case "PUT":
-        if (req.headers["Content-Format"]) optType = "write";
+        if (Boolean(req.headers["Content-Format"]) === true) optType = "write";
         else optType = "writeAttr";
         break;
       case "POST":
         if (req.url === "/ping") optType = "ping";
         else if (req.url === "/bs") optType = "finish";
         else if (req.url === "/announce") optType = "announce";
-        else if (req.headers["Content-Format"]) optType = "create";
+        else if (Boolean(req.headers["Content-Format"]) === true) optType = "create";
         else optType = "execute";
         break;
       case "DELETE":
@@ -52,7 +52,7 @@ export const serverReqParser = (req: {
  * example: <LwM2M Object id/ instance id>, <LwM2M Object id/ instance id>
  * // TODO: update method with new asset tracker v2 object struct
  */
-export const getObjectsToRegister = (LwM2MObjects: {}): string => {
+export const getObjectsToRegister = (LwM2MObjects: object): string => {
   const registerObject = Object.entries(LwM2MObjects).reduce(
     (previus: string, current: any) => {
       const objectId = current[0];
@@ -60,7 +60,7 @@ export const getObjectsToRegister = (LwM2MObjects: {}): string => {
       if (objectId === "0") return previus;
 
       const objectString = `<${objectId}`;
-      const instances = Object.keys(current[1] as {});
+      const instances = Object.keys(current[1] as object);
       const value = instances.reduce((prev, instanceId) => {
         //              < object id  / instance id >
         const struct = `${objectString}/${instanceId}>`;
@@ -75,31 +75,31 @@ export const getObjectsToRegister = (LwM2MObjects: {}): string => {
   return registerObject;
 };
 
-interface value {
-  n: string;
+type value = {
+  n: string
 }
 
-interface stringValue extends value {
-  sv: string;
-  v?: never;
-}
+type stringValue = {
+  sv: string
+  v?: never
+} & value
 
-interface numericValue extends value {
-  sv?: never;
-  v: number;
-}
+type numericValue = {
+  sv?: never
+  v: number
+} & value
 
 type e = stringValue | numericValue;
 
 export type read = {
-  bn: string;
-  e: e[];
+  bn: string
+  e: e[]
 };
 
 /**
  * Read current rersource values from LwM2M Object
  */
-export const readObject = (lwM2MObjects: {}, objectId: string): read => {
+export const readObject = (lwM2MObjects: object, objectId: string): read => {
 
     //const object = lwM2MObjects[`${objectId}`]
 

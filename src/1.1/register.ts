@@ -1,8 +1,8 @@
-const coap = require('coap')
+import coap from 'coap'
 import { CoapRequestParams } from "coap"
-import {getObjectsToRegister, serverReqParser} from '../1.1/utils'
+import {getObjectsToRegister, serverReqParser} from '../1.1/utils.js'
 import config from "../../config.json"
-import { assetTrackerFirmwareV2 } from "./assetTrackerV2"
+import { assetTrackerFirmwareV2 } from "./assetTrackerV2.js"
 
 const defaultType = "udp4"
 const contentFormat = {
@@ -14,8 +14,7 @@ const createAgent = () => new coap.Agent({type:defaultType})
 
 const register = (agent: { request: (arg0: CoapRequestParams) => any }) => {
 
-    const query = 'ep=' + config.deviceName 
-    + '&lt=' + config.lifetime + '&lwm2m=' + config.lwm2mV + '&b=' + config.biding 
+    const query = `ep=${config.deviceName} &lt=${config.lifetime} &lwm2m=${config.lwm2mV} &b=${config.biding}`
 
     const registrationString = getObjectsToRegister(assetTrackerFirmwareV2)
     const payload = `</>;ct=${contentFormat.numericId};hb,${registrationString}`
@@ -26,7 +25,7 @@ const register = (agent: { request: (arg0: CoapRequestParams) => any }) => {
         pathname: '/rd',
         method: "POST",
         options: {'Content-Format': 'application/link-format'},
-        query: query
+        query
     }
 
     const registerRequest = agent.request(params);
@@ -34,12 +33,12 @@ const register = (agent: { request: (arg0: CoapRequestParams) => any }) => {
     registerRequest.on('response', (response: { code: string; rsinfo: { address: unknown; port: unknown }; headers: { [x: string]: string }; outSocket: { address: unknown; port: string | number } }) => {
         console.log('register response: ', response)
 
-        if (response.code = "2.01"){
+        if (response.code === "2.01"){
 
             const coiote = {
                 ip: response.outSocket.address,
                 port: response.outSocket.port,
-                locationPath: '/rd/' + response.headers['Location-Path']
+                locationPath: `/rd/${response.headers['Location-Path']}`
             }
 
             listenToCoiote(coiote.port)
@@ -63,7 +62,8 @@ const listenToCoiote = (connectionPort: number | string) => {
         proxy: true
     });
 
-    server.on('request', function (request: unknown, response: { setOption: (arg0: string, arg1: string) => void; end: (arg0: string | Buffer | undefined) => void }) {        
+    
+    server.on('request', (request: unknown, response: { setOption: (arg0: string, arg1: string) => void; end: (arg0: string | Buffer | undefined) => void }) => {        
         /*
         console.log('catching listening')
         console.log('request', request)
@@ -76,7 +76,7 @@ const listenToCoiote = (connectionPort: number | string) => {
         response.end(data);
     });
 
-    server.listen(connectionPort, (err: unknown) => {
+    server.listen(connectionPort as number, (err: unknown) => {
         console.log({err})
     })
 }
