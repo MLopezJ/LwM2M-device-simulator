@@ -1,7 +1,7 @@
 import coap from 'coap'
 import { CoapRequestParams } from "coap"
-import {getObjectsToRegister, serverReqParser} from '../1.1/utils.js'
-import config from "../../config.json"
+import {getObjectsToRegister, serverReqParser} from './utils.js'
+import config from "../config.json"
 import { assetTrackerFirmwareV2 } from "./assetTrackerV2.js"
 
 const defaultType = "udp4"
