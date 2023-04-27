@@ -231,7 +231,7 @@ export const lwm2mObjects: LwM2MDocument = {
   [ECID_SignalMeasurementInformation_10256_urn]: signalMeasurementInfo,
 };
 
-type assetTracker = { '0': Security_0 } &  LwM2MDocument
+export type assetTracker = { '0': Security_0 } &  LwM2MDocument
 
 export const assetTrackerFirmwareV2: assetTracker = {
   '0': security,

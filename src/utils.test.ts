@@ -3,30 +3,35 @@ import { read, readObject, getObjectsToRegister } from "./utils.js";
 
 describe("getObjectsToRegister", () => {
   it("Should generate the list of the objects to be used in the register interface", () => {
-    // TODO: update object struct
     const lwM2MObjects = {
       // Security
-      "0": {
-        "0": {
+      "0": [
+        {
           "0": "coap://eu.iot.avsystem.cloud:5683", // LWM2M  Server URI  - Coiote
-          // ...
+          "1": false, // Bootstrap-Server
+          "2": 3, // Security Mode
+          "3": "", // ** Public Key or Identity
+          "4": "", // ** Server Public Key
+          "5": "", // ** Secret Key
+          "10": 1, // Short Server ID
         },
-      },
+      ],
 
       // Server
-      "1": {
-        "0": {
+      "1": [
+        {
           "0": 1, // Short Server ID
-          // ...
+          "1": 60, // Lifetime --> During "Register" or "Update" operations, the parameter Lifetime – if present – MUST match the current value of the Mandatory Lifetime Resource of the LwM2M Server Object Instance
+          "6": false, // Notification Storing When Disabled or Offline
+          "7": "U", // Binding
         },
-      },
+      ],
 
       // Device
       "3": {
-        "0": {
-          "0": "Nordic", // Manufacturer
-          // ...
-        },
+        "0": "Nordic", // Manufacturer
+        "11": 0, // error code
+        "16": "U", // Supported Binding and Modes
       },
     };
 
@@ -38,20 +43,27 @@ describe("getObjectsToRegister", () => {
   it("Should not add the Security object in the register list", () => {
     const lwM2MObjects = {
       // Security
-      "0": {
-        "0": {
+      "0": [
+        {
           "0": "coap://eu.iot.avsystem.cloud:5683", // LWM2M  Server URI  - Coiote
-          // ...
+          "1": false, // Bootstrap-Server
+          "2": 3, // Security Mode
+          "3": "", // ** Public Key or Identity
+          "4": "", // ** Server Public Key
+          "5": "", // ** Secret Key
+          "10": 1, // Short Server ID
         },
-      },
+      ],
 
       // Server
-      "1": {
-        "0": {
+      "1": [
+        {
           "0": 1, // Short Server ID
-          // ...
+          "1": 60, // Lifetime --> During "Register" or "Update" operations, the parameter Lifetime – if present – MUST match the current value of the Mandatory Lifetime Resource of the LwM2M Server Object Instance
+          "6": false, // Notification Storing When Disabled or Offline
+          "7": "U", // Binding
         },
-      },
+      ],
     };
 
     const registerList = "<1/0>";
@@ -62,36 +74,44 @@ describe("getObjectsToRegister", () => {
   it("Should contain multiple instances of same object", () => {
     const lwM2MObjects = {
       // Security
-      "0": {
-        "0": {
+      "0": [
+        {
           "0": "coap://eu.iot.avsystem.cloud:5683", // LWM2M  Server URI  - Coiote
-          // ...
+          "1": false,
+          "2": 3,
+          "3": "", 
+          "4": "", 
+          "5": "",
+          "10": 1, 
         },
-      },
+      ],
 
       // Server
-      "1": {
-        "0": {
-          "0": 1, // Short Server ID
-          // ...
+      "1": [
+        {
+          "0": 1, 
+          "1": 60,
+          "6": false, 
+          "7": "U",
+          
         },
-      },
+      ],
 
-      // Temperature
-      "3303": {
-        "0": {
-          "5700": 21, // Sensor Value
-          "5701": "C",
+      // Device
+      "3303": [
+        {
+          "5700": 24.57,
+          "5701": "Celsius degrees",
         },
-        "1": {
-          "5700": 21, // Sensor Value
-          "5701": "C",
+        {
+          "5700": 20,
+          "5701": "Celsius degrees",
         },
-        "2": {
-          "5700": 21, // Sensor Value
-          "5701": "C",
+        {
+          "5700": 27,
+          "5701": "Celsius degrees",
         },
-      },
+      ]
     };
 
     const registerList = "<1/0>, <3303/0>, <3303/1>, <3303/2>";

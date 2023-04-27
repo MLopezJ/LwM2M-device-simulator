@@ -1,3 +1,5 @@
+import {assetTracker} from '../src/assetTrackerV2.js'
+
 // TODO: add description
 export const serverReqParser = (req: {
   code: string
@@ -52,27 +54,28 @@ export const serverReqParser = (req: {
  * example: <LwM2M Object id/ instance id>, <LwM2M Object id/ instance id>
  * // TODO: update method with new asset tracker v2 object struct
  */
-export const getObjectsToRegister = (LwM2MObjects: object): string => {
-  const registerObject = Object.entries(LwM2MObjects).reduce(
-    (previus: string, current: any) => {
-      const objectId = current[0];
+export const getObjectsToRegister = (objectList: assetTracker): string => {
 
-      if (objectId === "0") return previus;
+  const ids = Object.keys(objectList)
+  
+  return  ids.reduce((previus: string, objectId: string) => {
+    if (objectId === '0') return '' // Security object should not be send
 
-      const objectString = `<${objectId}`;
-      const instances = Object.keys(current[1] as object);
-      const value = instances.reduce((prev, instanceId) => {
+    const object = objectList[`${objectId}` as keyof assetTracker] // LwM2M element
+    let elementString =  ''
+
+    if (Array.isArray(object)){
+      elementString = object.reduce((prev: string, curr: object, currentIndex: number) => {
         //              < object id  / instance id >
-        const struct = `${objectString}/${instanceId}>`;
-        return prev !== "" ? `${prev}, ${struct}` : struct;
-      }, "");
+        const struct = `<${objectId}/${currentIndex}>`
+        return currentIndex === 0 ? struct : `${prev}, ${struct}`
+      }, '')
+    } else {
+      elementString = `<${objectId}/0>`
+    }
 
-      return previus !== "" ? `${previus}, ${value}` : value;
-    },
-    ""
-  );
-
-  return registerObject;
+    return previus === '' ? elementString : `${previus}, ${elementString}`
+  }, '')
 };
 
 type value = {
