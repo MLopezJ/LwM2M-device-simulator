@@ -124,12 +124,11 @@ describe("readObject", () => {
       expect(object).toMatchObject(result);
       expect(object).toHaveProperty('bn', '/3')
       expect(object).toHaveProperty('e')
-      /*
       expect(object.e[0]).toHaveProperty('sv') // 0//
       expect(object.e[0]).not.toHaveProperty('v')// 0/0
       expect(object.e[5]).toHaveProperty('v') // 0/9
       expect(object.e[5]).not.toHaveProperty('sv')// 0/9
-      */
+      
     });
   
   });
