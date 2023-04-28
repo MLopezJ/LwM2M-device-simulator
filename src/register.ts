@@ -3,7 +3,7 @@ import { CoapRequestParams } from "coap"
 import {e, getObjectsToRegister, getResourceList, getURN, serverReqParser} from './utils.js'
 import config from "../config.json"
 import { assetTrackerFirmwareV2 } from "./assetTrackerV2.js"
-import { LwM2MDocument } from '@nordicsemiconductor/lwm2m-types'
+import type { LwM2MDocument } from '@nordicsemiconductor/lwm2m-types'
 
 const defaultType = "udp4"
 const contentFormat = {
