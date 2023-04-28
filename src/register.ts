@@ -1,8 +1,9 @@
 import coap from 'coap'
 import { CoapRequestParams } from "coap"
-import {getObjectsToRegister, serverReqParser} from './utils.js'
+import {e, getObjectsToRegister, getResourceList, getURN, serverReqParser} from './utils.js'
 import config from "../config.json"
 import { assetTrackerFirmwareV2 } from "./assetTrackerV2.js"
+import { LwM2MDocument } from '@nordicsemiconductor/lwm2m-types'
 
 const defaultType = "udp4"
 const contentFormat = {
@@ -81,27 +82,26 @@ const listenToCoiote = (connectionPort: number | string) => {
     })
 }
 
-const read = (url: string): string | Buffer => {
-    let data = ''
+export type read = {
+    bn: string
+    e: e[]
+  };
 
-    if (url === '/3') {
-        // TODO: get object from LwM2MObjects.ts file
-        data = JSON.stringify({
-            bn: '/3',
-            e: [
-              { n: '0/0', sv: 'Mauro L' },
-              { n: '0/1', sv: '00010' },
-              { n: '0/2', sv: '00000' },
-              { n: '0/3', sv: '0.0' },
-              { n: '0/6', sv: '1' },
-              { n: '0/9', v: 80 },
-              { n: '0/16', sv: 'U' },
-              { n: '0/18', sv: '0.0' },
-              { n: '0/19', sv: '0.0' }
-            ]
-          })
+/**
+ * Read data from resource and transform to vnd.oma.lwm2m+json format
+ * @see https://www.openmobilealliance.org/release/LightweightM2M/V1_0-20170208-A/OMA-TS-LightweightM2M-V1_0-20170208-A.pdf pag 55
+ */
+export const read = (url: string): string | Buffer => {
+    const urn = getURN(url, assetTrackerFirmwareV2)
+    if (Boolean(urn) === false) return Buffer.from(JSON.stringify({bn:null, e: null}))
+
+    const object = assetTrackerFirmwareV2[`${urn}` as keyof LwM2MDocument]
+    const resourceList = getResourceList(object??{})
+    const data: read = {
+        bn: url,
+        e: resourceList
     }
-    return Buffer.from(data)
+    return Buffer.from(JSON.stringify(data))
 }
 
 // discover what Coiote is looking for
