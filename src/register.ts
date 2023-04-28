@@ -65,25 +65,11 @@ const listenToCoiote = (connectionPort: number | string) => {
 
     
     server.on('request', (request: {url: string}, response: { setOption: (arg0: string, arg1: string) => void; end: (arg0: string | Buffer | undefined) => void }) => {        
-        /*
-        console.log('catching listening')
-        console.log('request', request)
-        console.log('response', response)
-        */
-        // response to Coiote request
-
-
-        // ****
+        
         const optType = serverReqParser(request as any) // TODO: improve this
-        const data2 = responseToCoioteAlternative(optType, request.url)
-        console.log(data2)
-        // ****
-
-        // TODO remove data and used data2 instead
-        const data = responseToCoiote(request as any)
-
-
-        //response.setOption('Content-Format', 'application/json');
+        console.log("coiote is looking for", optType, request.url)
+        const data = responseToCoiote(optType, request.url)
+        
         response.setOption('Content-Format', contentFormat["IANA-media-type"]);
         response.end(data);
     });
@@ -117,10 +103,8 @@ export const read = (url: string): Buffer => {
 
 /**
  * Generate payload depending on option type requested
- * 
- * TODO: change this method for responseToCoiote
  */
-export const responseToCoioteAlternative = (optionType: string, url: string): Buffer => {
+export const responseToCoiote = (optionType: string, url: string): Buffer => {
     let data: Buffer = Buffer.from('')
     switch (optionType) {
         case 'read':
@@ -129,32 +113,6 @@ export const responseToCoioteAlternative = (optionType: string, url: string): Bu
     }
     return data
 }
-
-// discover what Coiote is looking for
-const responseToCoiote = (req: { code: string; _packet: { confirmable: unknown }; payload: string | unknown[]; method: unknown; headers: { [x: string]: unknown; Observe: number; Accept: string }; url: string }) => {
-    const optType = serverReqParser(req)
-    console.log("coiote is looking for", optType, req.url)
-
-    const url = req.url
-    const slashCounter = url.split('').filter(x => x == '/').length
-
-    // object
-    if (slashCounter === 1){
-        console.log('object')
-    }
-
-    let data: string | Buffer = ''
-
-    switch (optType) {
-        case 'read':
-            data = read(req.url)
-            break;
-    }
-
-    return data
-}
-
-
 
 const index = () => {
     const agent =  createAgent()
