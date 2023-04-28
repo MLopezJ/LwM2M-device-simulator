@@ -123,7 +123,6 @@ const responseToCoiote = (req: { code: string; _packet: { confirmable: unknown }
         case 'read':
             data = read(req.url)
             break;
-    
     }
 
     return data
