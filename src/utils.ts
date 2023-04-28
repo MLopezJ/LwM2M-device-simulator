@@ -59,7 +59,8 @@ export const getObjectsToRegister = (objectList: assetTracker): string => {
   const ids = Object.keys(objectList)
   
   return  ids.reduce((previus: string, objectId: string) => {
-    if (objectId === '0') return '' // Security object should not be send
+    const id = objectId.split(':')[0]
+    if (id === '0') return '' // Security object should not be send
 
     const object = objectList[`${objectId}` as keyof assetTracker] // LwM2M element
     let elementString =  ''
@@ -67,11 +68,11 @@ export const getObjectsToRegister = (objectList: assetTracker): string => {
     if (Array.isArray(object)){
       elementString = object.reduce((prev: string, curr: object, currentIndex: number) => {
         //              < object id  / instance id >
-        const struct = `<${objectId}/${currentIndex}>`
+        const struct = `<${id}/${currentIndex}>`
         return currentIndex === 0 ? struct : `${prev}, ${struct}`
       }, '')
     } else {
-      elementString = `<${objectId}/0>`
+      elementString = `<${id}/0>`
     }
 
     return previus === '' ? elementString : `${previus}, ${elementString}`
