@@ -1,7 +1,7 @@
 import {read, responseToCoioteAlternative} from '../src/register.js'
 
 describe('responseToCoioteAlternative', ()=>{
-    it.only("Should read object value and build payload", () => {
+    it("Should read object value and build payload", () => {
         expect(responseToCoioteAlternative('read', '/3')).toBeInstanceOf(Buffer)
     })
 })
