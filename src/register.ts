@@ -82,7 +82,7 @@ const listenToCoiote = (connectionPort: number | string) => {
     })
 }
 
-export type read = {
+export type lwm2mJson = {
     bn: string
     e: e[]
   };
@@ -97,7 +97,7 @@ export const read = (url: string): string | Buffer => {
 
     const object = assetTrackerFirmwareV2[`${urn}` as keyof LwM2MDocument]
     const resourceList = getResourceList(object??{})
-    const data: read = {
+    const data: lwm2mJson = {
         bn: url,
         e: resourceList
     }
