@@ -101,7 +101,7 @@ type numericValue = {
   v: number
 } & value
 
-type e = stringValue | numericValue;
+export type e = stringValue | numericValue | Record<string, never>;
 
 export type read = {
   bn: string
@@ -110,23 +110,30 @@ export type read = {
 
 /**
  * Read current rersource values from LwM2M Object
+ * and transform into vnd.oma.lwm2m+json format. 
+ * 
+ * This method creates the JSON variable 'e'. 
+ * @see https://www.openmobilealliance.org/release/LightweightM2M/V1_0-20170208-A/OMA-TS-LightweightM2M-V1_0-20170208-A.pdf pag 55
+ * 
  */
-export const readObject = (objectList: assetTracker, objectId: string): read => {
+export const getResourceList = (values: object[] | object): e[] => {
 
-    console.log(objectList)
+  const createList = (x: object, index: number) => {
+    return Object.entries(x).reduce((previus: object[], current: [string, string|number]) => {
+      const value = typeof current[1] === 'string' ? 'sv' : 'v'
+      const result = {n:`${index}/${current[0]}`, [value]: current[1]}
+      previus.push(result)
+      return previus
+    }, [])
+  }
 
-  return {
-    bn: "/3",
-    e: [
-      { n: "0/0", sv: "Mauro L" },
-      { n: "0/1", sv: "00010" },
-      { n: "0/2", sv: "00000" },
-      { n: "0/3", sv: "0.0" },
-      { n: "0/6", sv: "1" },
-      { n: "0/9", v: 80 },
-      { n: "0/16", sv: "U" },
-      { n: "0/18", sv: "0.0" },
-      { n: "0/19", sv: "0.0" },
-    ],
-  };
+  let e = [{}]
+  if (Array.isArray(values)){
+    e = values.map(((element: object, index: number) => {
+      return createList(element, index)
+    })).flat()
+    return e
+  } else {
+    return createList(values, 0) as e[]
+  }
 };
