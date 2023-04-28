@@ -64,14 +64,25 @@ const listenToCoiote = (connectionPort: number | string) => {
     });
 
     
-    server.on('request', (request: unknown, response: { setOption: (arg0: string, arg1: string) => void; end: (arg0: string | Buffer | undefined) => void }) => {        
+    server.on('request', (request: {url: string}, response: { setOption: (arg0: string, arg1: string) => void; end: (arg0: string | Buffer | undefined) => void }) => {        
         /*
         console.log('catching listening')
         console.log('request', request)
         console.log('response', response)
         */
         // response to Coiote request
+
+
+        // ****
+        const optType = serverReqParser(request as any) // TODO: improve this
+        const data2 = responseToCoioteAlternative(optType, request.url)
+        console.log(data2)
+        // ****
+
+        // TODO remove data and used data2 instead
         const data = responseToCoiote(request as any)
+
+
         //response.setOption('Content-Format', 'application/json');
         response.setOption('Content-Format', contentFormat["IANA-media-type"]);
         response.end(data);
@@ -91,7 +102,7 @@ export type lwm2mJson = {
  * Read data from resource and transform to vnd.oma.lwm2m+json format
  * @see https://www.openmobilealliance.org/release/LightweightM2M/V1_0-20170208-A/OMA-TS-LightweightM2M-V1_0-20170208-A.pdf pag 55
  */
-export const read = (url: string): string | Buffer => {
+export const read = (url: string): Buffer => {
     const urn = getURN(url, assetTrackerFirmwareV2)
     if (Boolean(urn) === false) return Buffer.from(JSON.stringify({bn:null, e: null}))
 
@@ -102,6 +113,21 @@ export const read = (url: string): string | Buffer => {
         e: resourceList
     }
     return Buffer.from(JSON.stringify(data))
+}
+
+/**
+ * Generate payload depending on option type requested
+ * 
+ * TODO: change this method for responseToCoiote
+ */
+export const responseToCoioteAlternative = (optionType: string, url: string): Buffer => {
+    let data: Buffer = Buffer.from('')
+    switch (optionType) {
+        case 'read':
+            data = read(url)
+            break;
+    }
+    return data
 }
 
 // discover what Coiote is looking for
