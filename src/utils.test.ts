@@ -127,12 +127,16 @@ describe("getObjectsToRegister", () => {
 });
 
 
-describe('', () =>{
+describe('getURN', () =>{
   it('Should return the object URN given the URL', () => {
     expect(getURN('/3', assetTrackerFirmwareV2)).toBe(Device_3_urn)
     expect(getURN('/10256', assetTrackerFirmwareV2)).toBe(ECID_SignalMeasurementInformation_10256_urn)
     expect(getURN('/3303', assetTrackerFirmwareV2)).toBe(Temperature_3303_urn)
     expect(getURN('/4', assetTrackerFirmwareV2)).toBe(ConnectivityMonitoring_4_urn)
+  })
+
+  it('Should return undefined if object is not found by the given URL', () => {
+    expect(getURN('/40404', assetTrackerFirmwareV2)).toBe(undefined)
   })
 })
 
@@ -200,14 +204,12 @@ describe("getResourceList", () => {
     it("Should generate resource list from empty single instance object", () => {
       const singleInstance = {}
       const resourceList = getResourceList(singleInstance);
-      console.log(resourceList)
       expect(resourceList.length).toBe(0)
     });
 
     it("Should generate resource list from empty multiple instance object", () => {
       const multipleInstance = [{}]
       const resourceList = getResourceList(multipleInstance);
-      console.log(resourceList)
       expect(resourceList.length).toBe(0)
     });
   

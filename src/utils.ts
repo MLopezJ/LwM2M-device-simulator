@@ -82,10 +82,7 @@ export const getObjectsToRegister = (objectList: assetTracker): string => {
 /**
  * Given the LwM2M url of the object should return its URN used in assetTracker def
  */
-export const getURN = (url: string, objectsList: assetTracker): string => {
-  const result = Object.keys(objectsList).filter(element => element.split(':')[0] === url.split('/')[1])[0]
-  return result !== undefined ? result : ''
-}
+export const getURN = (url: string, objectsList: assetTracker): string | undefined =>  Object.keys(objectsList).filter(element => element.split(':')[0] === url.split('/')[1])[0]
 
 type value = {
   n: string
@@ -103,10 +100,6 @@ type numericValue = {
 
 export type e = stringValue | numericValue | Record<string, never>;
 
-export type read = {
-  bn: string
-  e: e[]
-};
 
 /**
  * Read current rersource values from LwM2M Object
