@@ -15,7 +15,7 @@ const createAgent = () => new coap.Agent({type:defaultType})
 
 const register = (agent: { request: (arg0: CoapRequestParams) => any }) => {
 
-    const query = `ep=${config.deviceName} &lt=${config.lifetime} &lwm2m=${config.lwm2mV} &b=${config.biding}`
+    const query = `ep=${config.deviceName}&lt=${config.lifetime}&lwm2m=${config.lwm2mV}&b=${config.biding}`
 
     const registrationString = getObjectsToRegister(assetTrackerFirmwareV2)
     const payload = `</>;ct=${contentFormat.numericId};hb,${registrationString}`
