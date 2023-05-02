@@ -1,6 +1,6 @@
 import coap from 'coap'
-import { CoapRequestParams } from "coap"
-import {e, getObjectsToRegister, getResourceList, getURN, serverReqParser} from './utils.js'
+import { type CoapRequestParams } from "coap"
+import {type e, getObjectsToRegister, getResourceList, getURN, serverReqParser} from './utils.js'
 import config from "../config.json"
 import { assetTrackerFirmwareV2 } from "./assetTrackerV2.js"
 import type { LwM2MDocument } from '@nordicsemiconductor/lwm2m-types'
