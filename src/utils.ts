@@ -59,7 +59,7 @@ export const getObjectsToRegister = (objectList: assetTracker): string => {
   const ids = Object.keys(objectList)
   
   return  ids.reduce((previus: string, objectId: string) => {
-    const id = objectId.split(':')[0]
+    const id = objectId.split(':')[0] // TODO: uses lib fuction
     if (id === '0') return '' // Security object should not be send
 
     const object = objectList[`${objectId}` as keyof assetTracker] // LwM2M element
