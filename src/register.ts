@@ -114,10 +114,7 @@ export const responseToCoiote = (optionType: string, url: string): Buffer => {
     return data
 }
 
-const index = () => {
+export const index = () => {
     const agent =  createAgent()
     register(agent)
 }
-
-index()
-
