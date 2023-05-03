@@ -1,6 +1,9 @@
 import * as readline from "readline";
 import { Command } from "commander";
 import { index } from "./register";
+import { assetTrackerFirmwareV2 } from "./assetTrackerV2.js"
+import { Temperature_3303_urn } from '@nordicsemiconductor/lwm2m-types'
+
 const program = new Command();
 
 let value: number
@@ -22,6 +25,9 @@ program.command('update')
     .action(() => {
         console.log('Updating values')
         value += 1
+        assetTrackerFirmwareV2[Temperature_3303_urn]![0]!["5700"] = Math.floor(Math.random() * (85 - -40 + 1) + -40);
+        console.log(assetTrackerFirmwareV2[Temperature_3303_urn]);
+        index()
     });
 
 program.command('quit')
