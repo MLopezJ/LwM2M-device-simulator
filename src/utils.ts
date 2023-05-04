@@ -131,3 +131,27 @@ export const getResourceList = (values: object[] | object): e[] => {
     return createList(values, 0) as e[]
   }
 };
+
+/**
+ * Return the element type that the LwM2M Server is requesting.
+ * 
+ * The parameter of the function will have the following struct: < OBJECT / INSTANCE / RESOURCE >
+ */
+export const getElementType = (element: string) : "object" | "instance" | "resource" | undefined => {
+  const amountOfSlashes = (element.split("/").length - 1)
+    let elementType: "object" | "instance" | "resource" | undefined
+    switch(amountOfSlashes){
+        case 1:
+            elementType = 'object'
+            break
+        case 2:
+            elementType = 'instance'
+            break
+        case 3:
+            elementType = 'resource'
+            break
+        default:
+            elementType = undefined
+    }
+    return elementType
+}

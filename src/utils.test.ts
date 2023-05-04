@@ -1,5 +1,5 @@
 import { assetTrackerFirmwareV2 } from "./assetTrackerV2.js";
-import { e, getResourceList, getObjectsToRegister, getURN } from "./utils.js";
+import { type e, getResourceList, getObjectsToRegister, getURN, getElementType } from "./utils.js";
 import {
   Device_3_urn,
   ConnectivityMonitoring_4_urn,
@@ -214,3 +214,17 @@ describe("getResourceList", () => {
     });
   
   });
+
+describe('getElementType', () =>{
+  it('Should detect object as the element type', () => {
+    expect(getElementType('/3')).toBe('object')
+  })
+
+  it('Should detect instance as the element type', () => {
+    expect(getElementType('/3/0')).toBe('instance')
+  })
+
+  it('Should detect resource as the element type', () => {
+    expect(getElementType('/3/0/1')).toBe('resource')
+  })
+})
