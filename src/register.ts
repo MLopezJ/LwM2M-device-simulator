@@ -1,6 +1,6 @@
 import coap from 'coap'
 import { type CoapRequestParams } from "coap"
-import {type e, getObjectsToRegister, getResourceList, getURN, serverReqParser} from './utils.js'
+import {type e, getObjectsToRegister, getResourceList, getURN, serverReqParser, getElementType, getElementPath} from './utils.js'
 import config from "../config.json"
 import { assetTrackerFirmwareV2 } from "./assetTrackerV2.js"
 import type { LwM2MDocument } from '@nordicsemiconductor/lwm2m-types'
@@ -93,11 +93,17 @@ export const read = (url: string): Buffer => {
     if (Boolean(urn) === false) return Buffer.from(JSON.stringify({bn:null, e: null}))
 
     const object = assetTrackerFirmwareV2[`${urn}` as keyof LwM2MDocument]
-    const resourceList = getResourceList(object??{})
+    const elementType = getElementType(url)
+    let elementPath = undefined
+
+    if (elementType === 'resource') elementPath = getElementPath(url)
+
+    const valueList = elementType !== undefined ? getResourceList(object??{}, elementType, elementPath) : []
     const data: lwm2mJson = {
         bn: url,
-        e: resourceList
+        e: valueList
     }
+    
     return Buffer.from(JSON.stringify(data))
 }
 
@@ -118,3 +124,5 @@ export const index = () => {
     const agent =  createAgent()
     register(agent)
 }
+
+//index()

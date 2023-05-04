@@ -1,5 +1,5 @@
 import { assetTrackerFirmwareV2 } from "./assetTrackerV2.js";
-import { type e, getResourceList, getObjectsToRegister, getURN, getElementType } from "./utils.js";
+import { type e, getResourceList, getObjectsToRegister, getURN, getElementType, getElementPath } from "./utils.js";
 import {
   Device_3_urn,
   ConnectivityMonitoring_4_urn,
@@ -158,7 +158,7 @@ describe("getResourceList", () => {
         { n: '2/5701', sv: 'Celsius degrees' }
       ]
 
-      const resourceList = getResourceList(multipleInstance); // TODO test with {}
+      const resourceList = getResourceList(multipleInstance, 'object'); // TODO test with {}
       expect(resourceList).toMatchObject(result);
       expect(resourceList[0]).toHaveProperty('n', '0/5700') 
       expect(resourceList[0]).toHaveProperty('v', 24.57)
@@ -197,21 +197,55 @@ describe("getResourceList", () => {
         { n: '0/19', sv: '0.0' }
       ]
 
-      const resourceList = getResourceList(singleInstance);
+      const resourceList = getResourceList(singleInstance, 'object');
       expect(resourceList).toMatchObject(result);
     });
 
     it("Should generate resource list from empty single instance object", () => {
       const singleInstance = {}
-      const resourceList = getResourceList(singleInstance);
+      const resourceList = getResourceList(singleInstance, 'object');
       expect(resourceList.length).toBe(0)
     });
 
     it("Should generate resource list from empty multiple instance object", () => {
       const multipleInstance = [{}]
-      const resourceList = getResourceList(multipleInstance);
+      const resourceList = getResourceList(multipleInstance, 'object');
       expect(resourceList.length).toBe(0)
     });
+
+    it("Should generate resource list from Instance id", () => {
+       const resourceList = getResourceList(assetTrackerFirmwareV2[Device_3_urn]!, 'instance');
+       const result: e[] = [
+        { n: '0', sv: 'Nordic' },
+        { n: '1', sv: '00010' },
+        { n: '2', sv: '00000' },
+        { n: '3', sv: '0.0' },
+        { n: '6', v: 1 },
+        { n: '7', v: 0 },
+        { n: '9', v: 80 },
+        { n: '11', v: 0 },
+        { n: '16', sv: 'U' },
+        { n: '18', sv: '0.0' },
+        { n: '19', sv: '0.0' }
+      ]
+      expect(resourceList).toMatchObject(result);
+    })
+
+    it("Should generate resource list from rersource id", () => {
+      const list = getResourceList(assetTrackerFirmwareV2[Device_3_urn]!, 'resource', {objectId: 3, instanceId:0, resourceId: 0});
+      const result: e[] = [
+       {sv: 'Nordic' }
+     ]
+     expect(list).toMatchObject(result);
+   })
+
+   it("Should generate value list from rersource id (multiple instance)", () => {
+    const list = getResourceList(assetTrackerFirmwareV2[Temperature_3303_urn]!, 'resource', {objectId: 3303, instanceId:0, resourceId: 5700});
+    const result: e[] = [
+     {v: 24.57 }
+   ]
+   expect(list).toMatchObject(result);
+ })
   
   });
 
@@ -226,5 +260,23 @@ describe('getElementType', () =>{
 
   it('Should detect resource as the element type', () => {
     expect(getElementType('/3/0/1')).toBe('resource')
+  })
+
+  it.each(['', '/3/0/1/0', '/3/0/1/0/1/1/1'])('Should return undefined when format is not recognized in value sent by parameter: %p', (element: string) => {
+    expect(getElementType(element)).toBe(undefined)
+  })
+})
+
+describe('getElementPath', () =>{
+  it.each([
+    ['3/0/1', {objectId: 3, instanceId: 0 ,resourceId: 1}],
+    ['3303/10/5700', {objectId: 3303, instanceId: 10 ,resourceId: 5700}],
+  ])
+  ('Should split path in different ids: %p', (path: string, obj: object) => {
+    expect(getElementPath(path)).toMatchObject(obj)
+  })
+
+  it('Should return ids with -1 if there is an issue on its transformation', () => {
+    expect(getElementPath('')).toMatchObject({objectId: -1, instanceId: -1 ,resourceId: -1})
   })
 })

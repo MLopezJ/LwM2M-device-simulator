@@ -1,4 +1,4 @@
-import {assetTracker} from '../src/assetTrackerV2.js'
+import {type assetTracker} from '../src/assetTrackerV2.js'
 
 // TODO: add description
 export const serverReqParser = (req: {
@@ -82,12 +82,16 @@ export const getObjectsToRegister = (objectList: assetTracker): string => {
 
 /**
  * Given the LwM2M url of the object should return its URN used in assetTracker def
+ * TODO: use method from lib
  */
 export const getURN = (url: string, objectsList: assetTracker): string | undefined =>  Object.keys(objectsList).filter(element => element.split(':')[0] === url.split('/')[1])[0]
 
+/**
+ * @see https://www.openmobilealliance.org/release/LightweightM2M/V1_0-20170208-A/OMA-TS-LightweightM2M-V1_0-20170208-A.pdf pag 57, last example
+ */
 type value = {
-  n: string
-}
+  n?: string
+} 
 
 type stringValue = {
   sv: string
@@ -110,12 +114,36 @@ export type e = stringValue | numericValue | Record<string, never>;
  * @see https://www.openmobilealliance.org/release/LightweightM2M/V1_0-20170208-A/OMA-TS-LightweightM2M-V1_0-20170208-A.pdf pag 55
  * 
  */
-export const getResourceList = (values: object[] | object): e[] => {
+export const getResourceList = (values: object[] | object, elementType: 'object' | 'instance' | 'resource', resourcePath?: {objectId: number, instanceId: number ,resourceId: number}): e[] => {
 
+  if (elementType === 'resource' && resourcePath !== undefined){
+    const value = Array.isArray(values) ? values[resourcePath.instanceId] : values
+    const resourceElement: string | number = value[`${resourcePath.resourceId}`]
+    const key = typeof resourceElement === 'string' ? 'sv' : 'v'
+    
+    return [{[key]: resourceElement}] as e[]
+  }
+
+
+  // resourcePath
   const createList = (x: object, index: number) => {
     return Object.entries(x).reduce((previus: object[], current: [string, string|number]) => {
       const value = typeof current[1] === 'string' ? 'sv' : 'v'
-      const result = {n:`${index}/${current[0]}`, [value]: current[1]}
+      let result = {}
+
+      // TODO: change to switch case
+      if (elementType === 'object'){
+        result = {n:`${index}/${current[0]}`, [value]: current[1]}
+      }
+      
+      if (elementType === 'instance'){
+        result = {n:`${current[0]}`, [value]: current[1]}
+      }
+
+      if (elementType === 'resource'){
+        result = {[value]: current[1]}
+      }
+      
       previus.push(result)
       return previus
     }, [])
@@ -154,4 +182,17 @@ export const getElementType = (element: string) : "object" | "instance" | "resou
             elementType = undefined
     }
     return elementType
+}
+
+/**
+ * Split path in object, instance and resource
+ * /object/instance/resource
+ */
+export const getElementPath = (url: string): {objectId: number, instanceId: number, resourceId: number} => {
+  const [objectId, instanceId, resourceId] = url.split("/")
+  return {
+    objectId: objectId? Number(objectId): -1,
+    instanceId: instanceId? Number(instanceId): -1,
+    resourceId: resourceId? Number(resourceId): -1
+  }
 }
