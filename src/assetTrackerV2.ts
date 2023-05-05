@@ -237,3 +237,17 @@ export const assetTrackerFirmwareV2: assetTracker = {
   '0': security,
   ...lwm2mObjects,
 };
+
+export const correlationTable: Record<string, string> = {
+  '0' : '0',
+  '1' : LwM2MServer_1_urn,
+  '3' : Device_3_urn,
+  '4' : ConnectivityMonitoring_4_urn,
+  '5' : FirmwareUpdate_5_urn,
+  '6' : Location_6_urn,
+  '3303' : Temperature_3303_urn,
+  '3304' : Humidity_3304_urn,
+  '3323' : Pressure_3323_urn,
+  '3347' : Pushbutton_3347_urn,
+  '10256' :  ECID_SignalMeasurementInformation_10256_urn
+}

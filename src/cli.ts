@@ -41,7 +41,7 @@ var rdLine = readline.createInterface({
     output: process.stdout
 });
 
-//rdLine.prompt();
+rdLine.prompt();
 
 console.log('connect. update. quit')
 rdLine.on('line', function (line: string) {
