@@ -189,7 +189,7 @@ export const getElementType = (element: string) : "object" | "instance" | "resou
  * /object/instance/resource
  */
 export const getElementPath = (url: string): {objectId: number, instanceId: number, resourceId: number} => {
-  const [objectId, instanceId, resourceId] = url.split("/")
+  const [,objectId, instanceId, resourceId] = url.split("/")
   return {
     objectId: objectId? Number(objectId): -1,
     instanceId: instanceId? Number(instanceId): -1,

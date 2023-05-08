@@ -5,6 +5,7 @@ import {
   ConnectivityMonitoring_4_urn,
   Temperature_3303_urn,
   ECID_SignalMeasurementInformation_10256_urn,
+  LwM2MServer_1_urn,
 } from "@nordicsemiconductor/lwm2m-types";
 
 describe("getObjectsToRegister", () => {
@@ -133,6 +134,7 @@ describe('getURN', () =>{
     expect(getURN('/10256')).toBe(ECID_SignalMeasurementInformation_10256_urn)
     expect(getURN('/3303')).toBe(Temperature_3303_urn)
     expect(getURN('/4')).toBe(ConnectivityMonitoring_4_urn)
+    expect(getURN('/1')).toBe(LwM2MServer_1_urn)
   })
 
   it('Should return undefined if object is not found by the given URL', () => {
@@ -269,8 +271,8 @@ describe('getElementType', () =>{
 
 describe('getElementPath', () =>{
   it.each([
-    ['3/0/1', {objectId: 3, instanceId: 0 ,resourceId: 1}],
-    ['3303/10/5700', {objectId: 3303, instanceId: 10 ,resourceId: 5700}],
+    ['/3/0/1', {objectId: 3, instanceId: 0 ,resourceId: 1}],
+    ['/3303/10/5700', {objectId: 3303, instanceId: 10 ,resourceId: 5700}],
   ])
   ('Should split path in different ids: %p', (path: string, obj: object) => {
     expect(getElementPath(path)).toMatchObject(obj)
