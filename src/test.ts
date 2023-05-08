@@ -104,6 +104,7 @@ const commands: Record<string, {parameters: string[], description: string, handl
 const executeCommand = (command: string, parameters: string[]) => {
     if (commands[`${command}`] === undefined ){
         console.log('Wrong command')
+        help()
     } else{
         commands[`${command}`]!.handler(parameters)
     }
