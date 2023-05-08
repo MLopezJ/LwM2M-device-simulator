@@ -7,6 +7,7 @@ import { getElementPath } from "./utils";
 import type { LwM2MDocument } from "@nordicsemiconductor/lwm2m-types";
 import {set, bootstrap} from '../src/index.js'
 
+// TODO: Implement this apart
 const list = (command: string[]) => {
     const object = command[0]
     if (object !== undefined){
