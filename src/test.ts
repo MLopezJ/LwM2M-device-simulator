@@ -29,6 +29,7 @@ const clear = () => {
 
 /**
  * Log in console the list of all possible commands
+ * TODO: add the rest of commands
  */
 const help = () => {
     const commands = [{
