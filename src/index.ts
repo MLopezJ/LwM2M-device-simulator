@@ -10,6 +10,9 @@ import { getElementPath } from './utils.js'
 let objectList: assetTracker | undefined = undefined
 let agent = undefined
 
+/**
+ * Connector method to update the resource value of an object
+ */
 export const set = (command: string[]) => {
     const path = getElementPath(command[0]??'')
     const value = command[1]
@@ -23,7 +26,7 @@ export const set = (command: string[]) => {
 
     if (result !== undefined) objectList = result
 
-    console.log(objectList, assetTrackerFirmwareV2)
+    //console.log(objectList, assetTrackerFirmwareV2)
 }
 
 export const bootstrap = () => {
