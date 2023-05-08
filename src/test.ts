@@ -86,6 +86,42 @@ const clear = () => {
 }
 
 /**
+ * Log in console the list of all possible commands
+ */
+const help = () => {
+    const commands = [{
+        title: 'Clear',
+        description: 'Clear CLI',
+        command: 'clear',
+        example: 'clear'
+    },
+    {
+        title: 'List',
+        description: 'List the values of requested object',
+        command: 'list [object id]',
+        example: 'list 3'
+    },
+    {
+        title: 'Quit',
+        description: 'Exit CLI',
+        command: 'quit',
+        example: 'quit'
+    }
+    ]
+
+    console.log("command required-param [optional param]")
+    console.log(`Options:\n`)
+    commands.map(cmd => {
+        //console.log('------------------------------------------')
+        console.log(`\t${cmd.title}\n`);
+        console.log(`\t${cmd.description}`);
+        console.log(`\tCommand: ${cmd.command}`);
+        console.log(`\tExample: ${cmd.example}`);
+        console.log(`--------------------------------------------\n`)
+    })
+}
+
+/**
  * bootstrap
  */
 const bootstrapa = () => {
@@ -122,6 +158,11 @@ const commands: Record<string, {parameters: string[], description: string, handl
         parameters: [],
         description: '\tExit the client',
         handler: quit
+    },
+    'help': {
+        parameters: [],
+        description: '\tList all possible commands',
+        handler: help
     }
 }
 
