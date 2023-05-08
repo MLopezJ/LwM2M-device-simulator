@@ -2,10 +2,10 @@
  * Implementing CLI
  */
 import * as readline from "readline";
-import { assetTrackerFirmwareV2, correlationTable } from "./assetTrackerV2.js"
+import { correlationTable } from "./assetTrackerV2.js"
 import { getElementPath } from "./utils";
 import type { LwM2MDocument } from "@nordicsemiconductor/lwm2m-types";
-import {set, bootstrap} from '../src/index.js'
+import {set, bootstrap, register, objectList} from '../src/index.js'
 
 // TODO: Implement this apart
 const list = (command: string[]) => {
@@ -13,9 +13,9 @@ const list = (command: string[]) => {
     if (object !== undefined){
         const path = getElementPath(object)
         const objectURI: keyof LwM2MDocument = correlationTable[`${path.objectId}`] as keyof LwM2MDocument 
-        console.log(assetTrackerFirmwareV2[`${objectURI}`])
+        console.log(objectList![`${objectURI}`])
     } else{
-        console.log(assetTrackerFirmwareV2)
+        console.log(objectList)
     }
 }
 
@@ -31,6 +31,7 @@ const clear = () => {
 /**
  * Log in console the list of all possible commands
  * TODO: add the rest of commands
+ * TODO: uses commands global var instead of the internal one. Make no sense to have same logic in 2 different places
  */
 const help = () => {
     const commands = [{
@@ -38,6 +39,12 @@ const help = () => {
         description: 'Clear CLI',
         command: 'clear',
         example: 'clear'
+    },
+    {
+        title: 'Register',
+        description: 'Register device to Coiote',
+        command: 'register [port]',
+        example: 'register'
     },
     {
         title: 'List',
@@ -81,10 +88,10 @@ const commands: Record<string, {parameters: string[], description: string, handl
         description: '\tExecute the factory bootstrap',
         handler: bootstrap
     },
-    'rergister': {
+    'register': {
         parameters: [],
         description: '\tExecute registation to server',
-        handler: set
+        handler: register
     },
     'clear': {
         parameters: [],

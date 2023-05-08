@@ -129,14 +129,14 @@ describe("getObjectsToRegister", () => {
 
 describe('getURN', () =>{
   it('Should return the object URN given the URL', () => {
-    expect(getURN('/3', assetTrackerFirmwareV2)).toBe(Device_3_urn)
-    expect(getURN('/10256', assetTrackerFirmwareV2)).toBe(ECID_SignalMeasurementInformation_10256_urn)
-    expect(getURN('/3303', assetTrackerFirmwareV2)).toBe(Temperature_3303_urn)
-    expect(getURN('/4', assetTrackerFirmwareV2)).toBe(ConnectivityMonitoring_4_urn)
+    expect(getURN('/3')).toBe(Device_3_urn)
+    expect(getURN('/10256')).toBe(ECID_SignalMeasurementInformation_10256_urn)
+    expect(getURN('/3303')).toBe(Temperature_3303_urn)
+    expect(getURN('/4')).toBe(ConnectivityMonitoring_4_urn)
   })
 
   it('Should return undefined if object is not found by the given URL', () => {
-    expect(getURN('/40404', assetTrackerFirmwareV2)).toBe(undefined)
+    expect(getURN('/40404')).toBe(undefined)
   })
 })
 

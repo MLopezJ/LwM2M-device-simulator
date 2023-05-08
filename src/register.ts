@@ -89,7 +89,7 @@ export type lwm2mJson = {
  * @see https://www.openmobilealliance.org/release/LightweightM2M/V1_0-20170208-A/OMA-TS-LightweightM2M-V1_0-20170208-A.pdf pag 55
  */
 export const read = (url: string): Buffer => {
-    const urn = getURN(url, assetTrackerFirmwareV2)
+    const urn = getURN(url)
     if (Boolean(urn) === false) return Buffer.from(JSON.stringify({bn:null, e: null}))
 
     const object = assetTrackerFirmwareV2[`${urn}` as keyof LwM2MDocument]

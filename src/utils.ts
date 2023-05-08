@@ -1,4 +1,4 @@
-import {type assetTracker} from '../src/assetTrackerV2.js'
+import {assetTrackerFirmwareV2, type assetTracker} from '../src/assetTrackerV2.js'
 
 // TODO: add description
 export const serverReqParser = (req: {
@@ -84,7 +84,7 @@ export const getObjectsToRegister = (objectList: assetTracker): string => {
  * Given the LwM2M url of the object should return its URN used in assetTracker def
  * TODO: use method from lib
  */
-export const getURN = (url: string, objectsList: assetTracker): string | undefined =>  Object.keys(objectsList).filter(element => element.split(':')[0] === url.split('/')[1])[0]
+export const getURN = (url: string): string | undefined =>  Object.keys(assetTrackerFirmwareV2).filter(element => element.split(':')[0] === url.split('/')[1])[0]
 
 /**
  * @see https://www.openmobilealliance.org/release/LightweightM2M/V1_0-20170208-A/OMA-TS-LightweightM2M-V1_0-20170208-A.pdf pag 57, last example

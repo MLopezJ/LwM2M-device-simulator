@@ -1,14 +1,17 @@
+//import type { Agent } from 'coap'
 import {set as setCmd} from '../src/cmds/set.js'
 import { assetTrackerFirmwareV2, type assetTracker } from './assetTrackerV2.js'
-import { bootstrap as bootstrapCmd } from './cmds/bootstrap.js'
+//import { bootstrap as bootstrapCmd } from './cmds/bootstrap.js'
+import {register as registerCmd} from './cmds/register.js'
+import { index } from './register.js'
 import { getElementPath } from './utils.js'
 
 /**
  * Second layer of the app
  */
 
-let objectList: assetTracker | undefined = undefined
-let agent = undefined
+export let objectList: assetTracker | undefined = undefined
+//let agent: Agent | undefined = undefined
 
 /**
  * Connector method to update the resource value of an object
@@ -30,10 +33,36 @@ export const set = (command: string[]) => {
 }
 
 export const bootstrap = () => {
-    const result = bootstrapCmd()
+    console.log('no effects here')
+    return
+    //objectList = structuredClone(assetTrackerFirmwareV2)
+    
+    /*const result = bootstrapCmd()
     
     objectList = result[0]
     agent = result[1]
+    // TODO: add successfull message
+    */
 }
 
 export const list = () => {}
+
+/**
+ * Connector method to execute registration on Coiote
+ */
+export const register = () => {
+    /*
+    if (objectList === undefined){
+        console.log('Executing Factory Bootstrap')
+        objectList = structuredClone(assetTrackerFirmwareV2)
+        /*
+        console.log(
+            `\nError: Factory Bootstrap should be executed first\n--------------------------------\n`
+        );
+        return
+        */
+    //}
+    index()
+    //registerCmd(assetTrackerFirmwareV2)
+
+}
