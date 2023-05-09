@@ -1,3 +1,4 @@
+import type { LwM2MDocument } from '@nordicsemiconductor/lwm2m-types';
 import {assetTrackerFirmwareV2, type assetTracker} from '../src/assetTrackerV2.js'
 
 // TODO: add description
@@ -161,11 +162,16 @@ export const getResourceList = (values: object[] | object, elementType: 'object'
 };
 
 /**
+ * Components of a LwM2M element
+ */
+type elementType = "object" | "instance" | "resource"
+
+/**
  * Return the element type that the LwM2M Server is requesting.
  * 
  * The parameter of the function will have the following struct: < OBJECT / INSTANCE / RESOURCE >
  */
-export const getElementType = (element: string) : "object" | "instance" | "resource" | undefined => {
+export const getElementType = (element: string) : elementType | undefined => {
   const amountOfSlashes = (element.split("/").length - 1)
     let elementType: "object" | "instance" | "resource" | undefined
     switch(amountOfSlashes){
@@ -185,14 +191,77 @@ export const getElementType = (element: string) : "object" | "instance" | "resou
 }
 
 /**
+ * LwM2M element struct
+ * < objectId / instanceId / resourceId >
+ */
+type element = {
+  objectId: number,
+  instanceId: number,
+  resourceId: number
+}
+
+/**
  * Split path in object, instance and resource
  * /object/instance/resource
+ * 
+ * -1 means no defined value
  */
-export const getElementPath = (url: string): {objectId: number, instanceId: number, resourceId: number} => {
+export const getElementPath = (url: string): element => {
   const [,objectId, instanceId, resourceId] = url.split("/")
   return {
     objectId: objectId? Number(objectId): -1,
     instanceId: instanceId? Number(instanceId): -1,
     resourceId: resourceId? Number(resourceId): -1
   }
+}
+
+/**
+ * Given an element and a list, should return the value of the element in list
+ */
+export const getElementValue = (element: element, typeOfElement: elementType, objectList: assetTracker) => {
+
+
+  const id = getURN(`/${element.objectId}`)
+  const temp = objectList[`${id}`  as keyof LwM2MDocument]
+
+  if (temp === undefined){
+    console.log('Error: object does not exist')
+    return undefined
+  } 
+
+  if (typeOfElement === 'object'){
+    return temp
+  }
+
+  const isSingleInstance = Array.isArray(temp) === false
+
+  if (typeOfElement === 'instance'){
+    
+    
+    if (isSingleInstance === true){
+      if(element.instanceId !== 0){
+        console.log('Error: element is single instance')
+        return undefined
+      }
+      return temp
+    }
+
+    // TODO: solve this
+    // @ts-ignore
+    return temp[element.instanceId]
+  }
+
+  if (typeOfElement === 'resource'){
+    // if object is single instance 
+    if (isSingleInstance === true){
+      // TODO: solve this
+      // @ts-ignore
+      return temp[`${element.resourceId}`]
+    }
+    // TODO: solve this
+    // @ts-ignore
+    return temp[element.instanceId][`${element.resourceId}`]
+  }
+
+  return undefined
 }
