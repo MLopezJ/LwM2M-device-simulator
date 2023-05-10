@@ -4,8 +4,11 @@ import { clear, help, list, quit, register, set } from "./index.js";
 type commandsObject = Record<
   string,
   {
+    title: string;
     parameters: string[];
     description: string;
+    format: string;
+    example: string;
     execute: (
       command: string[] | never,
       objectList: assetTracker
@@ -18,33 +21,51 @@ type commandsObject = Record<
  */
 export const commands: commandsObject = {
   list: {
+    title: 'List',
     parameters: ["objectId", "instanceId", "resourceId"],
     description: "\tList values",
+    format: "list /[object-id]/[instance-id]/[resource-id]",
+    example: "list /3/0/0",
     execute: list,
   },
   set: {
+    title: 'Set',
     parameters: ["objectId", "instanceId", "resourceId"],
     description: "\tList objects values",
+    format: "set object-id/instance-id/resource-id value",
+    example: "set /3/0/0 Nordic",
     execute: set,
   },
   register: {
+    title: 'Register',
     parameters: [],
     description: "\tExecute registation to server",
+    format: "register",
+    example: "register",
     execute: register,
   },
   clear: {
+    title: 'Clear',
     parameters: [],
     description: "\tClear console",
+    format: "clear",
+    example: "clear",
     execute: clear,
   },
   quit: {
+    title: 'Quit',
     parameters: [],
     description: "\tExit the client",
+    format: "quit",
+    example: "quit",
     execute: quit,
   },
   help: {
+    title: 'Help',
     parameters: [],
     description: "\tList all possible commands",
+    format: "help",
+    example: "help",
     execute: help,
   },
 };
