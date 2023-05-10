@@ -6,15 +6,14 @@ import { getElementValue } from "../utils"
 /**
  * List object from object list
  */
-export const list = (command: string[], objectList: assetTracker): Partial<assetTracker> | assetTracker | undefined => {
-    const cmd = command[0]
+export const list = (input: string| undefined, objectList: assetTracker): Partial<assetTracker> | assetTracker | undefined => {
     
-    if (cmd === undefined){
+    if (input === undefined){
         return objectList
     }
 
-    const elementPath = getElementPath(cmd)
-    const elementType = getElementType(cmd)
+    const elementPath = getElementPath(input)
+    const elementType = getElementType(input)
 
     if (elementType === undefined){
         console.log('Error: element type does not exist')
