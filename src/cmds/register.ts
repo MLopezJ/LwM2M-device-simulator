@@ -1,7 +1,7 @@
 import type { LwM2MDocument } from "@nordicsemiconductor/lwm2m-types";
-import coap, { type Agent, type CoapRequestParams } from "coap";
+import coap, { type CoapRequestParams } from "coap"; // type Agent,
 import config from "../../config.json";
-import type { assetTracker } from "../assetTrackerV2.js";
+import { assetTrackerFirmwareV2, type assetTracker } from "../assetTrackerV2.js";
 import {
   getElementPath,
   getElementType,
@@ -11,7 +11,6 @@ import {
   serverReqParser,
   type e,
 } from "../utils.js";
-import { objectList } from "..";
 
 const contentFormat = {
   "IANA-media-type": "application/vnd.oma.lwm2m+json",
@@ -21,10 +20,10 @@ const contentFormat = {
 /**
  * Register device to Coiote
  */
-export const register = (objectList: assetTracker, agent: Agent) => {
+export const register = (objectList: assetTracker) => { // agent: Agent
 
-  //const defaultType = "udp4"
-  //const agent = new coap.Agent({type:defaultType})
+  const defaultType = "udp4"
+  const agent = new coap.Agent({type:defaultType})
 
   const query = `ep=${config.deviceName}&lt=${config.lifetime}&lwm2m=${config.lwm2mV}&b=${config.biding}`;
   const registrationString = getObjectsToRegister(objectList);
@@ -116,7 +115,7 @@ export const createPayload = (action: string, url: string): Buffer => {
   let data: Buffer = Buffer.from("");
   switch (action) {
     case "read":
-      data = getObject(url, objectList!);
+      data = getObject(url, assetTrackerFirmwareV2); // TODO: refactorr
       break;
   }
   return data;
