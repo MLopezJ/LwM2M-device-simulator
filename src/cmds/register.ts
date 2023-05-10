@@ -1,5 +1,5 @@
 import type { LwM2MDocument } from "@nordicsemiconductor/lwm2m-types";
-import coap, { type CoapRequestParams } from "coap";
+import coap, { type Agent, type CoapRequestParams } from "coap";
 import config from "../../config.json";
 import type { assetTracker } from "../assetTrackerV2.js";
 import {
@@ -21,10 +21,10 @@ const contentFormat = {
 /**
  * Register device to Coiote
  */
-export const register = (objectList: assetTracker) => {
+export const register = (objectList: assetTracker, agent: Agent) => {
 
-  const defaultType = "udp4"
-  const agent = new coap.Agent({type:defaultType})
+  //const defaultType = "udp4"
+  //const agent = new coap.Agent({type:defaultType})
 
   const query = `ep=${config.deviceName}&lt=${config.lifetime}&lwm2m=${config.lwm2mV}&b=${config.biding}`;
   const registrationString = getObjectsToRegister(objectList);
