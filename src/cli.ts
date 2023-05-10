@@ -1,57 +1,126 @@
+/**
+ * Implementing CLI
+ */
 import * as readline from "readline";
-import { Command } from "commander";
-import { index } from "./register";
-import { assetTrackerFirmwareV2 } from "./assetTrackerV2.js"
-import { Temperature_3303_urn } from '@nordicsemiconductor/lwm2m-types'
+import {set, bootstrap, register, list} from './index.js'
 
-const program = new Command();
+const quit = () => {
+    console.log('\nExiting client...\n--------------------------------\n')
+    process.exit()
+}
 
-let value: number
+const clear = () => {
+    console.clear();
+}
 
-program
-    .name("Device Simulator")
-    .description("Virtual implementation of Thingy:91 with Asset Tracker firmware to send LwM2M data to Coiote")
-
-program.command('connect')
-    .description('Implement Bootstraping factory and connect device to Coiote.')
-    .action(() => {
-        index()
-        console.log('connecting to Coiote')
-        value = 5
-    });
-
-program.command('update')
-    .description('...')
-    .action(() => {
-        console.log('Updating values')
-        value += 1
-        assetTrackerFirmwareV2[Temperature_3303_urn]![0]!["5700"] = Math.floor(Math.random() * (85 - -40 + 1) + -40);
-        console.log(assetTrackerFirmwareV2[Temperature_3303_urn]);
-        index()
-    });
-
-program.command('quit')
-    .description('exit')
-    .action(() => {
-        console.log('quiting')
-    });
-
-var rdLine = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-});
-
-rdLine.prompt();
-
-console.log('connect. update. quit')
-rdLine.on('line', function (line: string) {
-    program.parse([line] , { from : 'user'});
-    if(line === 'quit') rdLine.close();
-    else {
-        console.log(value)
-        console.log("press control + c to exit or add another command to continue")
-        console.log('connect. update. quit')
+/**
+ * Log in console the list of all possible commands
+ * TODO: add the rest of commands
+ * TODO: uses commands global var instead of the internal one. Make no sense to have same logic in 2 different places
+ */
+const help = () => {
+    const commands = [{
+        title: 'Clear',
+        description: 'Clear CLI',
+        command: 'clear',
+        example: 'clear'
+    },
+    {
+        title: 'Register',
+        description: 'Register device to Coiote',
+        command: 'register [port]',
+        example: 'register'
+    },
+    {
+        title: 'List',
+        description: 'List the values of requested object',
+        command: 'list [object id]',
+        example: 'list 3'
+    },
+    {
+        title: 'Quit',
+        description: 'Exit CLI',
+        command: 'quit',
+        example: 'quit'
     }
-});
+    ]
 
-// async option https://stackoverflow.com/questions/58096673/how-to-make-readline-work-inside-a-loop-in-typescript 
+    console.log("command required-param [optional param]")
+    console.log(`Options:\n`)
+    commands.map(cmd => {
+        console.log(`\t${cmd.title}\n`);
+        console.log(`\t${cmd.description}`);
+        console.log(`\tCommand: ${cmd.command}`);
+        console.log(`\tExample: ${cmd.example}`);
+        console.log(`--------------------------------------------\n`)
+    })
+}
+
+
+const commands: Record<string, {parameters: string[], description: string, handler: (command: string[]|never) => void}> = {
+    'list': {
+        parameters: ['objectId', 'instanceId', 'resourceId'],
+        description: '\tList values',
+        handler: list
+    },
+    'set': {
+        parameters: ['objectId', 'instanceId', 'resourceId'],
+        description: '\tList objects values',
+        handler: set
+    },
+    'bootstrap': {
+        parameters: [],
+        description: '\tExecute the factory bootstrap',
+        handler: bootstrap
+    },
+    'register': {
+        parameters: [],
+        description: '\tExecute registation to server',
+        handler: register
+    },
+    'clear': {
+        parameters: [],
+        description: '\tClear console',
+        handler: clear
+    },
+    'quit': {
+        parameters: [],
+        description: '\tExit the client',
+        handler: quit
+    },
+    'help': {
+        parameters: [],
+        description: '\tList all possible commands',
+        handler: help
+    }
+}
+
+const executeCommand = (command: string, parameters: string[]) => {
+    if (commands[`${command}`] === undefined ){
+        console.log('Wrong command')
+        help()
+    } else{
+        commands[`${command}`]!.handler(parameters)
+    }
+}
+
+const init = () => {
+    const rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout
+    })
+
+    rl.setPrompt("LwM2M-Dev-Simulator> ")
+    rl.prompt();
+
+    rl.on('line', (userInput: string) => {
+        // from user input, first is the command and second is the params
+        const input = userInput.split(' ');
+        const command = input[0] ?? ''
+        const parameters = input.slice(1);
+        executeCommand(command, parameters)
+        rl.prompt()
+    })
+}
+
+init()
