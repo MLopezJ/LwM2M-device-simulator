@@ -1,7 +1,7 @@
 import type { LwM2MDocument } from "@nordicsemiconductor/lwm2m-types";
-import coap, { type CoapRequestParams } from "coap"; // type Agent,
+import coap, { OutgoingMessage, type CoapRequestParams } from "coap"; // type Agent,
 import config from "../../config.json";
-import { assetTrackerFirmwareV2, type assetTracker } from "../assetTrackerV2.js";
+import { type assetTracker } from "../assetTrackerV2.js";
 import {
   getElementPath,
   getElementType,
@@ -12,22 +12,49 @@ import {
   type e,
 } from "../utils.js";
 
+type registrationResponse = {
+  code: string;
+  rsinfo: { address: unknown; port: unknown };
+  headers: { [x: string]: string };
+  outSocket: { address: unknown; port: string | number };
+}
+
 const contentFormat = {
   "IANA-media-type": "application/vnd.oma.lwm2m+json",
   numericId: "11543",
 };
 
+const udpDefault = "udp4"
+
+let assetTrackerObjects:  undefined | assetTracker = undefined
+
 /**
- * Register device to Coiote
+ * Index
  */
-export const register = (objectList: assetTracker) => { // agent: Agent
+export const register = (objectList: assetTracker) => {
+  assetTrackerObjects = objectList
+  const objects = getObjectsToRegister(objectList);
+  const payload = `</>;ct=${contentFormat.numericId};hb,${objects}`;
 
-  const defaultType = "udp4"
-  const agent = new coap.Agent({type:defaultType})
+  const registerRequest = registration()
 
-  const query = `ep=${config.deviceName}&lt=${config.lifetime}&lwm2m=${config.lwm2mV}&b=${config.biding}`;
-  const registrationString = getObjectsToRegister(objectList);
-  const payload = `</>;ct=${contentFormat.numericId};hb,${registrationString}`;
+  registerRequest.end(payload);
+
+  registerRequest.on("error", (err: any) => {
+    console.log({ err });
+  });
+
+  registerRequest.on(
+    "response",
+    (response: registrationResponse) => manageResponse(response)
+  );
+}
+
+/**
+ * Send registration request to server
+ */
+const registration = (): OutgoingMessage => {
+  const registerQuery = `ep=${config.deviceName}&lt=${config.lifetime}&lwm2m=${config.lwm2mV}&b=${config.biding}`;
 
   const params: CoapRequestParams = {
     host: "eu.iot.avsystem.cloud",
@@ -35,87 +62,75 @@ export const register = (objectList: assetTracker) => { // agent: Agent
     pathname: "/rd",
     method: "POST",
     options: { "Content-Format": "application/link-format" },
-    query,
+    query: registerQuery,
   };
 
+  const agent = new coap.Agent({type:udpDefault})
   const registerRequest = agent.request(params);
 
-  registerRequest.on(
-    "response",
-    (response: {
-      code: string;
-      rsinfo: { address: unknown; port: unknown };
-      headers: { [x: string]: string };
-      outSocket: { address: unknown; port: string | number };
-    }) => {
-      //console.log("register response: ", response);
+  return registerRequest
+}
 
-      if (response.code === "2.01") {
-        const coiote = {
-          ip: response.outSocket.address,
-          port: response.outSocket.port,
-          locationPath: `/rd/${response.headers["Location-Path"]}`,
-        };
-
-        /**
-         * The Device Simulator just sent a request to Coiote for register itself.
-         *
-         * Now, a server should be open to hear from Coiote and see what else is needed.
-         */
-        listenToCoiote(coiote.port);
-      }
-    }
-  );
-
-  registerRequest.on("error", (err: any) => {
-    console.log({ err });
-  });
-
-  registerRequest.end(payload);
-};
+type serverRequest = { url: string }
+type serverRespose = {
+  setOption: (arg0: string, arg1: string) => void;
+  end: (arg0: string | Buffer | undefined) => void;
+}
 
 /**
- * Open a new server to hear requests from Coiote
+ * Stablish a socket connection in case the response is sucess
  */
-const listenToCoiote = (connectionPort: number | string) => {
-  console.log("LISTENING TO COIOTE on port: ", connectionPort);
-  const defaultType = "udp4";
-  const server = coap.createServer({
-    type: defaultType,
-    proxy: true,
-  });
+const manageResponse = (response: registrationResponse) => {
+  // if registration sucess
+  if (response.code === "2.01") {
+    const socketPort = response.outSocket.port // socket port of connection between Coiote and Device Simulator
 
-  server.on(
-    "request",
-    (
-      request: { url: string },
-      response: {
-        setOption: (arg0: string, arg1: string) => void;
-        end: (arg0: string | Buffer | undefined) => void;
-      }
-    ) => {
-      const action = serverReqParser(request as any); // TODO: improve this
-      console.log("coiote is looking for", action, request.url);
-      const data = createPayload(action, request.url);
+    // Create a new server to interact with Coiote
+    const server = coap.createServer({
+      type: udpDefault,
+      proxy: true,
+    });
 
-      response.setOption("Content-Format", contentFormat["IANA-media-type"]);
-      response.end(data);
-    }
-  );
+    server.listen(socketPort as number, (err: unknown) => {
+      console.log({ err });
+    });
 
-  server.listen(connectionPort as number, (err: unknown) => {
-    console.log({ err });
-  });
-};
+    server.on(
+      "request",
+      (
+        request: serverRequest,
+        response: serverRespose
+      ) => manageCoioteRequest(request, response)
+    );
+  }
+}
+
+/**
+ * Identify the action requested and create payload to response
+ */
+const manageCoioteRequest = (request: serverRequest, response: serverRespose, objectList: assetTracker | undefined = assetTrackerObjects) => {
+  const actionRequested = serverReqParser(request as any); // TODO: improve this
+  console.log("Coiote request ",actionRequested," element ", request.url)
+
+  let payload = undefined
+  if (objectList !== undefined){
+    payload = getPayload(actionRequested, request.url, objectList)
+  } else {
+    console.log('List with objects is undefined')
+  }
+
+  response.setOption("Content-Format", contentFormat["IANA-media-type"]);
+  response.end(payload);
+}
 
 /**
  * Generate payload depending on option type requested
  */
-export const createPayload = (action: string, url: string): Buffer => {
+export const getPayload = (action: string, url: string,  objectList: assetTracker): Buffer => {
   let data: Buffer = Buffer.from("");
   switch (action) {
     case "read":
-      data = getObject(url, assetTrackerFirmwareV2); // TODO: refactorr
+      data = getObject(url, objectList);
       break;
   }
   return data;
