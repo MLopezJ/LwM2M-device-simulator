@@ -1,9 +1,9 @@
-import {set as setCmd} from '../src/cmds/set.js'
-import {register as registerCmd} from './cmds/register.js'
-import { list as listCmd} from './cmds/list.js'
-import {help as helpCmd} from './cmds/help.js'
-import { getElementPath } from './utils.js'
-import type { assetTracker } from './assetTrackerV2.js'
+import {set as setCmd} from './set.js'
+import {register as registerCmd} from './register.js'
+import { list as listCmd} from './list.js'
+import {help as helpCmd} from './help.js'
+import { getElementPath } from '../utils.js'
+import type { assetTracker } from '../assetTrackerV2.js'
 
 /**
  * Clear console
