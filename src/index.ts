@@ -1,72 +1,60 @@
-//import type { Agent } from 'coap'
-import type { Agent } from 'coap'
 import {set as setCmd} from '../src/cmds/set.js'
-import { assetTrackerFirmwareV2, type assetTracker } from './assetTrackerV2.js'
-//import { bootstrap as bootstrapCmd } from './cmds/bootstrap.js'
 import {register as registerCmd} from './cmds/register.js'
 import { list as listCmd} from './cmds/list.js'
-//import { index } from './register.js'
+import {help as helpCmd} from './cmds/help.js'
 import { getElementPath } from './utils.js'
+import type { assetTracker } from './assetTrackerV2.js'
 
 /**
- * Second layer of the app
+ * Clear console
  */
+export const clear = () => console.clear()
 
-export let objectList: assetTracker | undefined = undefined
-let agent: Agent | undefined = undefined
+/**
+ * Quit console
+ */
+export const quit = () => {
+    console.log('\nExiting client...\n--------------------------------\n')
+    process.exit()
+}
+
+/**
+ * Connector method to list info about available commands
+ * TODO: make no sense to have it in separe file
+ */
+export const help = () => helpCmd()
 
 /**
  * Connector method to update the resource value of an object
  */
-export const set = (command: string[]) => {
-    const path = getElementPath(command[0]??'')
-    const value = command[1]
-    if (objectList === undefined){
-        console.log(
-            `\nError: Factory Bootstrap is not executed\n--------------------------------\n`
-          );
-        return
-    }
-    const result = setCmd(objectList, path, value?? '')
+export const set = (userInput: string[], list: assetTracker) => {
+    const path = getElementPath(userInput[0]??'')
+    const value = userInput[1]
+    
+    const result = setCmd(list, path, value?? '')
 
-    if (result !== undefined) objectList = result
-
-    //console.log(objectList, assetTrackerFirmwareV2)
+    return result
 }
 
 /**
  * Connector method to execute list of objects
  */
-export const list = (command: string[]) => {
-    const result = listCmd(command, assetTrackerFirmwareV2)
+export const list = (userInput: string[], objectsList: assetTracker) => {
+    const input = userInput[0]
+
+    const result = listCmd(input, objectsList)
 
     if (result === undefined){
         console.log('Error')
         return 
     }
+
     console.log(result)
 }
 
 /**
  * Connector method to execute registration on Coiote
  */
-export const register = () => {
-    
-    if (objectList === undefined || agent === undefined){
-        console.log('Executing Factory Bootstrap')
-        const result = bootstrapCmd()
-        objectList = result[0]
-        agent = result[1]
-
-        //objectList = structuredClone(assetTrackerFirmwareV2)
-        /*
-        console.log(
-            `\nError: Factory Bootstrap should be executed first\n--------------------------------\n`
-        );
-        return
-        */
-    }
-    //index()
-    registerCmd(objectList, agent)
-
+export const register = (command: string[]|never, list: assetTracker) => {
+    registerCmd(list) // agent
 }
