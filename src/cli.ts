@@ -2,7 +2,7 @@
  * Implementing CLI
  */
 import * as readline from "readline";
-import {set, bootstrap, register, list} from './index.js'
+import {set, register, list} from './index.js'
 
 const quit = () => {
     console.log('\nExiting client...\n--------------------------------\n')
@@ -67,11 +67,6 @@ const commands: Record<string, {parameters: string[], description: string, handl
         parameters: ['objectId', 'instanceId', 'resourceId'],
         description: '\tList objects values',
         handler: set
-    },
-    'bootstrap': {
-        parameters: [],
-        description: '\tExecute the factory bootstrap',
-        handler: bootstrap
     },
     'register': {
         parameters: [],

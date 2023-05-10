@@ -2,7 +2,7 @@
 import type { Agent } from 'coap'
 import {set as setCmd} from '../src/cmds/set.js'
 import { assetTrackerFirmwareV2, type assetTracker } from './assetTrackerV2.js'
-import { bootstrap as bootstrapCmd } from './cmds/bootstrap.js'
+//import { bootstrap as bootstrapCmd } from './cmds/bootstrap.js'
 import {register as registerCmd} from './cmds/register.js'
 import { list as listCmd} from './cmds/list.js'
 //import { index } from './register.js'
@@ -32,18 +32,6 @@ export const set = (command: string[]) => {
     if (result !== undefined) objectList = result
 
     //console.log(objectList, assetTrackerFirmwareV2)
-}
-
-export const bootstrap = () => {
-    //console.log('no effects here')
-    //return
-    //objectList = structuredClone(assetTrackerFirmwareV2)
-    
-    const result = bootstrapCmd()
-    
-    objectList = result[0]
-    agent = result[1]
-    // TODO: add successfull message
 }
 
 /**
