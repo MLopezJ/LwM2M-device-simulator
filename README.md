@@ -45,20 +45,14 @@ Allows to manage devices that have very little power over really low bandwidth n
 npm install
 ```
 
+## Test
+
+```
+npm test
+```
+
 ## Execution
 
 ```
 npx tsx src/cli.ts 
-```
-
-## CoAP interaction test
-
-in `src/simulation` there is an example which pretend to simulate the interaction between the `src/connection.ts` (client) and `Coiote` (server). This is because is not possible to know how is the request received by Coiote, so a server was created in order to double check the information is sent as expected. 
-
-```
-// runs server
-npx ts-node ./src/simulation/server.ts
-
-// runs client
-npx ts-node ./src/simulation/client.ts
 ```
