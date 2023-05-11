@@ -1,6 +1,6 @@
 import type { assetTracker } from "../assetTrackerV2"
-import { getElementPath, getElementType } from "./utils"
-import { getElementValue } from "./utils"
+import { getElementPath, getElementType } from "./registerUtils"
+import { getElementValue } from "./registerUtils"
 
 
 /**

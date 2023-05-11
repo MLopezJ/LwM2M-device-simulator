@@ -2,7 +2,7 @@ import {set as setCmd} from './set.js'
 import {register as registerCmd} from './register.js'
 import { list as listCmd} from './list.js'
 import {help as helpCmd} from './help.js'
-import { getElementPath } from './utils.js'
+import { getElementPath } from './registerUtils.js'
 import type { assetTracker } from '../assetTrackerV2.js'
 
 /**
