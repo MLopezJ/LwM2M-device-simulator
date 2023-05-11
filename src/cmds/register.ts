@@ -56,8 +56,8 @@ const registration = (): OutgoingMessage => {
   const registerQuery = `ep=${config.deviceName}&lt=${config.lifetime}&lwm2m=${config.lwm2mV}&b=${config.biding}`;
 
   const params: CoapRequestParams = {
-    host: "eu.iot.avsystem.cloud",
-    port: 5683,
+    host: config.host,
+    port: config.port,
     pathname: "/rd",
     method: "POST",
     options: { "Content-Format": "application/link-format" },
