@@ -55,6 +55,4 @@ export const list = (userInput: string[], objectsList: assetTracker) => {
 /**
  * Connector method to execute registration on Coiote
  */
-export const register = (command: string[]|never, list: assetTracker) => {
-    registerCmd(list)
-}
+export const register = (command: string[]|never, list: assetTracker) => registerCmd(list)
