@@ -8,7 +8,7 @@ type commandsObject = Record<
     parameters: string[];
     description: string;
     format: string;
-    example: string;
+    example: string | string[];
     execute: (
       command: string[] | never,
       objectList: assetTracker
@@ -25,7 +25,7 @@ export const commands: commandsObject = {
     parameters: ["objectId", "instanceId", "resourceId"],
     description: "\tList values",
     format: "list /[object-id]/[instance-id]/[resource-id]",
-    example: "list /3/0/0",
+    example: ["list","list /3","list /3/0","list /3/0/0"],
     execute: list,
   },
   set: {

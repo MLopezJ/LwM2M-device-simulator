@@ -10,7 +10,12 @@ export const help = () => {
         console.log(`\t${element.title}\n`);
         console.log(`\t${element.description}\n`);
         console.log(`\tFormat: ${element.format}`);
-        console.log(`\tExample: ${element.example}`);
+        if (Array.isArray(element.example)){
+            console.log(`\tExample:`);
+            element.example.map(example => console.log(`\t\t${example}`))
+        }else {
+            console.log(`\tExample: ${element.example}`);
+        }
         console.log(`-------------------------------------------------\n`)
     })
 }
