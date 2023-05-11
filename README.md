@@ -40,15 +40,15 @@ Allows to manage devices that have very little power over really low bandwidth n
 5. Perform Information Reporting
 
 
-## Install
+## Installation
 ```
 npm install
 ```
 
-## Execute Client Registration
+## Execution
 
 ```
-npx ts-node ./src/connection.ts
+npx tsx src/cli.ts 
 ```
 
 ## CoAP interaction test
