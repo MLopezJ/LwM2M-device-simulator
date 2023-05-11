@@ -19,13 +19,7 @@ type registrationResponse = {
   outSocket: { address: unknown; port: string | number };
 }
 
-const contentFormat = {
-  "IANA-media-type": "application/vnd.oma.lwm2m+json",
-  numericId: "11543",
-};
-
 const udpDefault = "udp4"
-
 let assetTrackerObjects:  undefined | assetTracker = undefined
 
 /**
@@ -33,8 +27,13 @@ let assetTrackerObjects:  undefined | assetTracker = undefined
  */
 export const register = (objectList: assetTracker) => {
   assetTrackerObjects = objectList
+  /**
+   * Data Format id for Transferring Resource Information as a json
+   * @see http://www.openmobilealliance.org/release/LightweightM2M/V1_0_2-20180209-A/OMA-TS-LightweightM2M-V1_0_2-20180209-A.pdf Page 48
+   */
+  const jsonId = "11543";
   const objects = getObjectsToRegister(objectList);
-  const payload = `</>;ct=${contentFormat.numericId};hb,${objects}`;
+  const payload = `</>;ct=${jsonId};hb,${objects}`;
 
   const registerRequest = registration()
 
@@ -119,7 +118,13 @@ const manageCoioteRequest = (request: serverRequest, response: serverRespose, ob
     console.log('List with objects is undefined')
   }
 
-  response.setOption("Content-Format", contentFormat["IANA-media-type"]);
+  /**
+   * Json as IANA Media Type 
+   * @see http://www.openmobilealliance.org/release/LightweightM2M/V1_0_2-20180209-A/OMA-TS-LightweightM2M-V1_0_2-20180209-A.pdf Page 48
+   */
+  const json = "application/vnd.oma.lwm2m+json";
+
+  response.setOption("Content-Format", json);
   response.end(payload);
 }
 
