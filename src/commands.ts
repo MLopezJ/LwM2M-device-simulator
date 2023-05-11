@@ -31,7 +31,7 @@ export const commands: commandsObject = {
   set: {
     title: 'Set',
     parameters: ["objectId", "instanceId", "resourceId"],
-    description: "\tList objects values",
+    description: "\tSet resource value",
     format: "set object-id/instance-id/resource-id value",
     example: "set /3/0/0 Nordic",
     execute: set,
