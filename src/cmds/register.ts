@@ -10,7 +10,7 @@ import {
   getURN,
   serverReqParser,
   type e,
-} from "../utils.js";
+} from "./utils.js";
 
 type registrationResponse = {
   code: string;

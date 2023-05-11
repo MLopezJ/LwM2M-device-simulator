@@ -1,5 +1,5 @@
 import type { LwM2MDocument } from '@nordicsemiconductor/lwm2m-types';
-import {assetTrackerFirmwareV2, type assetTracker} from '../src/assetTrackerV2.js'
+import {assetTrackerFirmwareV2, type assetTracker} from '../assetTrackerV2.js'
 
 // TODO: add description
 export const serverReqParser = (req: {

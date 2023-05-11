@@ -1,4 +1,4 @@
-import { assetTrackerFirmwareV2, type assetTracker } from "./assetTrackerV2.js";
+import { assetTrackerFirmwareV2, type assetTracker } from "../assetTrackerV2.js";
 import { type e, getResourceList, getObjectsToRegister, getURN, getElementType, getElementPath, getElementValue } from "./utils.js";
 import {
   Device_3_urn,
