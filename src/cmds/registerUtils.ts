@@ -194,7 +194,7 @@ export const getElementType = (element: string) : elementType | undefined => {
  * LwM2M element struct
  * < objectId / instanceId / resourceId >
  */
-type element = {
+export type element = {
   objectId: number,
   instanceId: number,
   resourceId: number

@@ -1,21 +1,16 @@
 import type { LwM2MDocument } from "@nordicsemiconductor/lwm2m-types";
 import { correlationTable } from "../assetTrackerV2";
 import type { assetTracker } from "../assetTrackerV2.js";
+import type { element } from '../cmds/registerUtils'
 
 // TODO: update assetTrackerFirmwareV2 with param
 
 /**
  * Set new value in LwM2M object list
- * TODO: add unit test
- * TODO: make sure there is not site effect on assetTrackerFirmwareV2
  */
 export const set = (
   objectList: assetTracker,
-  path: {
-    objectId: number;
-    instanceId: number;
-    resourceId: number;
-  },
+  path: element,
   value: string
 ): assetTracker | undefined => {
   //const path = getElementPath(command[0]??'')
@@ -52,10 +47,20 @@ export const set = (
       return;
     }
 
+    // @ts-ignore
+    if (objectList![`${objectURI}`]![`${path.resourceId}`] === undefined){
+      console.log(
+        `\nError: Resource ${path.resourceId} do not exist on ${path.objectId}/${path.instanceId}. \n--------------------------------\n`
+      );
+      return;
+    }
+
+    // @ts-ignore
+    const isNumber = typeof objectList![`${objectURI}`]![`${path.resourceId}`] === 'number' 
     // TODO Solve this typescript issue
     // set value
     // @ts-ignore
-    objectList![`${objectURI}`]![`${path.resourceId}`]! = value;
+    objectList![`${objectURI}`]![`${path.resourceId}`]! = isNumber? Number(value): value;
     return objectList
   } else {
     // multiple instance case
@@ -75,12 +80,14 @@ export const set = (
       return;
     }
 
+    // @ts-ignore
+    const isNumber = typeof objectList[`${objectURI}`]![path.instanceId]![`${path.resourceId}`] === 'number' 
     // TODO Solve this typescript issue
     // set value
     // @ts-ignore
     objectList[`${objectURI}`]![path.instanceId]![
       `${path.resourceId}`
-    ] = value;
+    ] = isNumber ? Number(value) : value;
     return objectList
   }
 };
