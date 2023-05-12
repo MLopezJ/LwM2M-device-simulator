@@ -164,7 +164,7 @@ export const getResourceList = (values: object[] | object, elementType: 'object'
 /**
  * Components of a LwM2M element
  */
-type elementType = "object" | "instance" | "resource"
+export type elementType = "object" | "instance" | "resource"
 
 /**
  * Return the element type that the LwM2M Server is requesting.
