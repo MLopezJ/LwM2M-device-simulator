@@ -3,7 +3,6 @@ import coap, { OutgoingMessage, type CoapRequestParams } from "coap"; // type Ag
 import config from "../../config.json";
 import { type assetTracker } from "../assetTrackerV2.js";
 import {
-  getElementPath,
   getResourceList,
   getURN,
   type e,
@@ -11,6 +10,7 @@ import {
 import { getBracketFormat } from "../utils/getBracketFormat";
 import { requestParser } from "../utils/requestParser";
 import { typeOfElement } from "../utils/typeOfElement";
+import { getElementPath } from "../utils/getElementPath";
 
 type registrationResponse = {
   code: string;

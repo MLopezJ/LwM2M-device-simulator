@@ -1,6 +1,7 @@
 import type { LwM2MDocument } from '@nordicsemiconductor/lwm2m-types';
 import type { elementType } from '../utils/typeOfElement.js'
 import {assetTrackerFirmwareV2, type assetTracker} from '../assetTrackerV2.js'
+import type { element } from '../utils/getElementPath.js';
 
 /**
  * Given the LwM2M url of the object should return its URN used in assetTracker def
@@ -83,34 +84,9 @@ export const getResourceList = (values: object[] | object, elementType: 'object'
 };
 
 /**
- * LwM2M element struct
- * < objectId / instanceId / resourceId >
- */
-export type element = {
-  objectId: number,
-  instanceId: number,
-  resourceId: number
-}
-
-/**
- * Split path in object, instance and resource
- * /object/instance/resource
- * 
- * -1 means no defined value
- */
-export const getElementPath = (url: string): element => {
-  const [,objectId, instanceId, resourceId] = url.split("/")
-  return {
-    objectId: objectId? Number(objectId): -1,
-    instanceId: instanceId? Number(instanceId): -1,
-    resourceId: resourceId? Number(resourceId): -1
-  }
-}
-
-/**
  * Given an element and a list, should return the value of the element in list
  */
-export const getElementValue = (element: element, typeOfElement: elementType, objectList: assetTracker) => {
+export const getElementValue = (element: element,  typeOfElement: elementType, objectList: assetTracker) => {
 
 
   const id = getURN(`/${element.objectId}`)
