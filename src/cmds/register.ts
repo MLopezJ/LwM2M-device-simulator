@@ -4,13 +4,13 @@ import config from "../../config.json";
 import { type assetTracker } from "../assetTrackerV2.js";
 import {
   getElementPath,
-  getElementType,
   getResourceList,
   getURN,
   type e,
 } from "./registerUtils.js";
 import { getBracketFormat } from "../utils/getBracketFormat";
 import { requestParser } from "../utils/requestParser";
+import { typeOfElement } from "../utils/typeOfElement";
 
 type registrationResponse = {
   code: string;
@@ -156,7 +156,7 @@ export const getObject = (url: string, objectList: assetTracker): Buffer => {
     return Buffer.from(JSON.stringify({ bn: null, e: null }));
 
   const object = objectList[`${urn}` as keyof LwM2MDocument];
-  const elementType = getElementType(url);
+  const elementType = typeOfElement(url);
   let elementPath = undefined;
 
   if (elementType === "resource") elementPath = getElementPath(url);

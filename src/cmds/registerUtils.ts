@@ -1,4 +1,5 @@
 import type { LwM2MDocument } from '@nordicsemiconductor/lwm2m-types';
+import type { elementType } from '../utils/typeOfElement.js'
 import {assetTrackerFirmwareV2, type assetTracker} from '../assetTrackerV2.js'
 
 /**
@@ -80,35 +81,6 @@ export const getResourceList = (values: object[] | object, elementType: 'object'
     return createList(values, 0) as e[]
   }
 };
-
-/**
- * Components of a LwM2M element
- */
-export type elementType = "object" | "instance" | "resource"
-
-/**
- * Return the element type that the LwM2M Server is requesting.
- * 
- * The parameter of the function will have the following struct: < OBJECT / INSTANCE / RESOURCE >
- */
-export const getElementType = (element: string) : elementType | undefined => {
-  const amountOfSlashes = (element.split("/").length - 1)
-    let elementType: "object" | "instance" | "resource" | undefined
-    switch(amountOfSlashes){
-        case 1:
-            elementType = 'object'
-            break
-        case 2:
-            elementType = 'instance'
-            break
-        case 3:
-            elementType = 'resource'
-            break
-        default:
-            elementType = undefined
-    }
-    return elementType
-}
 
 /**
  * LwM2M element struct

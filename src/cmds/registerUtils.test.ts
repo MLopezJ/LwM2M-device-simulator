@@ -1,5 +1,5 @@
 import { assetTrackerFirmwareV2, type assetTracker } from "../assetTrackerV2.js";
-import { type e, getResourceList, getURN, getElementType, getElementPath, getElementValue } from "./registerUtils.js";
+import { type e, getResourceList, getURN, getElementPath, getElementValue } from "./registerUtils.js";
 import {
   Device_3_urn,
   ConnectivityMonitoring_4_urn,
@@ -131,24 +131,6 @@ describe("getResourceList", () => {
  })
   
   });
-
-describe('getElementType', () =>{
-  it('Should detect object as the element type', () => {
-    expect(getElementType('/3')).toBe('object')
-  })
-
-  it('Should detect instance as the element type', () => {
-    expect(getElementType('/3/0')).toBe('instance')
-  })
-
-  it('Should detect resource as the element type', () => {
-    expect(getElementType('/3/0/1')).toBe('resource')
-  })
-
-  it.each(['', '/3/0/1/0', '/3/0/1/0/1/1/1'])('Should return undefined when format is not recognized in value sent by parameter: %p', (element: string) => {
-    expect(getElementType(element)).toBe(undefined)
-  })
-})
 
 describe('getElementPath', () =>{
   it.each([
