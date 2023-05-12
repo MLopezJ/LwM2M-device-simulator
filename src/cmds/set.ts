@@ -1,9 +1,9 @@
-import type { LwM2MDocument } from "@nordicsemiconductor/lwm2m-types";
-import { correlationTable } from "../assetTrackerV2";
 import type { assetTracker } from "../assetTrackerV2.js";
-import type { element } from '../cmds/registerUtils'
-
-// TODO: update assetTrackerFirmwareV2 with param
+import { type element } from '../cmds/registerUtils'
+import { checkObject } from "../utils/checkObject";
+import { checkInstance } from "../utils/checkInstance";
+import { checkResource } from "../utils/checkResource";
+import { getUrn } from "../utils/getUrn";
 
 /**
  * Set new value in LwM2M object list
@@ -13,81 +13,34 @@ export const set = (
   path: element,
   value: string
 ): assetTracker | undefined => {
-  //const path = getElementPath(command[0]??'')
-  //const value = command[1]
-  //const objectURI: keyof LwM2MDocument | undefined = correlationTable[`${path.objectId}`] as keyof LwM2MDocument ?? undefined
-  const objectURI: keyof LwM2MDocument = correlationTable[
-    `${path.objectId}`
-  ] as keyof LwM2MDocument;
-  if (objectURI === undefined) {
-    console.log(
-      `\nError: Object ${path.objectId} do not exist in object list \n--------------------------------\n`
-    );
-    return;
-  }
 
-  // LwM2M object
-  const element = objectList[`${objectURI}`];
+  // check if object exist 
+  const object = checkObject(path,objectList)
+  if (object === undefined) return undefined
 
-  // This condition is repeated but been added because object could be undefined just because of the typescript rules
-  if (element === undefined) {
-    console.log(
-      `\nError: Object ${path.objectId} do not exist in object list \n--------------------------------\n`
-    );
-    return;
-  }
+  // check if instance exist 
+  const instance = checkInstance(object, path.instanceId)
+  if (instance === undefined) return undefined
 
-  const isSingleInstance = !Array.isArray(element);
+  // check if resource exist 
+  const resource = checkResource(instance, path.resourceId)
+  if (resource === undefined) return undefined
 
-  if (isSingleInstance) {
-    if (path.instanceId !== 0) {
-      console.log(
-        `\nError: Object ${path.objectId} is single instance. \n--------------------------------\n`
-      );
-      return;
-    }
+  // set new value and retur 
 
+  // set new data type taking in consideration last data type of element
+  const newValue = typeof resource === 'number' ? Number(value) : value
+  const urn = getUrn(path.objectId)
+
+  // multiple instance
+  if (Array.isArray(object) === true){
     // @ts-ignore
-    if (objectList![`${objectURI}`]![`${path.resourceId}`] === undefined){
-      console.log(
-        `\nError: Resource ${path.resourceId} do not exist on ${path.objectId}/${path.instanceId}. \n--------------------------------\n`
-      );
-      return;
-    }
-
-    // @ts-ignore
-    const isNumber = typeof objectList![`${objectURI}`]![`${path.resourceId}`] === 'number' 
-    // TODO Solve this typescript issue
-    // set value
-    // @ts-ignore
-    objectList![`${objectURI}`]![`${path.resourceId}`]! = isNumber? Number(value): value;
-    return objectList
+    objectList[`${urn}`]![path.instanceId]![`${path.resourceId}`] = newValue
   } else {
-    // multiple instance case
-    if (element.length - 1 < path.instanceId) {
-      console.log(
-        `\nError: Instance ${path.instanceId} of object ${path.objectId} do not exist on list. \n--------------------------------\n`
-      );
-      return;
-    }
-
-    const resourceOptions = element[`${path.instanceId}`];
-
-    if (resourceOptions[`${path.resourceId}`] === undefined) {
-      console.log(
-        `\nError: Resource ${path.resourceId} do not exist on ${path.objectId}/${path.instanceId}. \n--------------------------------\n`
-      );
-      return;
-    }
-
+    // Single instance
     // @ts-ignore
-    const isNumber = typeof objectList[`${objectURI}`]![path.instanceId]![`${path.resourceId}`] === 'number' 
-    // TODO Solve this typescript issue
-    // set value
-    // @ts-ignore
-    objectList[`${objectURI}`]![path.instanceId]![
-      `${path.resourceId}`
-    ] = isNumber ? Number(value) : value;
-    return objectList
+    objectList![`${urn}`]![`${path.resourceId}`]! = newValue
   }
+ 
+  return objectList
 };
