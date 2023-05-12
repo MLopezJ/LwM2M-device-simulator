@@ -7,10 +7,10 @@ import {
   getElementType,
   getResourceList,
   getURN,
-  serverReqParser,
   type e,
 } from "./registerUtils.js";
 import { getBracketFormat } from "../utils/getBracketFormat";
+import { requestParser } from "../utils/requestParser";
 
 type registrationResponse = {
   code: string;
@@ -108,7 +108,7 @@ const manageResponse = (response: registrationResponse) => {
  * Identify the action requested and create payload to response
  */
 const manageCoioteRequest = (request: serverRequest, response: serverRespose, objectList: assetTracker | undefined = assetTrackerObjects) => {
-  const actionRequested = serverReqParser(request as any); // TODO: improve this
+  const actionRequested = requestParser(request as any); // TODO: improve this
   console.log("Coiote request ",actionRequested," element ", request.url)
 
   let payload = undefined
