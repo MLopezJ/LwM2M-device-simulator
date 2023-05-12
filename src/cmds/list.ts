@@ -1,5 +1,6 @@
 import type { assetTracker } from "../assetTrackerV2"
-import { getElementPath, getElementType } from "./registerUtils"
+import { getElementPath } from "../utils/getElementPath"
+import { typeOfElement } from "../utils/typeOfElement"
 import { getElementValue } from "./registerUtils"
 
 
@@ -13,7 +14,7 @@ export const list = (input: string| undefined, objectList: assetTracker): Partia
     }
 
     const elementPath = getElementPath(input)
-    const elementType = getElementType(input)
+    const elementType = typeOfElement(input)
 
     if (elementType === undefined){
         console.log('Error: element type does not exist')
