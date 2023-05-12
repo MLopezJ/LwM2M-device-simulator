@@ -50,36 +50,6 @@ export const serverReqParser = (req: {
   return optType;
 };
 
-/**
- * Generate the list of LwM2M objects that are goint to be send in the registration interface
- * example: <LwM2M Object id/ instance id>, <LwM2M Object id/ instance id>
- * // TODO: update method with new asset tracker v2 object struct
- */
-export const getObjectsToRegister = (objectList: assetTracker): string => {
-
-  const ids = Object.keys(objectList)
-  
-  return  ids.reduce((previus: string, objectId: string) => {
-    const id = objectId.split(':')[0] // TODO: uses lib fuction
-    if (id === '0') return '' // Security object should not be send
-
-    const object = objectList[`${objectId}` as keyof assetTracker] // LwM2M element
-    let elementString =  ''
-
-    if (Array.isArray(object)){
-      elementString = object.reduce((prev: string, curr: object, currentIndex: number) => {
-        //              < object id  / instance id >
-        const struct = `<${id}/${currentIndex}>`
-        return currentIndex === 0 ? struct : `${prev}, ${struct}`
-      }, '')
-    } else {
-      elementString = `<${id}/0>`
-    }
-
-    return previus === '' ? elementString : `${previus}, ${elementString}`
-  }, '')
-};
-
 
 /**
  * Given the LwM2M url of the object should return its URN used in assetTracker def

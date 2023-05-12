@@ -5,12 +5,12 @@ import { type assetTracker } from "../assetTrackerV2.js";
 import {
   getElementPath,
   getElementType,
-  getObjectsToRegister,
   getResourceList,
   getURN,
   serverReqParser,
   type e,
 } from "./registerUtils.js";
+import { getBracketFormat } from "../utils/getBracketFormat";
 
 type registrationResponse = {
   code: string;
@@ -32,7 +32,7 @@ export const register = (objectList: assetTracker) => {
    * @see http://www.openmobilealliance.org/release/LightweightM2M/V1_0_2-20180209-A/OMA-TS-LightweightM2M-V1_0_2-20180209-A.pdf Page 48
    */
   const jsonId = "11543";
-  const objects = getObjectsToRegister(objectList);
+  const objects = getBracketFormat(objectList);
   const payload = `</>;ct=${jsonId};hb,${objects}`;
 
   const registerRequest = registration()
