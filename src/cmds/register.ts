@@ -135,29 +135,23 @@ export type lwm2mJson = {
 };
 
 /**
- * Read data from object and transform to vnd.oma.lwm2m+json format
+ * Read value from requested URL and transform it to vnd.oma.lwm2m+json format
  * @see https://www.openmobilealliance.org/release/LightweightM2M/V1_0-20170208-A/OMA-TS-LightweightM2M-V1_0-20170208-A.pdf pag 55
  */
 export const readObject = (url: string, objectList: assetTracker): Buffer => {
-  const element = getElementPath(url)
-  const urn = getLibUrn(`${element.objectId}`);
+  const elementPath = getElementPath(url)
+  const urn = getLibUrn(`${elementPath.objectId}`);
 
+  // element not found in object list
   if (Boolean(urn) === false)
     return Buffer.from(JSON.stringify({ bn: null, e: null }));
 
   const object = objectList[`${urn}` as keyof LwM2MDocument];
   const elementType = typeOfElement(url);
-  let elementPath = undefined;
-
-  if (elementType === "resource") elementPath = getElementPath(url);
-
-  const e =
-    elementType !== undefined
-      ? createE(object ?? {}, elementType, elementPath)
-      : [];
+ 
   const data: lwm2mJson = {
     bn: url,
-    e: e,
+    e: elementType !== undefined ? createE(object ?? {}, elementType, elementPath) : [],
   };
 
   return Buffer.from(JSON.stringify(data));
