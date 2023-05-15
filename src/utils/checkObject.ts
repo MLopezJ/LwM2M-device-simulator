@@ -1,12 +1,12 @@
 import type { LwM2MDocument } from "@nordicsemiconductor/lwm2m-types";
 import { correlationTable, type assetTracker } from "../assetTrackerV2";
-import type { element } from "../cmds/registerUtils";
 import type { instance } from "./checkInstance";
+import type { element } from "./getElementPath";
 
 /**
  * Check if object exist in Asset Tracker
  */
-export const checkObject = (path: element, objectList: assetTracker): instance | undefined=> {
+export const checkObject = (path: element, objectList: assetTracker): instance | undefined => {
 
     const urn: keyof LwM2MDocument = correlationTable[`${path.objectId}`] as keyof LwM2MDocument;
     const object =  objectList[`${urn}`];

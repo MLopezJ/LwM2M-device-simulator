@@ -1,6 +1,7 @@
-import type { element } from "../cmds/registerUtils.js"
+
 import { assetTrackerFirmwareV2 } from "../assetTrackerV2"
 import { checkObject } from "./checkObject"
+import type { element } from "./getElementPath"
 
 describe("Check Object", () => {
     it.each([
@@ -14,18 +15,18 @@ describe("Check Object", () => {
             instanceId: 0,
             resourceId: 0,
         }]
-    ])("Should check that object exist in asset tracker: %p", (element: element) => {
+    ])("Should check that object exist in asset tracker: %p", (path: element) => {
         const list = structuredClone(assetTrackerFirmwareV2)
-        expect(checkObject(element, list)).not.toBe(undefined)
+        expect(checkObject(path, list)).not.toBe(undefined)
     })
 
     it("Should inform that object do not exist in asset tracker", () => {
-        const element: element = {
+        const path: element = {
             objectId: 101010101,
             instanceId: 0,
             resourceId: 0,
         }
         const list = structuredClone(assetTrackerFirmwareV2)
-        expect(checkObject(element, list)).toBe(undefined)
+        expect(checkObject(path, list)).toBe(undefined)
     })
 })
