@@ -7,7 +7,7 @@ import { getLibUrn } from '../utils/getLibUrn.js';
 /**
  * Given an element and a list, should return the value of the element in list
  */
-export const getElementValue = (element: element,  typeOfElement: elementType, objectList: assetTracker) => {
+export const getValue = (element: element,  typeOfElement: elementType, objectList: assetTracker) => {
 
 
   const id = getLibUrn(`${element.objectId}`)

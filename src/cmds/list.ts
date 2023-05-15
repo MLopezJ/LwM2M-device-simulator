@@ -1,7 +1,7 @@
 import type { assetTracker } from "../assetTrackerV2"
 import { getElementPath } from "../utils/getElementPath"
 import { typeOfElement } from "../utils/typeOfElement"
-import { getElementValue } from "./registerUtils"
+import { getValue } from "../utils/getValue"
 
 
 /**
@@ -21,6 +21,6 @@ export const list = (input: string| undefined, objectList: assetTracker): Partia
         return undefined
     }
 
-    const element = getElementValue(elementPath,elementType,objectList)
+    const element = getValue(elementPath,elementType,objectList)
     return element
 }
