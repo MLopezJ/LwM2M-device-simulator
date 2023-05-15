@@ -12,6 +12,7 @@ describe('getLibUrn', () =>{
 
     it('Should return undefined if object is not found by the given id', () => {
         expect(getLibUrn('40404')).toBe(undefined)
+        expect(getLibUrn('-1')).toBe(undefined)
     })
 })
 
