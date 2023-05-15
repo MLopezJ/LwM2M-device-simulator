@@ -2,15 +2,12 @@ import type { LwM2MDocument } from "@nordicsemiconductor/lwm2m-types";
 import coap, { OutgoingMessage, type CoapRequestParams } from "coap"; // type Agent,
 import config from "../../config.json";
 import { type assetTracker } from "../assetTrackerV2.js";
-import {
-  getResourceList,
-  getURN,
-  type e,
-} from "./registerUtils.js";
+import { getURN } from "./registerUtils.js";
 import { getBracketFormat } from "../utils/getBracketFormat";
 import { requestParser } from "../utils/requestParser";
 import { typeOfElement } from "../utils/typeOfElement";
 import { getElementPath } from "../utils/getElementPath";
+import { createE, type e } from "../utils/createE";
 
 type registrationResponse = {
   code: string;
@@ -161,13 +158,13 @@ export const getObject = (url: string, objectList: assetTracker): Buffer => {
 
   if (elementType === "resource") elementPath = getElementPath(url);
 
-  const valueList =
+  const e =
     elementType !== undefined
-      ? getResourceList(object ?? {}, elementType, elementPath)
+      ? createE(object ?? {}, elementType, elementPath)
       : [];
   const data: lwm2mJson = {
     bn: url,
-    e: valueList,
+    e: e,
   };
 
   return Buffer.from(JSON.stringify(data));
