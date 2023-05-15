@@ -112,7 +112,7 @@ const manageCoioteRequest = (request: serverRequest, response: serverRespose, ob
   if (objectList !== undefined){
     switch (actionRequested) {
       case "read":
-        payload = getObject(request.url, objectList);
+        payload = readObject(request.url, objectList);
         break;
     }
   } else {
@@ -138,7 +138,7 @@ export type lwm2mJson = {
  * Read data from object and transform to vnd.oma.lwm2m+json format
  * @see https://www.openmobilealliance.org/release/LightweightM2M/V1_0-20170208-A/OMA-TS-LightweightM2M-V1_0-20170208-A.pdf pag 55
  */
-export const getObject = (url: string, objectList: assetTracker): Buffer => {
+export const readObject = (url: string, objectList: assetTracker): Buffer => {
   const urn = getURN(url);
   if (Boolean(urn) === false)
     return Buffer.from(JSON.stringify({ bn: null, e: null }));
