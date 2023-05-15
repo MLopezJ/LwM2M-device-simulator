@@ -1,27 +1,10 @@
 import { assetTrackerFirmwareV2, type assetTracker } from "../assetTrackerV2.js";
-import { getURN, getElementValue } from "./registerUtils.js";
+import { getElementValue } from "./registerUtils.js";
 import {
   Device_3_urn,
-  ConnectivityMonitoring_4_urn,
   Temperature_3303_urn,
-  ECID_SignalMeasurementInformation_10256_urn,
-  LwM2MServer_1_urn,
 } from "@nordicsemiconductor/lwm2m-types";
 
-
-describe('getURN', () =>{
-  it('Should return the object URN given the URL', () => {
-    expect(getURN('/3')).toBe(Device_3_urn)
-    expect(getURN('/10256')).toBe(ECID_SignalMeasurementInformation_10256_urn)
-    expect(getURN('/3303')).toBe(Temperature_3303_urn)
-    expect(getURN('/4')).toBe(ConnectivityMonitoring_4_urn)
-    expect(getURN('/1')).toBe(LwM2MServer_1_urn)
-  })
-
-  it('Should return undefined if object is not found by the given URL', () => {
-    expect(getURN('/40404')).toBe(undefined)
-  })
-})
 
 describe("getElementValue", () => {
   it("Should return object", () => {

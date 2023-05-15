@@ -1,14 +1,8 @@
 import type { LwM2MDocument } from '@nordicsemiconductor/lwm2m-types';
 import type { elementType } from '../utils/typeOfElement.js'
-import {assetTrackerFirmwareV2, type assetTracker} from '../assetTrackerV2.js'
+import { type assetTracker } from '../assetTrackerV2.js'
 import type { element } from '../utils/getElementPath.js';
-
-/**
- * Given the LwM2M url of the object should return its URN used in assetTracker def
- * TODO: use method from lib
- */
-export const getURN = (url: string): string | undefined =>  Object.keys(assetTrackerFirmwareV2).filter(element => element.split(':')[0] === url.split('/')[1])[0]
-
+import { getLibUrn } from '../utils/getLibUrn.js';
 
 /**
  * Given an element and a list, should return the value of the element in list
@@ -16,7 +10,7 @@ export const getURN = (url: string): string | undefined =>  Object.keys(assetTra
 export const getElementValue = (element: element,  typeOfElement: elementType, objectList: assetTracker) => {
 
 
-  const id = getURN(`/${element.objectId}`)
+  const id = getLibUrn(`${element.objectId}`)
   const temp = objectList[`${id}`  as keyof LwM2MDocument]
 
   if (temp === undefined){

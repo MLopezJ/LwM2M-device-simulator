@@ -2,12 +2,12 @@ import type { LwM2MDocument } from "@nordicsemiconductor/lwm2m-types";
 import coap, { OutgoingMessage, type CoapRequestParams } from "coap"; // type Agent,
 import config from "../../config.json";
 import { type assetTracker } from "../assetTrackerV2.js";
-import { getURN } from "./registerUtils.js";
 import { getBracketFormat } from "../utils/getBracketFormat";
 import { requestParser } from "../utils/requestParser";
 import { typeOfElement } from "../utils/typeOfElement";
 import { getElementPath } from "../utils/getElementPath";
 import { createE, type e } from "../utils/createE";
+import { getLibUrn } from "../utils/getLibUrn";
 
 type registrationResponse = {
   code: string;
@@ -139,7 +139,9 @@ export type lwm2mJson = {
  * @see https://www.openmobilealliance.org/release/LightweightM2M/V1_0-20170208-A/OMA-TS-LightweightM2M-V1_0-20170208-A.pdf pag 55
  */
 export const readObject = (url: string, objectList: assetTracker): Buffer => {
-  const urn = getURN(url);
+  const element = getElementPath(url)
+  const urn = getLibUrn(`${element.objectId}`);
+
   if (Boolean(urn) === false)
     return Buffer.from(JSON.stringify({ bn: null, e: null }));
 
