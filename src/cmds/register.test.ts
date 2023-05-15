@@ -1,5 +1,5 @@
 import { assetTrackerFirmwareV2 } from '../assetTrackerV2.js'
-import {getObject, getPayload} from '../cmds/register.js'
+import {getObject} from '../cmds/register.js'
 
 describe('getObject', ()=>{
     it("Should read from object and create buffer from its values", () => {
@@ -34,6 +34,7 @@ describe('getObject', ()=>{
     })
 })
 
+/*
 describe('getPayload', ()=>{
     it("Should get payload when read action is requested", () => {
         const url = '/3'
@@ -49,3 +50,4 @@ describe('getPayload', ()=>{
         expect(result).toBe('')
     })
 })
+*/

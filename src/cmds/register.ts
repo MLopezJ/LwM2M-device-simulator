@@ -108,9 +108,13 @@ const manageCoioteRequest = (request: serverRequest, response: serverRespose, ob
   const actionRequested = requestParser(request as any); // TODO: improve this
   console.log("Coiote request ",actionRequested," element ", request.url)
 
-  let payload = undefined
+  let payload: Buffer = Buffer.from("");
   if (objectList !== undefined){
-    payload = getPayload(actionRequested, request.url, objectList)
+    switch (actionRequested) {
+      case "read":
+        payload = getObject(request.url, objectList);
+        break;
+    }
   } else {
     console.log('List with objects is undefined')
   }
@@ -124,19 +128,6 @@ const manageCoioteRequest = (request: serverRequest, response: serverRespose, ob
   response.setOption("Content-Format", json);
   response.end(payload);
 }
-
-/**
- * Generate payload depending on option type requested
- */
-export const getPayload = (action: string, url: string,  objectList: assetTracker): Buffer => {
-  let data: Buffer = Buffer.from("");
-  switch (action) {
-    case "read":
-      data = getObject(url, objectList);
-      break;
-  }
-  return data;
-};
 
 export type lwm2mJson = {
   bn: string;
