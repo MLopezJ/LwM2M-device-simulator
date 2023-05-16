@@ -5,9 +5,11 @@ This is a LwM2M device simulator who emulate a [Thingy:91](https://www.nordicsem
 The main propose of this project is to facilitate the testing process of [LwM2M Asset Tracker](https://github.com/MLopezJ/LwM2M-Asset-Tracker).
 
 ## Specifications 
-This device uses LwM2M as a protocol and has implemented the “Client Registration” and “Device Management and Service Enablement” interfaces to communicate with a LwM2M server.
+This device uses LwM2M as a protocol and has implemented the “Client Registration” and “Device Management and Service Enablement” interfaces to communicate with the server.
 
 The bootstrap of the device is executed by using the Factory Bootstrap mode with the already defined [LwM2M objects](https://github.com/MLopezJ/LwM2M-device-simulator/blob/saga/src/assetTrackerV2.ts)
+ 
+A command line interface is provided for communication with the server
 
 ## CLI reference
 
