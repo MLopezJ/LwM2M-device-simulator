@@ -9,7 +9,7 @@ This device uses LwM2M as a protocol and has implemented the “Client Registrat
 
 The bootstrap of the device is executed by using the Factory Bootstrap mode with the already defined [LwM2M objects](https://github.com/MLopezJ/LwM2M-device-simulator/blob/saga/src/assetTrackerV2.ts)
  
-A command line interface is provided for communication with the server
+A command line interface is provided for communication with the server and objects.
 
 ## CLI reference
 
