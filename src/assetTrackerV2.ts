@@ -135,8 +135,8 @@ const firmawareUpdate: FirmwareUpdate_5 = {
  * Location
  */
 const location: Location_6 = {
-  "0": 0, // Latitude *** used in Asset Tracker web app
-  "1": 0, // Longitude *** used in Asset Tracker web app
+  "0": 10.366531, // Latitude *** used in Asset Tracker web app
+  "1": -84.512150, // Longitude *** used in Asset Tracker web app
   "2": 0, // Altitude *** used in Asset Tracker web app
   "3": 0, // Radius *** used in Asset Tracker web app
   "4": "0", // Velocity
