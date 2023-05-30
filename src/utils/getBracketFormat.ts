@@ -1,12 +1,12 @@
-import type { assetTracker } from "../assetTrackerV2"
+import type { assetTracker } from "../assetTrackerV2.js"
 
 /**
  * Transform object from json to the following string format: <X/Y>
  * Where:
  *      <> is an object
  *      X is the object id
- *      / is a dividerr between object id and resource id
- *      Y is a resource id
+ *      / is a divider between object id and resource id
+ *      Y is the resource id
  */
 export const getBracketFormat = (objectList: assetTracker): string => {
     const ids = Object.keys(objectList)

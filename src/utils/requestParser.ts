@@ -1,5 +1,5 @@
 
-type request =  { code: string; _packet: { confirmable: any; }; payload: string | any[]; method: any; headers: { [x: string]: any; Observe: number; Accept: string; }; url: string; }
+type request =  { code: string; _packet: { confirmable: any }; payload: string | any[]; method: any; headers: { [x: string]: any; Observe: number; Accept: string }; url: string }
 
 /**
  * Parser request

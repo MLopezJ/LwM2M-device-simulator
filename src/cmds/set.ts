@@ -1,9 +1,9 @@
 import type { assetTracker } from "../assetTrackerV2.js";
-import { type element } from '../cmds/registerUtils'
-import { checkObject } from "../utils/checkObject";
-import { checkInstance } from "../utils/checkInstance";
-import { checkResource } from "../utils/checkResource";
-import { getUrn } from "../utils/getUrn";
+import type { element } from "../utils/getElementPath.js"
+import { checkObject } from "../utils/checkObject.js";
+import { checkInstance } from "../utils/checkInstance.js";
+import { checkResource } from "../utils/checkResource.js";
+import { getUrn } from "../utils/getUrn.js";
 
 /**
  * Set new value in LwM2M object list
@@ -39,7 +39,7 @@ export const set = (
   } else {
     // Single instance
     // @ts-ignore
-    objectList![`${urn}`]![`${path.resourceId}`]! = newValue
+    objectList[`${urn}`]![`${path.resourceId}`] = newValue
   }
  
   return objectList

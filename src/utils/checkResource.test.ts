@@ -1,6 +1,6 @@
 import { Device_3_urn, Temperature_3303_urn } from "@nordicsemiconductor/lwm2m-types"
-import { assetTrackerFirmwareV2, type assetTracker } from "../assetTrackerV2"
-import { checkResource } from "./checkResource"
+import { assetTrackerFirmwareV2, type assetTracker } from "../assetTrackerV2.js"
+import { checkResource } from "./checkResource.js"
 
 describe("Check Resource", () => {
     it("Should return resource value if resource exist", () => {

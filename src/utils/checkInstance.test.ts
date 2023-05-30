@@ -1,6 +1,6 @@
 import { Device_3_urn, Temperature_3303_urn } from "@nordicsemiconductor/lwm2m-types"
-import { assetTrackerFirmwareV2 } from "../assetTrackerV2"
-import { checkInstance } from "./checkInstance"
+import { assetTrackerFirmwareV2 } from "../assetTrackerV2.js"
+import { checkInstance } from "./checkInstance.js"
 
 describe("Check Instance", () => {
     it("Should check that instance exist in object (single instance object)", () => {

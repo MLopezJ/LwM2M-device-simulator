@@ -1,5 +1,5 @@
-import type { element } from "./registerUtils"
-import { assetTrackerFirmwareV2 } from "../assetTrackerV2"
+import type { element } from "../utils/getElementPath.js"
+import { assetTrackerFirmwareV2 } from "../assetTrackerV2.js"
 import { set } from '../cmds/set.js'
 import { Device_3_urn, Temperature_3303_urn } from "@nordicsemiconductor/lwm2m-types"
 

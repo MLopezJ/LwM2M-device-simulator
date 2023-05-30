@@ -2,18 +2,18 @@ import type { LwM2MDocument } from "@nordicsemiconductor/lwm2m-types";
 import coap, { OutgoingMessage, type CoapRequestParams } from "coap"; // type Agent,
 import config from "../../config.json";
 import { type assetTracker } from "../assetTrackerV2.js";
-import { getBracketFormat } from "../utils/getBracketFormat";
-import { requestParser } from "../utils/requestParser";
-import { typeOfElement } from "../utils/typeOfElement";
-import { getElementPath } from "../utils/getElementPath";
-import { createE, type e } from "../utils/createE";
-import { getLibUrn } from "../utils/getLibUrn";
+import { getBracketFormat } from "../utils/getBracketFormat.js";
+import { requestParser } from "../utils/requestParser.js";
+import { typeOfElement } from "../utils/typeOfElement.js";
+import { getElementPath } from "../utils/getElementPath.js";
+import { createE, type e } from "../utils/createE.js";
+import { getLibUrn } from "../utils/getLibUrn.js";
 
 type registrationResponse = {
-  code: string;
-  rsinfo: { address: unknown; port: unknown };
-  headers: { [x: string]: string };
-  outSocket: { address: unknown; port: string | number };
+  code: string
+  rsinfo: { address: unknown; port: unknown }
+  headers: { [x: string]: string }
+  outSocket: { address: unknown; port: string | number }
 }
 
 const udpDefault = "udp4"
@@ -22,7 +22,7 @@ let assetTrackerObjects:  undefined | assetTracker = undefined
 /**
  * Index
  */
-export const register = (objectList: assetTracker) => {
+export const register = (objectList: assetTracker): void => {
   assetTrackerObjects = objectList
   /**
    * Data Format id for Transferring Resource Information as a json
@@ -69,8 +69,8 @@ const registration = (): OutgoingMessage => {
 
 type serverRequest = { url: string }
 type serverRespose = {
-  setOption: (arg0: string, arg1: string) => void;
-  end: (arg0: string | Buffer | undefined) => void;
+  setOption: (arg0: string, arg1: string) => void
+  end: (arg0: string | Buffer | undefined) => void
 }
 
 /**
@@ -130,8 +130,8 @@ const manageCoioteRequest = (request: serverRequest, response: serverRespose, ob
 }
 
 export type lwm2mJson = {
-  bn: string;
-  e: e[];
+  bn: string
+  e: e[]
 };
 
 /**

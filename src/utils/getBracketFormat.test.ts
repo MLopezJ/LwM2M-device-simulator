@@ -1,5 +1,5 @@
-import { assetTrackerFirmwareV2 } from "../assetTrackerV2"
-import { getBracketFormat } from "./getBracketFormat"
+import { assetTrackerFirmwareV2 } from "../assetTrackerV2.js"
+import { getBracketFormat } from "./getBracketFormat.js"
 
 describe("getBracketFormat", () => {
     it("Should transform Asset Tracker into string bracket format", () => {

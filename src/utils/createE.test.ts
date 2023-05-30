@@ -1,6 +1,6 @@
 import { Device_3_urn, Temperature_3303_urn } from "@nordicsemiconductor/lwm2m-types";
-import { assetTrackerFirmwareV2 } from "../assetTrackerV2";
-import { createE, type e } from "./createE";
+import { assetTrackerFirmwareV2 } from "../assetTrackerV2.js";
+import { createE, type e } from "./createE.js";
 
 describe("createE", () => {
     it("Should create the 'e' value from multiple instance object", () => {

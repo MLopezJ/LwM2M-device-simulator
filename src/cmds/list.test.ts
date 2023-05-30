@@ -1,5 +1,5 @@
 import { list } from "../cmds/list.js"
-import { assetTrackerFirmwareV2 } from "../assetTrackerV2"
+import { assetTrackerFirmwareV2 } from "../assetTrackerV2.js"
 import { Device_3_urn, Temperature_3303_urn } from "@nordicsemiconductor/lwm2m-types"
 
 describe('List', ()=>{

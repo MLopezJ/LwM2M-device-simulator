@@ -1,6 +1,6 @@
 
-import { assetTrackerFirmwareV2 } from "../assetTrackerV2"
-import { checkObject } from "./checkObject"
+import { assetTrackerFirmwareV2 } from "../assetTrackerV2.js"
+import { checkObject } from "./checkObject.js"
 import type { element } from "./getElementPath"
 
 describe("Check Object", () => {

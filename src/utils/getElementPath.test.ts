@@ -1,4 +1,4 @@
-import { getElementPath } from "./getElementPath"
+import { getElementPath } from "./getElementPath.js"
 
 describe('getElementPath', () =>{
     it.each([

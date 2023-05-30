@@ -1,5 +1,5 @@
 import type { LwM2MDocument } from "@nordicsemiconductor/lwm2m-types";
-import { correlationTable } from "../assetTrackerV2";
+import { correlationTable } from "../assetTrackerV2.js";
 
 /**
  * "Translate" from LwM2M object id to @nordicsemiconductor/lwm2m-types id

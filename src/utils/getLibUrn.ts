@@ -1,4 +1,4 @@
-import { assetTrackerFirmwareV2 } from "../assetTrackerV2";
+import { assetTrackerFirmwareV2 } from "../assetTrackerV2.js";
 
 /**
  * Given the LwM2M object id of a element should return its URN used in assetTracker def

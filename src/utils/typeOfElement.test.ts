@@ -1,4 +1,4 @@
-import { typeOfElement } from "./typeOfElement"
+import { typeOfElement } from "./typeOfElement.js"
 
 describe('typeOfElement', () =>{
     it('Should detect object as the element type', () => {

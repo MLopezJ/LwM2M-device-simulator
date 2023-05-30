@@ -1,5 +1,5 @@
 import { Device_3_urn, Location_6_urn, Temperature_3303_urn, LwM2MServer_1_urn } from "@nordicsemiconductor/lwm2m-types"
-import { getUrn } from "./getUrn"
+import { getUrn } from "./getUrn.js"
 
 describe('Get URN', () => {
     it.each([
