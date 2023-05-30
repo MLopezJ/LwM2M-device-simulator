@@ -4,15 +4,15 @@ import { clear, help, list, quit, register, set } from "./cmds/index.js";
 type commandsObject = Record<
   string,
   {
-    title: string;
-    parameters: string[];
-    description: string;
-    format: string;
-    example: string | string[];
+    title: string
+    parameters: string[]
+    description: string
+    format: string
+    example: string | string[]
     execute: (
       command: string[] | never,
       objectList: assetTracker
-    ) => void | assetTracker;
+    ) => void | assetTracker
   }
 >;
 
