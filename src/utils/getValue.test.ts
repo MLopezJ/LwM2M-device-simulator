@@ -14,7 +14,7 @@ describe("getValue", () => {
         "object",
         assetTrackerFirmwareV2
       )
-    ).toMatchObject(assetTrackerFirmwareV2[Device_3_urn]!);
+    ).toMatchObject(assetTrackerFirmwareV2[Device_3_urn] as unknown as Partial<assetTracker>);
   });
 
   it("Should return undefined if object does not exist", () => {
@@ -34,7 +34,7 @@ describe("getValue", () => {
         "instance",
         assetTrackerFirmwareV2
       )
-    ).toMatchObject(assetTrackerFirmwareV2[Device_3_urn]!);
+    ).toMatchObject(assetTrackerFirmwareV2[Device_3_urn] as unknown as Partial<assetTracker>);
   });
 
   it("Should return undefined when instance does not exist (single instance object)", () => {
@@ -58,7 +58,7 @@ describe("getValue", () => {
       "5700": 10,
       "5701": "Celsius degrees",
     }
-    objectList[Temperature_3303_urn as keyof assetTracker] = [...assetTrackerFirmwareV2[Temperature_3303_urn]!, newTemp]
+    objectList[Temperature_3303_urn as keyof assetTracker] = [...assetTrackerFirmwareV2[Temperature_3303_urn]?? '' , newTemp]
     expect(
       getValue(
         { objectId: 3303, instanceId: 1, resourceId: -1 },
