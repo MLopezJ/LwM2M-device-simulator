@@ -8,12 +8,12 @@ import { getElementPath } from '../utils/getElementPath.js'
 /**
  * Clear console
  */
-export const clear = () => console.clear()
+export const clear = (): void => console.clear()
 
 /**
  * Quit console
  */
-export const quit = () => {
+export const quit = (): void => {
     console.log('\nExiting client...\n--------------------------------\n')
     process.exit()
 }
@@ -22,12 +22,12 @@ export const quit = () => {
  * Connector method to list info about available commands
  * TODO: make no sense to have it in separe file
  */
-export const help = () => helpCmd()
+export const help = ():void => helpCmd()
 
 /**
  * Connector method to update the resource value of an object
  */
-export const set = (userInput: string[], list: assetTracker) => {
+export const set = (userInput: string[], list: assetTracker): assetTracker | undefined => {
     const path = getElementPath(userInput[0]??'')
     const value = userInput[1]
     
@@ -39,7 +39,7 @@ export const set = (userInput: string[], list: assetTracker) => {
 /**
  * Connector method to execute list of objects
  */
-export const list = (userInput: string[], objectsList: assetTracker) => {
+export const list = (userInput: string[], objectsList: assetTracker): void | undefined => {
     const input = userInput[0]
 
     const result = listCmd(input, objectsList)
@@ -55,4 +55,4 @@ export const list = (userInput: string[], objectsList: assetTracker) => {
 /**
  * Connector method to execute registration on Coiote
  */
-export const register = (command: string[]|never, list: assetTracker) => registerCmd(list)
+export const register = (command: string[]|never, list: assetTracker): void => registerCmd(list)

@@ -3,7 +3,7 @@ import {commands} from '../commands.js'
 /**
  * Log in console the list of all possible commands
  */
-export const help = () => {
+export const help = (): void => {
     console.log("command required-param [optional param]")
     console.log(`Options:\n`)
     Object.values(commands).map(element => {
