@@ -1,13 +1,13 @@
-import type { assetTracker } from "../assetTrackerV2"
-import { getElementPath } from "../utils/getElementPath"
-import { typeOfElement } from "../utils/typeOfElement"
-import { getValue } from "../utils/getValue"
+import type { assetTracker } from "../assetTrackerV2.js"
+import { getElementPath } from "../utils/getElementPath.js"
+import { typeOfElement } from "../utils/typeOfElement.js"
+import { getValue } from "../utils/getValue.js"
 
 
 /**
  * List object from object list
  */
-export const list = (input: string| undefined, objectList: assetTracker): Partial<assetTracker> | assetTracker | undefined => {
+export const list = (input: string| undefined, objectList: assetTracker): Partial<assetTracker> | undefined => {
     
     if (input === undefined){
         return objectList
