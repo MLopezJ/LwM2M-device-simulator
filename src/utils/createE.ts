@@ -5,17 +5,17 @@ import type { elementType } from "./typeOfElement";
  * @see https://www.openmobilealliance.org/release/LightweightM2M/V1_0-20170208-A/OMA-TS-LightweightM2M-V1_0-20170208-A.pdf pag 57, last example
  */
 type value = {
-  n?: string;
+  n?: string
 };
 
 type stringValue = {
-  sv: string;
-  v?: never;
+  sv: string
+  v?: never
 } & value;
 
 type numericValue = {
-  sv?: never;
-  v: number;
+  sv?: never
+  v: number
 } & value;
 
 export type e = stringValue | numericValue | Record<string, never>;
