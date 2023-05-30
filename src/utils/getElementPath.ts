@@ -4,8 +4,8 @@
  * < objectId / instanceId / resourceId >
  */
 export type element = {
-    objectId: number,
-    instanceId: number,
+    objectId: number
+    instanceId: number
     resourceId: number
   }
 
@@ -17,8 +17,8 @@ export type element = {
 export const getElementPath = (url: string): element => {
     const [,objectId, instanceId, resourceId] = url.split("/")
     return {
-      objectId: objectId? Number(objectId): -1,
-      instanceId: instanceId? Number(instanceId): -1,
-      resourceId: resourceId? Number(resourceId): -1
+      objectId: (objectId != null)? Number(objectId): -1,
+      instanceId: (instanceId != null)? Number(instanceId): -1,
+      resourceId: (resourceId != null)? Number(resourceId): -1
     }
   }
