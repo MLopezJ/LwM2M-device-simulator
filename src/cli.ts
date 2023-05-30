@@ -3,8 +3,8 @@
  */
 
 import * as readline from "readline";
-import { assetTrackerFirmwareV2 } from "./assetTrackerV2";
-import { executeCommand } from "./commands";
+import { assetTrackerFirmwareV2 } from "./assetTrackerV2.js";
+import { executeCommand } from "./commands.js";
 
 const init = () => {
 
