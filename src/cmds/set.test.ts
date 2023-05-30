@@ -14,7 +14,7 @@ describe("Set", () => {
         const value = "new value"
         const list = structuredClone(assetTrackerFirmwareV2)
         const result = set(list, element,value)
-        expect(result![Device_3_urn]!["0"]).toBe(value)
+        expect(result?.[Device_3_urn]?.["0"]).toBe(value)
     })
 
     it("Should set new numeric value to resource", () => {
@@ -26,7 +26,7 @@ describe("Set", () => {
         const value = "100"
         const list = structuredClone(assetTrackerFirmwareV2)
         const result = set(list, element,value)
-        expect(result![Device_3_urn]!["9"]).toBe(Number(value))
+        expect(result?.[Device_3_urn]?.["9"]).toBe(Number(value))
     })
 
     it("Should set new value to resource (multiple instance object)", () => {
@@ -38,7 +38,7 @@ describe("Set", () => {
         const value = "new value"
         const list = structuredClone(assetTrackerFirmwareV2)
         const result = set(list, element,value)
-        expect(result![Temperature_3303_urn]![0]!["5701"]).toBe(value)
+        expect(result?.[Temperature_3303_urn]?.[0]?.["5701"]).toBe(value)
     })
 
     it("Should set new numeric value to resource (multiple instance object)", () => {
@@ -50,7 +50,7 @@ describe("Set", () => {
         const value = "100"
         const list = structuredClone(assetTrackerFirmwareV2)
         const result = set(list, element,value)
-        expect(result![Temperature_3303_urn]![0]!["5700"]).toBe(Number(value))
+        expect(result?.[Temperature_3303_urn]?.[0]?.["5700"]).toBe(Number(value))
     })
 
     it.each([

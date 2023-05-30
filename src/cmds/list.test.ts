@@ -10,7 +10,7 @@ describe('List', ()=>{
     
     it("Should list object (single instance)", () => {
         const param = "/3"
-        expect(list(param,assetTrackerFirmwareV2)).toMatchObject(assetTrackerFirmwareV2[Device_3_urn]!)
+        expect(list(param,assetTrackerFirmwareV2)).toMatchObject(assetTrackerFirmwareV2[Device_3_urn]?? '')
     })
 
     it("Should return undefined when request for a no existing instance of a single instance object", () => {
@@ -20,7 +20,7 @@ describe('List', ()=>{
 
     it("Should list object (multiple instance)", () => {
         const param = "/3303"
-        expect(list(param,assetTrackerFirmwareV2)).toMatchObject(assetTrackerFirmwareV2[Temperature_3303_urn]!)
+        expect(list(param,assetTrackerFirmwareV2)).toMatchObject(assetTrackerFirmwareV2[Temperature_3303_urn]?? '')
     })
 
     it("Should return undefined when request for a no existing instance of a multiple instance object", () => {
