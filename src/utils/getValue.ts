@@ -1,12 +1,11 @@
-import type { LwM2MDocument } from '@nordicsemiconductor/lwm2m-types'
 import { type assetTracker } from '../assetTrackerV2.js'
 import type { element } from '../utils/getElementPath.js'
 import { getLibUrn } from '../utils/getLibUrn.js'
 import type { elementType } from '../utils/typeOfElement.js'
 
-type obj = Partial<assetTracker>
-type instance = Partial<obj>
-type resource = Partial<instance>
+type ValueOf<T> = T[keyof T]
+export type instance = ValueOf<Partial<assetTracker>>
+export type resourceValue = string | number | boolean
 
 /**
  * Given an element and a list, should return the value of the element in list
@@ -15,46 +14,89 @@ export const getValue = (
 	element: element,
 	typeOfElement: elementType,
 	objectList: assetTracker,
-): undefined | obj | instance | resource => {
+): undefined | instance | resourceValue => {
 	const id = getLibUrn(`${element.objectId}`)
-	const temp = objectList[`${id}` as keyof LwM2MDocument]
+	const value = objectList[
+		`${id}` as keyof assetTracker
+	] as ValueOf<assetTracker>
 
-	if (temp === undefined) {
+	if (value === undefined) {
 		console.log('Error: object does not exist')
 		return undefined
 	}
 
-	if (typeOfElement === 'object') {
-		return temp as Partial<assetTracker>
+	const isSingleInstance = Array.isArray(value) === false
+
+	switch (typeOfElement) {
+		// <X/y/y>
+		case 'object':
+			return value
+		// <y/X/y>
+		case 'instance':
+			return getInstance(isSingleInstance, element.instanceId, value)
+		// <y/y/X>
+		case 'resource':
+			return getResource(
+				isSingleInstance,
+				element.instanceId,
+				element.resourceId,
+				value,
+			)
+		default:
+			return undefined
 	}
+}
 
-	const isSingleInstance = Array.isArray(temp) === false
-
-	if (typeOfElement === 'instance') {
-		if (isSingleInstance === true) {
-			if (element.instanceId !== 0) {
-				console.log('Error: element is single instance')
-				return undefined
-			}
-			return temp as instance
+/**
+ * Get instance from object
+ */
+const getInstance = (
+	isSingleInstance: boolean,
+	instanceId: number,
+	instance: instance | instance[],
+): instance | undefined => {
+	if (isSingleInstance === true) {
+		if (instanceId !== 0) {
+			console.log('Error: element is single instance')
+			return undefined
 		}
-
-		// TODO: solve this
-		// @ts-ignore
-		return temp[element.instanceId] as instance
+		return instance as instance
 	}
 
-	if (typeOfElement === 'resource') {
-		// if object is single instance
-		if (isSingleInstance === true) {
-			// TODO: solve this
-			// @ts-ignore
-			return temp[`${element.resourceId}`] as resource
-		}
-		// TODO: solve this
-		// @ts-ignore
-		return temp[element.instanceId][`${element.resourceId}`] as resource
+	const list = instance as instance[]
+	return list[instanceId]
+}
+
+/**
+ * Get resource from Instance
+ */
+const getResource = (
+	isSingleInstance: boolean,
+	instanceId: number,
+	resourceId: number,
+	instance: instance | instance[],
+): string | number | boolean | undefined => {
+	const key = `${resourceId}` as keyof instance
+
+	// single instance object
+	if (isSingleInstance === true) {
+		return getSingleResource(instance as instance, key)
 	}
 
+	// multiple instance resource
+	const list = instance as instance[]
+	return getSingleResource(list[instanceId], key)
+}
+
+/**
+ *
+ */
+const getSingleResource = (
+	instance: instance | undefined,
+	key: keyof instance,
+) => {
+	if (instance !== undefined) {
+		return instance[key]
+	}
 	return undefined
 }

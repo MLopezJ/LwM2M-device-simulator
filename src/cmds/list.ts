@@ -1,6 +1,10 @@
 import type { assetTracker } from '../assetTrackerV2.js'
 import { getElementPath } from '../utils/getElementPath.js'
-import { getValue } from '../utils/getValue.js'
+import {
+	getValue,
+	type instance,
+	type resourceValue,
+} from '../utils/getValue.js'
 import { typeOfElement } from '../utils/typeOfElement.js'
 
 /**
@@ -9,7 +13,7 @@ import { typeOfElement } from '../utils/typeOfElement.js'
 export const list = (
 	input: string | undefined,
 	objectList: assetTracker,
-): Partial<assetTracker> | undefined => {
+): Partial<assetTracker> | instance | resourceValue | undefined => {
 	if (input === undefined) {
 		return objectList
 	}
