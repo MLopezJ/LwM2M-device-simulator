@@ -1,4 +1,4 @@
-import type { assetTracker } from "../assetTrackerV2.js"
+import type { assetTracker } from '../assetTrackerV2.js'
 
 /**
  * Transform object from json to the following string format: <X/Y>
@@ -9,26 +9,29 @@ import type { assetTracker } from "../assetTrackerV2.js"
  *      Y is the resource id
  */
 export const getBracketFormat = (objectList: assetTracker): string => {
-    const ids = Object.keys(objectList)
-  
-    return  ids.reduce((previus: string, objectId: string) => {
-        const id = objectId.split(':')[0] // TODO: uses lib fuction
-        
-        if (id === '0') return '' // Security object should not be send
+	const ids = Object.keys(objectList)
 
-        const object = objectList[`${objectId}` as keyof assetTracker] // LwM2M element
-        let elementString =  ''
+	return ids.reduce((previus: string, objectId: string) => {
+		const id = objectId.split(':')[0] // TODO: uses lib fuction
 
-        if (Array.isArray(object)){
-        elementString = object.reduce((prev: string, curr: object, currentIndex: number) => {
-            //              < object id  / instance id >
-            const struct = `<${id}/${currentIndex}>`
-            return currentIndex === 0 ? struct : `${prev}, ${struct}`
-        }, '')
-        } else {
-        elementString = `<${id}/0>`
-        }
+		if (id === '0') return '' // Security object should not be send
 
-        return previus === '' ? elementString : `${previus}, ${elementString}`
-    }, '')
+		const object = objectList[`${objectId}` as keyof assetTracker] // LwM2M element
+		let elementString = ''
+
+		if (Array.isArray(object)) {
+			elementString = object.reduce(
+				(prev: string, curr: object, currentIndex: number) => {
+					//              < object id  / instance id >
+					const struct = `<${id}/${currentIndex}>`
+					return currentIndex === 0 ? struct : `${prev}, ${struct}`
+				},
+				'',
+			)
+		} else {
+			elementString = `<${id}/0>`
+		}
+
+		return previus === '' ? elementString : `${previus}, ${elementString}`
+	}, '')
 }
