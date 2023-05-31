@@ -1,9 +1,9 @@
-import {set as setCmd} from './set.js'
-import {register as registerCmd} from './register.js'
-import { list as listCmd} from './list.js'
-import {help as helpCmd} from './help.js'
 import type { assetTracker } from '../assetTrackerV2.js'
 import { getElementPath } from '../utils/getElementPath.js'
+import { help as helpCmd } from './help.js'
+import { list as listCmd } from './list.js'
+import { register as registerCmd } from './register.js'
+import { set as setCmd } from './set.js'
 
 /**
  * Clear console
@@ -14,45 +14,51 @@ export const clear = (): void => console.clear()
  * Quit console
  */
 export const quit = (): void => {
-    console.log('\nExiting client...\n--------------------------------\n')
-    process.exit()
+	console.log('\nExiting client...\n--------------------------------\n')
+	process.exit()
 }
 
 /**
  * Connector method to list info about available commands
- * TODO: make no sense to have it in separe file
  */
-export const help = ():void => helpCmd()
+export const help = (): void => helpCmd()
 
 /**
  * Connector method to update the resource value of an object
  */
-export const set = (userInput: string[], list: assetTracker): assetTracker | undefined => {
-    const path = getElementPath(userInput[0]??'')
-    const value = userInput[1]
-    
-    const result = setCmd(list, path, value?? '')
+export const set = (
+	userInput: string[],
+	list: assetTracker,
+): assetTracker | undefined => {
+	const path = getElementPath(userInput[0] ?? '')
+	const value = userInput[1]
 
-    return result
+	const result = setCmd(list, path, value ?? '')
+
+	return result
 }
 
 /**
  * Connector method to execute list of objects
  */
-export const list = (userInput: string[], objectsList: assetTracker): void | undefined => {
-    const input = userInput[0]
+export const list = (
+	userInput: string[],
+	objectsList: assetTracker,
+): void | undefined => {
+	const input = userInput[0]
 
-    const result = listCmd(input, objectsList)
+	const result = listCmd(input, objectsList)
 
-    if (result === undefined){
-        console.log('Error')
-        return 
-    }
+	if (result === undefined) {
+		console.log('Error')
+		return
+	}
 
-    console.log(result)
+	console.log(result)
 }
 
 /**
  * Connector method to execute registration on Coiote
  */
-export const register = (command: string[]|never, list: assetTracker): void => registerCmd(list)
+export const register = (command: string[] | never, list: assetTracker): void =>
+	registerCmd(list)
