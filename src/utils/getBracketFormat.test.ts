@@ -1,4 +1,4 @@
-import { assetTrackerFirmwareV2 } from '../assetTrackerV2.js'
+import { assetTrackerFirmwareV2, type assetTracker } from '../assetTrackerV2.js'
 import { getBracketFormat } from './getBracketFormat.js'
 
 describe('getBracketFormat', () => {
@@ -36,10 +36,10 @@ describe('getBracketFormat', () => {
 		expect(getBracketFormat(lwM2MObjects)).toBe('<1/0>')
 	})
 
-	it('Should transform multiple instances of same object', () => {
+	it('Should transform multiple instances of same object to bracket format', () => {
 		const lwM2MObjects = {
-			// Device
-			'3303': [
+			// Temperature
+			'3303:1.1': [
 				{
 					'5700': 24.57,
 					'5701': 'Celsius degrees',
@@ -53,10 +53,29 @@ describe('getBracketFormat', () => {
 					'5701': 'Celsius degrees',
 				},
 			],
-		}
-
+		} as unknown as assetTracker
 		const registerList = '<3303/0>, <3303/1>, <3303/2>'
-		// set any to ignore ts warnig, becuase the context is controlled.
-		expect(getBracketFormat(lwM2MObjects as any)).toBe(registerList)
+
+		expect(getBracketFormat(lwM2MObjects)).toBe(registerList)
+	})
+
+	it('Should transform custom objects to bracket format', () => {
+		const lwM2MObjects = {
+			// Config object from Asset Tracker
+			'50009': {}, // ...
+		} as unknown as assetTracker
+		const bracketFormat = '<50009/0>'
+
+		expect(getBracketFormat(lwM2MObjects)).toBe(bracketFormat)
+	})
+
+	it('Should transform to bracket format even if the object id is not a valid Asset Tracker object', () => {
+		const lwM2MObjects = {
+			// not valid Asset Tracker id
+			'4040404040404:1.1': {},
+		} as unknown as assetTracker
+		const bracketFormat = '<4040404040404/0>'
+
+		expect(getBracketFormat(lwM2MObjects)).toBe(bracketFormat)
 	})
 })

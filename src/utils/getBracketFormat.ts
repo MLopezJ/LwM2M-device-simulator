@@ -1,3 +1,4 @@
+import { parseURN } from '@nordicsemiconductor/lwm2m-types'
 import type { assetTracker } from '../assetTrackerV2.js'
 
 /**
@@ -11,12 +12,13 @@ import type { assetTracker } from '../assetTrackerV2.js'
 export const getBracketFormat = (objectList: assetTracker): string => {
 	const ids = Object.keys(objectList)
 
-	return ids.reduce((previus: string, objectId: string) => {
-		const id = objectId.split(':')[0] // TODO: uses lib fuction
+	return ids.reduce((previus: string, urn: string) => {
+		const parsedURN = parseURN(urn)
+		const id = parsedURN.ObjectID
 
 		if (id === '0') return '' // Security object should not be send
 
-		const object = objectList[`${objectId}` as keyof assetTracker] // LwM2M element
+		const object = objectList[`${urn}` as keyof assetTracker] // LwM2M element
 		let elementString = ''
 
 		if (Array.isArray(object)) {
