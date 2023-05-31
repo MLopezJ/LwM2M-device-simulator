@@ -215,7 +215,49 @@ const signalMeasurementInfo: ECID_SignalMeasurementInformation_10256 = [
 	},
 ]
 
-// TODO: Location Assistance (50001) and Config are missing (50009)
+// TODO: Location Assistance (50001) is missing
+
+/**
+ * Asset Tracker Configuration
+ *
+ * Asset Tracker v2 configuration object
+ *
+ * @see https://github.com/NordicSemiconductor/asset-tracker-cloud-firmware-aws/blob/saga/src/cloud/lwm2m_integration/config_object_descript.xml
+ *
+ * ID: 50009
+ * LWM2MVersion:
+ * ObjectVersion:
+ * MultipleInstances: false
+ * Mandatory: false
+ */
+type Config_50009 = Readonly<{
+	'0': boolean
+	'1': number
+	'2': number
+	'3': number
+	'4': number
+	'5': number
+	'6': boolean
+	'7': boolean
+	'8': number
+	'9': number
+}>
+
+/**
+ * Asset Tracker v2 configuration object
+ */
+const config: Config_50009 = {
+	'0': false, // Passive mode
+	'1': 45654, // Location timeout
+	'2': 3, // Active wait time
+	'3': 45, // Movement resolution
+	'4': 45, // Movement timeout
+	'5': 1, // Accelerometer activity threshold
+	'6': false, // GNSS enable
+	'7': true, // Neighbor cell measurements enable
+	'8': 78, // Accelerometer inactivity threshold
+	'9': 63, // Accelerometer inactivity timeout
+}
 
 // TODO: add complete list of LwM2M objects
 export const lwm2mObjects: LwM2MDocument = {
@@ -231,11 +273,15 @@ export const lwm2mObjects: LwM2MDocument = {
 	[ECID_SignalMeasurementInformation_10256_urn]: signalMeasurementInfo,
 }
 
-export type assetTracker = { '0': Security_0 } & LwM2MDocument
+export type assetTracker = {
+	'0': Security_0
+	'50009'?: Config_50009
+} & LwM2MDocument
 
 export const assetTrackerFirmwareV2: assetTracker = {
 	'0': security,
 	...lwm2mObjects,
+	'50009': config,
 }
 
 export const correlationTable: Record<string, string> = {
@@ -250,4 +296,5 @@ export const correlationTable: Record<string, string> = {
 	'3323': Pressure_3323_urn,
 	'3347': Pushbutton_3347_urn,
 	'10256': ECID_SignalMeasurementInformation_10256_urn,
+	'50009': '50009',
 }
