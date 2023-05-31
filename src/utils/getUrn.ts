@@ -1,9 +1,8 @@
-import type { LwM2MDocument } from "@nordicsemiconductor/lwm2m-types";
-import { correlationTable } from "../assetTrackerV2.js";
+import type { LwM2MDocument } from '@nordicsemiconductor/lwm2m-types'
+import { correlationTable } from '../assetTrackerV2.js'
 
 /**
  * "Translate" from LwM2M object id to @nordicsemiconductor/lwm2m-types id
- * 
- * TODO: uses getURN from registerUtils instead
  */
-export const getUrn = (objectId : number): keyof LwM2MDocument => correlationTable[`${objectId}`] as keyof LwM2MDocument;
+export const getUrn = (objectId: number): keyof LwM2MDocument =>
+	correlationTable[`${objectId}`] as keyof LwM2MDocument
