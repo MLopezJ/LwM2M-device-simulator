@@ -1,4 +1,13 @@
-# LwM2M Device Simulator
+# LwM2M Device Simulator [![npm version](https://img.shields.io/npm/v/@nordicsemiconductor/LwM2M-device-simulator.svg)](https://www.npmjs.com/package/@nordicsemiconductor/LwM2M-device-simulator)
+
+
+[![Test and Release](https://github.com/MLopezJ/LwM2M-device-simulator/actions/workflows/test-and-release.yaml/badge.svg)](https://github.com/MLopezJ/LwM2M-device-simulator/actions/workflows/test-and-release.yaml)
+[![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
+[![Renovate](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://renovatebot.com)
+[![Mergify Status](https://img.shields.io/endpoint.svg?url=https://api.mergify.com/v1/badges/NordicSemiconductor/LwM2M-device-simulator)](https://mergify.io)
+[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier/)
+[![ESLint: TypeScript](https://img.shields.io/badge/ESLint-TypeScript-blue.svg)](https://github.com/typescript-eslint/typescript-eslint)
 
 This is a LwM2M device simulator who emulate a [Thingy:91](https://www.nordicsemi.com/Products/Development-hardware/Nordic-Thingy-91) running with [nRF Asset Tracker firmware](https://github.com/nrfconnect/sdk-nrf/tree/main/applications/asset_tracker_v2). 
 
