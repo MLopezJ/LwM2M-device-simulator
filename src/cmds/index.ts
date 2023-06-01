@@ -1,4 +1,5 @@
 import type { assetTracker } from '../assetTrackerV2.js'
+import { commands } from '../commands.js'
 import { getElementPath } from '../utils/getElementPath.js'
 import { help as helpCmd } from './help.js'
 import { list as listCmd } from './list.js'
@@ -50,7 +51,12 @@ export const list = (
 	const result = listCmd(input, objectsList)
 
 	if (result === undefined) {
-		console.log('Error')
+		console.log(`\nExpected format:  \n\t${commands['list']?.format}`)
+		if (Array.isArray(commands['list']?.example)) {
+			console.log(`Example:`)
+			commands['list']?.example.map((example) => console.log(`\t${example}`))
+		}
+		console.log(`\n`)
 		return
 	}
 
