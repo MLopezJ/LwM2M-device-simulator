@@ -6,6 +6,9 @@ import type { elementType } from '../utils/typeOfElement.js'
 type ValueOf<T> = T[keyof T]
 export type instance = ValueOf<Partial<assetTracker>>
 export type resourceValue = string | number | boolean
+export type resource =
+	| Record<string, resourceValue>
+	| Record<string, resourceValue>[]
 
 /**
  * Given an element and a list, should return the value of the element in list

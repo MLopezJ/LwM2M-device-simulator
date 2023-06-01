@@ -1,7 +1,12 @@
+import { type instance } from './getValue.js'
+
 /**
- * Check if resource exist in object
+ * Check if resource exist in instance
  */
 export const checkResource = (
-	object: Record<string, unknown>,
+	object: instance,
 	resourceId: number,
-): unknown => object[`${resourceId}`]
+): Record<string, unknown> | undefined => {
+	const id = `${resourceId}` as keyof instance
+	return object ? object[id] : undefined
+}

@@ -1,10 +1,10 @@
 import type { LwM2MDocument } from '@nordicsemiconductor/lwm2m-types'
 import { correlationTable, type assetTracker } from '../assetTrackerV2.js'
-import type { instance } from './checkInstance'
 import type { element } from './getElementPath'
+import type { instance } from './getValue'
 
 /**
- * Check if object exist in Asset Tracker
+ * Check if object exist in Asset Tracker and return it instance(s)
  */
 export const checkObject = (
 	path: element,

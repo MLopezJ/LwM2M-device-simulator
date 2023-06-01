@@ -4,6 +4,10 @@ import { checkObject } from '../utils/checkObject.js'
 import { checkResource } from '../utils/checkResource.js'
 import type { element } from '../utils/getElementPath.js'
 import { getUrn } from '../utils/getUrn.js'
+import { type resourceValue } from '../utils/getValue.js'
+
+type instance = Record<string, resourceValue>
+type resource = Record<string, unknown>
 
 /**
  * Set new value in LwM2M object list
@@ -33,12 +37,12 @@ export const set = (
 
 	// multiple instance
 	if (Array.isArray(object) === true) {
-		// @ts-ignore
-		objectList[`${urn}`]![path.instanceId]![`${path.resourceId}`] = newValue
+		;((objectList[`${urn}`] as instance[])[path.instanceId] as resource)[
+			path.resourceId
+		] = newValue
 	} else {
 		// Single instance
-		// @ts-ignore
-		objectList[`${urn}`]![`${path.resourceId}`] = newValue
+		;(objectList[`${urn}`] as instance)[`${path.resourceId}`] = newValue
 	}
 
 	return objectList

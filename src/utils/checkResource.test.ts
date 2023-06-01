@@ -2,8 +2,9 @@ import {
 	Device_3_urn,
 	Temperature_3303_urn,
 } from '@nordicsemiconductor/lwm2m-types'
-import { assetTrackerFirmwareV2, type assetTracker } from '../assetTrackerV2.js'
+import { assetTrackerFirmwareV2 } from '../assetTrackerV2.js'
 import { checkResource } from './checkResource.js'
+import { type instance } from './getValue.js'
 
 describe('Check Resource', () => {
 	it('Should return resource value if resource exist', () => {
@@ -23,10 +24,8 @@ describe('Check Resource', () => {
 		],
 	])(
 		'Should check that resource %p exist in object: %p',
-		(resourceId: number, objectName: string, object: unknown) => {
-			expect(checkResource(object as assetTracker, resourceId)).not.toBe(
-				undefined,
-			)
+		(resourceId: number, objectName: string, object: instance) => {
+			expect(checkResource(object, resourceId)).not.toBe(undefined)
 		},
 	)
 
@@ -41,10 +40,8 @@ describe('Check Resource', () => {
 		],
 	])(
 		'Should check that resource %p do not exist in object: %p',
-		(resourceId: number, objectName: string, object: unknown) => {
-			expect(checkResource(object as Partial<assetTracker>, resourceId)).toBe(
-				undefined,
-			)
+		(resourceId: number, objectName: string, object: instance) => {
+			expect(checkResource(object, resourceId)).toBe(undefined)
 		},
 	)
 })

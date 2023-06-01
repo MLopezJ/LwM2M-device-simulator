@@ -1,17 +1,19 @@
-export type instance = Record<string, unknown> | Record<string, unknown>[]
+//export type instance = Record<string, unknown> | Record<string, unknown>[]
+
+import { type instance, type resource } from './getValue.js'
 
 /**
- * Check if instance exist in object
+ * Check if instance exist in object and return it resources
  */
 export const checkInstance = (
 	object: instance,
 	instanceId: number,
-): undefined | Record<string, unknown> => {
+): undefined | resource => {
 	// single instance
 	if (Array.isArray(object) === false) {
 		if (instanceId > 0) return undefined
 
-		return object as Record<string, unknown>
+		return object as resource
 	}
 
 	// repeat list validation to satisfy typescript concern about type 'number' can't be used to index type 'Partial<assetTracker>'.
