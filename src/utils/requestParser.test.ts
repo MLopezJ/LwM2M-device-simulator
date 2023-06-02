@@ -1,4 +1,74 @@
-import { get, post, put } from './requestParser'
+import { get, post, put, requestParser } from './requestParser'
+
+describe('requestParser', () => {
+	it('should parser empty requests', () => {
+		const request = {
+			code: '0.00',
+			_packet: { confirmable: true },
+			payload: '',
+			method: 'GET',
+			url: '/',
+			headers: { Observe: 3, Accept: 'application/link-format' },
+		}
+		expect(requestParser(request)).toBe('empty')
+	})
+
+	it('should parser GET requests', () => {
+		const request = {
+			code: '2.01',
+			_packet: { confirmable: true },
+			payload: 'payload',
+			method: 'GET',
+			url: '/',
+			headers: { Observe: 3, Accept: 'application/link-format' },
+		}
+		expect(requestParser(request)).toBe('discover')
+	})
+
+	it('should parser PUT requests', () => {
+		const request = {
+			code: '2.01',
+			_packet: { confirmable: true },
+			payload: 'payload',
+			method: 'PUT',
+			url: '/',
+			headers: {
+				'Content-Format': 'application/vnd.oma.lwm2m+json',
+				Observe: 3,
+				Accept: 'application/link-format',
+			},
+		}
+		expect(requestParser(request)).toBe('write')
+	})
+
+	it('should parser PUT requests', () => {
+		const request = {
+			code: '2.01',
+			_packet: { confirmable: true },
+			payload: 'payload',
+			method: 'POST',
+			url: '/',
+			headers: {
+				'Content-Format': 'application/vnd.oma.lwm2m+json',
+				Observe: 3,
+				Accept: 'application/link-format',
+			},
+		}
+		expect(requestParser(request)).toBe('create')
+	})
+
+	it('should parser DELETE requests', () => {
+		const request = {
+			code: '2.01',
+			_packet: { confirmable: true },
+			payload: 'payload',
+			method: 'DELETE',
+			url: '/',
+			headers: { Observe: 3, Accept: 'application/link-format' },
+		}
+		expect(requestParser(request)).toBe('delete')
+	})
+})
 
 describe('GET', () => {
 	it(`should return 'observe' if 'observe' parameter is 0`, () => {
