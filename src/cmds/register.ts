@@ -1,6 +1,6 @@
 import type { LwM2MDocument } from '@nordicsemiconductor/lwm2m-types'
 import coap, { OutgoingMessage, type CoapRequestParams } from 'coap' // type Agent,
-import config from '../../config.json'
+import { config } from '../../config.js'
 import { type assetTracker } from '../assetTrackerV2.js'
 import { createE, type e } from '../utils/createE.js'
 import { getBracketFormat } from '../utils/getBracketFormat.js'
