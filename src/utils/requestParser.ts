@@ -58,9 +58,9 @@ export const put = (contentFormat: boolean): string =>
 	contentFormat ? 'write' : 'writeAttr'
 
 /**
- *
+ * POST request
  */
-const post = (url: string, contentFormat: boolean): string => {
+export const post = (url: string, contentFormat: boolean): string => {
 	if (url === '/ping') return 'ping'
 	else if (url === '/bs') return 'finish'
 	else if (url === '/announce') return 'announce'
