@@ -1,7 +1,13 @@
 import { jest } from '@jest/globals'
 import { type OutgoingMessage } from 'coap'
 import { assetTrackerFirmwareV2 } from '../assetTrackerV2.js'
-import { readObject, register } from '../cmds/register.js'
+import {
+	manageCoioteRequest,
+	readObject,
+	register,
+	type serverRequest,
+	type serverRespose,
+} from '../cmds/register.js'
 
 describe('register', () => {
 	it('should send registration request to server', () => {
@@ -20,6 +26,26 @@ describe('register', () => {
 
 		expect(createRegisterQuery).toHaveBeenCalled()
 		expect(sendRegistrationRequest).toHaveBeenCalledWith(query)
+	})
+})
+
+describe('manageCoioteRequest', () => {
+	it('should receive request from server and create response', () => {
+		const request = jest
+			.fn()
+			.mockReturnValue({ url: '/3' }) as unknown as serverRequest
+		const response = {
+			setOption: jest.fn(),
+			end: jest.fn(),
+		} as serverRespose // Device simulator response to the server
+
+		const payload: Buffer = Buffer.from('')
+		const json = 'application/vnd.oma.lwm2m+json'
+
+		manageCoioteRequest(request, response, assetTrackerFirmwareV2)
+
+		expect(response.setOption).toHaveBeenCalledWith('Content-Format', json)
+		expect(response.end).toHaveBeenCalledWith(payload)
 	})
 })
 

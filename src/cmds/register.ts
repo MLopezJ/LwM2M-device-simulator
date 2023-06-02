@@ -62,8 +62,8 @@ export const sendRegistrationRequest = (query: string): OutgoingMessage => {
 	return registerRequest
 }
 
-type serverRequest = { url: string }
-type serverRespose = {
+export type serverRequest = { url: string }
+export type serverRespose = {
 	setOption: (arg0: string, arg1: string) => void
 	end: (arg0: string | Buffer | undefined) => void
 }
@@ -95,11 +95,11 @@ const manageResponse = (response: registrationResponse) => {
 /**
  * Identify the action requested and create payload to response
  */
-const manageCoioteRequest = (
+export const manageCoioteRequest = (
 	request: serverRequest,
 	response: serverRespose,
 	objectList: assetTracker | undefined = assetTrackerObjects,
-) => {
+): void => {
 	const actionRequested = requestParser(request as any) // TODO: improve this
 	console.log('Coiote request ', actionRequested, ' element ', request.url)
 
@@ -107,7 +107,7 @@ const manageCoioteRequest = (
 	if (objectList !== undefined) {
 		switch (actionRequested) {
 			case 'read':
-				payload = readObject(request.url, objectList)
+				payload = readObject(request.url, objectList) // TODO: test creation of paylod from read request
 				break
 		}
 	} else {
