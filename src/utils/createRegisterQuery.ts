@@ -3,7 +3,7 @@ import { config } from '../../config.js'
 /**
  * Build register query
  */
-export const getRegisterQuery = (
+export const createRegisterQuery = (
 	deviceName: string = config.deviceName,
 	lifetime: number = config.lifetime,
 	lwM2MVersion: number = config.lwm2mV,
