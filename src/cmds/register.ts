@@ -1,12 +1,12 @@
 import type { LwM2MDocument } from '@nordicsemiconductor/lwm2m-types'
-import coap, { OutgoingMessage, type CoapRequestParams } from 'coap' // type Agent,
-import { config } from '../../config.js'
+import coap, { OutgoingMessage } from 'coap' // type Agent,
 import { type assetTracker } from '../assetTrackerV2.js'
 import { createE, type e } from '../utils/createE.js'
+import { createParamsRequest } from '../utils/createParamsRequest.js'
+import { createRegisterQuery } from '../utils/createRegisterQuery.js'
 import { getBracketFormat } from '../utils/getBracketFormat.js'
 import { getElementPath } from '../utils/getElementPath.js'
 import { getLibUrn } from '../utils/getLibUrn.js'
-import { getRegisterQuery } from '../utils/getRegisterQuery.js'
 import { requestParser } from '../utils/requestParser.js'
 import { typeOfElement } from '../utils/typeOfElement.js'
 
@@ -50,15 +50,8 @@ export const register = (objectList: assetTracker): void => {
  * Send registration request to server
  */
 const registration = (): OutgoingMessage => {
-	const params: CoapRequestParams = {
-		host: config.host,
-		port: config.port,
-		pathname: '/rd',
-		method: 'POST',
-		options: { 'Content-Format': 'application/link-format' },
-		query: getRegisterQuery(),
-	}
-
+	const query = createRegisterQuery()
+	const params = createParamsRequest(query)
 	const agent = new coap.Agent({ type: udpDefault })
 	const registerRequest = agent.request(params)
 
