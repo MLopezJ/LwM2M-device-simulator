@@ -3,7 +3,6 @@ import coap, { OutgoingMessage } from 'coap' // type Agent,
 import { type assetTracker } from '../assetTrackerV2.js'
 import { createE, type e } from '../utils/createE.js'
 import { createParamsRequest } from '../utils/createParamsRequest.js'
-import { createRegisterQuery } from '../utils/createRegisterQuery.js'
 import { getBracketFormat } from '../utils/getBracketFormat.js'
 import { getElementPath } from '../utils/getElementPath.js'
 import { getLibUrn } from '../utils/getLibUrn.js'
@@ -23,7 +22,12 @@ let assetTrackerObjects: undefined | assetTracker = undefined
 /**
  * Index
  */
-export const register = (objectList: assetTracker): void => {
+export const register = (
+	objectList: assetTracker,
+	createRegisterQuery: () => string,
+	sendRegistrationRequest: (query: string) => OutgoingMessage,
+	//createParams: () => CoapRequestParams
+): void => {
 	assetTrackerObjects = objectList
 	/**
 	 * Data Format id for Transferring Resource Information as a json
@@ -32,8 +36,9 @@ export const register = (objectList: assetTracker): void => {
 	const dataFormatId = '11543'
 	const objects = getBracketFormat(objectList)
 	const payload = `</>;ct=${dataFormatId};hb,${objects}`
+	const query = createRegisterQuery()
 
-	const registerRequest = registration()
+	const registerRequest = sendRegistrationRequest(query)
 
 	registerRequest.end(payload)
 
@@ -49,8 +54,7 @@ export const register = (objectList: assetTracker): void => {
 /**
  * Send registration request to server
  */
-const registration = (): OutgoingMessage => {
-	const query = createRegisterQuery()
+export const sendRegistrationRequest = (query: string): OutgoingMessage => {
 	const params = createParamsRequest(query)
 	const agent = new coap.Agent({ type: udpDefault })
 	const registerRequest = agent.request(params)

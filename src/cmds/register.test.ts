@@ -1,5 +1,27 @@
+import { jest } from '@jest/globals'
+import { type OutgoingMessage } from 'coap'
 import { assetTrackerFirmwareV2 } from '../assetTrackerV2.js'
-import { readObject } from '../cmds/register.js'
+import { readObject, register } from '../cmds/register.js'
+
+describe('register', () => {
+	it('should send registration request to server', () => {
+		const query = 'query'
+		const createRegisterQuery = jest.fn().mockReturnValue(query) as () => string
+		const sendRegistrationRequest = jest.fn().mockImplementation(() => ({
+			end: jest.fn(),
+			on: jest.fn(),
+		})) as () => OutgoingMessage
+
+		register(
+			assetTrackerFirmwareV2,
+			createRegisterQuery,
+			sendRegistrationRequest,
+		)
+
+		expect(createRegisterQuery).toHaveBeenCalled()
+		expect(sendRegistrationRequest).toHaveBeenCalledWith(query)
+	})
+})
 
 describe('readObject', () => {
 	it('Should read from object and create buffer from its values', () => {

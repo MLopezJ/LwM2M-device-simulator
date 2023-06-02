@@ -1,9 +1,10 @@
 import type { assetTracker } from '../assetTrackerV2.js'
 import { commands } from '../commands.js'
+import { createRegisterQuery } from '../utils/createRegisterQuery.js'
 import { getElementPath } from '../utils/getElementPath.js'
 import { help as helpCmd } from './help.js'
 import { list as listCmd } from './list.js'
-import { register as registerCmd } from './register.js'
+import { register as registerCmd, sendRegistrationRequest } from './register.js'
 import { set as setCmd } from './set.js'
 
 /**
@@ -67,4 +68,4 @@ export const list = (
  * Connector method to execute registration on Coiote
  */
 export const register = (command: string[] | never, list: assetTracker): void =>
-	registerCmd(list)
+	registerCmd(list, createRegisterQuery, sendRegistrationRequest)
