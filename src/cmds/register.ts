@@ -6,6 +6,7 @@ import { createE, type e } from '../utils/createE.js'
 import { getBracketFormat } from '../utils/getBracketFormat.js'
 import { getElementPath } from '../utils/getElementPath.js'
 import { getLibUrn } from '../utils/getLibUrn.js'
+import { getRegisterQuery } from '../utils/getRegisterQuery.js'
 import { requestParser } from '../utils/requestParser.js'
 import { typeOfElement } from '../utils/typeOfElement.js'
 
@@ -49,15 +50,13 @@ export const register = (objectList: assetTracker): void => {
  * Send registration request to server
  */
 const registration = (): OutgoingMessage => {
-	const registerQuery = `ep=${config.deviceName}&lt=${config.lifetime}&lwm2m=${config.lwm2mV}&b=${config.biding}`
-
 	const params: CoapRequestParams = {
 		host: config.host,
 		port: config.port,
 		pathname: '/rd',
 		method: 'POST',
 		options: { 'Content-Format': 'application/link-format' },
-		query: registerQuery,
+		query: getRegisterQuery(),
 	}
 
 	const agent = new coap.Agent({ type: udpDefault })
