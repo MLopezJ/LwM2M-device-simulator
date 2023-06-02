@@ -29,9 +29,9 @@ export const register = (objectList: assetTracker): void => {
 	 * Data Format id for Transferring Resource Information as a json
 	 * @see http://www.openmobilealliance.org/release/LightweightM2M/V1_0_2-20180209-A/OMA-TS-LightweightM2M-V1_0_2-20180209-A.pdf Page 48
 	 */
-	const jsonId = '11543'
+	const dataFormatId = '11543'
 	const objects = getBracketFormat(objectList)
-	const payload = `</>;ct=${jsonId};hb,${objects}`
+	const payload = `</>;ct=${dataFormatId};hb,${objects}`
 
 	const registerRequest = registration()
 
