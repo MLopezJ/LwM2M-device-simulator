@@ -1,4 +1,4 @@
-import { get } from './requestParser'
+import { get, put } from './requestParser'
 
 describe('GET', () => {
 	it(`should return 'observe' if 'observe' parameter is 0`, () => {
@@ -15,5 +15,15 @@ describe('GET', () => {
 
 	it(`should return 'read' as default value`, () => {
 		expect(get(3, '')).toBe('read')
+	})
+})
+
+describe('PUT', () => {
+	it(`should return 'write' if 'content format' parameter is true`, () => {
+		expect(put(true)).toBe('write')
+	})
+
+	it(`should return 'writeAttr' if 'content format' parameter is false`, () => {
+		expect(put(false)).toBe('writeAttr')
 	})
 })

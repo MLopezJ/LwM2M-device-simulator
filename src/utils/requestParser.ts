@@ -52,9 +52,10 @@ export const get = (observe: number, accept: string): string => {
 }
 
 /**
- *
+ * PUT request
  */
-const put = (contentFormat: boolean) => (contentFormat ? 'write' : 'writeAttr')
+export const put = (contentFormat: boolean): string =>
+	contentFormat ? 'write' : 'writeAttr'
 
 /**
  *
