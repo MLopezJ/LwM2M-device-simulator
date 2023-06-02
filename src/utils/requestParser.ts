@@ -42,9 +42,9 @@ export const requestParser = (req: request): string => {
 }
 
 /**
- *
+ * Get request
  */
-const get = (observe: number, accept: string): string => {
+export const get = (observe: number, accept: string): string => {
 	if (observe === 0) return 'observe'
 	else if (observe === 1) return 'cancelObserve'
 	else if (accept === 'application/link-format') return 'discover'
