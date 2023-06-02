@@ -31,4 +31,10 @@ describe('getUserInput', () => {
 			expect(result.parameters).toStrictEqual(parameters)
 		},
 	)
+
+	it(`should return '' as a command and [] as a parameters if input is empty string`, () => {
+		const result = getUserInput('')
+		expect(result.command).toStrictEqual('')
+		expect(result.parameters.length).toBe(0)
+	})
 })
