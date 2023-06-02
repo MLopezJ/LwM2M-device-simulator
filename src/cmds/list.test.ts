@@ -56,4 +56,9 @@ describe('List', () => {
 		const param = '/3303/0/1010101010'
 		expect(list(param, assetTrackerFirmwareV2)).toBe(undefined)
 	})
+
+	it('Should return undefined when input do not follow LwM2M object syntax', () => {
+		const param = 'test'
+		expect(list(param, assetTrackerFirmwareV2)).toBe(undefined)
+	})
 })
