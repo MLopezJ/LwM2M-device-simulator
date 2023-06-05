@@ -1,16 +1,15 @@
 type request = {
 	code: string
-	_packet: { confirmable: any }
-	payload: string | any[]
-	method: any
-	headers: { [x: string]: any; Observe: number; Accept: string }
+	_packet: { confirmable: unknown }
+	payload: string | unknown[]
+	method: unknown
+	headers: { [x: string]: unknown; Observe: number; Accept: string }
 	url: string
 }
 
 /**
  * Parser request
  */
-
 export const requestParser = (req: request): string => {
 	const isEmpty =
 		req.code === '0.00' &&
