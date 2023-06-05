@@ -1,4 +1,4 @@
-# LwM2M Device Simulator [![npm version](https://img.shields.io/npm/v/@nordicsemiconductor/LwM2M-device-simulator.svg)](https://www.npmjs.com/package/@nordicsemiconductor/LwM2M-device-simulator)
+# LwM2M Device Simulator
 
 [![Test and Release](https://github.com/MLopezJ/LwM2M-device-simulator/actions/workflows/test-and-release.yaml/badge.svg)](https://github.com/MLopezJ/LwM2M-device-simulator/actions/workflows/test-and-release.yaml)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
