@@ -110,21 +110,3 @@ describe('readObject', () => {
 		expect(result.e).toBe(null)
 	})
 })
-
-/*
-describe('getPayload', ()=>{
-    it("Should get payload when read action is requested", () => {
-        const url = '/3'
-        const result = JSON.parse(getPayload('read', url, assetTrackerFirmwareV2).toString())
-        expect(result.bn).toBe(url)
-        expect(result.e[0]).toHaveProperty('n', '0/0')
-        expect(result.e[0]).toHaveProperty('sv', 'Nordic') 
-    })
-
-    it("Should return empty string when not known action is requested", () => {
-        const url = '/3'
-        const result = getPayload('something', url, assetTrackerFirmwareV2).toString()
-        expect(result).toBe('')
-    })
-})
-*/
