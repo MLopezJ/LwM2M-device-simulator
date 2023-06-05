@@ -1,5 +1,3 @@
-//export type instance = Record<string, unknown> | Record<string, unknown>[]
-
 import { type instance, type resource } from './getValue.js'
 
 /**
