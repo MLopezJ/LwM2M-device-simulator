@@ -27,8 +27,8 @@ jobs:
       - name: Run unit tests
         run: npm test
 
-      - name: Run the example
-        run: npx tsx example.ts
+      - name: Run the CLI
+        run: npx tsx src/index.ts
 
       - name: Semantic release
         env:
