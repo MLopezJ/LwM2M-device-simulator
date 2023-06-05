@@ -29,7 +29,7 @@ export const set = (
 	const resource = checkResource(instance, path.resourceId)
 	if (resource === undefined) return undefined
 
-	// set new value and retur
+	// set new value and return
 
 	// set new data type taking in consideration last data type of element
 	const newValue = typeof resource === 'number' ? Number(value) : value
