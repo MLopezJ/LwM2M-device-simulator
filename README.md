@@ -110,11 +110,11 @@ simulator with the default configuration, you should:
   [Coiote IoT DM account](https://eu.iot.avsystem.cloud/ui/device/inventory)
 - Create a device in Coiote IoT DM with NoSec security mode
 - Update
-  [config](https://github.com/MLopezJ/LwM2M-device-simulator/blob/saga/config.json)
+  [config](https://github.com/MLopezJ/LwM2M-device-simulator/blob/saga/config.ts)
   file with name of created device in `deviceName` property.
 
 If other server is desired to be used, just update the `host` property from
-[config](https://github.com/MLopezJ/LwM2M-device-simulator/blob/saga/config.json)
+[config](https://github.com/MLopezJ/LwM2M-device-simulator/blob/saga/config.ts)
 with the required value.
 
 ## Execution
