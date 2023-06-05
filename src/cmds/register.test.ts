@@ -1,5 +1,5 @@
-import { jest } from '@jest/globals'
 import coap, { type OutgoingMessage } from 'coap'
+import jest from 'jest-mock'
 import { assetTrackerFirmwareV2 } from '../assetTrackerV2.js'
 import {
 	manageCoioteRequest,
