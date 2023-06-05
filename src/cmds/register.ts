@@ -71,16 +71,20 @@ export type serverRespose = {
 /**
  * Stablish a socket connection in case the response is sucess
  */
-const manageResponse = (response: registrationResponse) => {
+export const manageResponse = (
+	response: registrationResponse,
+	createServer = () =>
+		coap.createServer({
+			type: udpDefault,
+			proxy: true,
+		}),
+): void => {
 	// if registration sucess
 	if (response.code === '2.01') {
 		const socketPort = response.outSocket.port // socket port of connection between Coiote and Device Simulator
 
 		// Create a new server to interact with Coiote
-		const server = coap.createServer({
-			type: udpDefault,
-			proxy: true,
-		})
+		const server = createServer()
 
 		server.listen(socketPort as number, (err: unknown) => {
 			console.log({ err })

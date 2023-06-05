@@ -1,8 +1,9 @@
 import { jest } from '@jest/globals'
-import { type OutgoingMessage } from 'coap'
+import coap, { type OutgoingMessage } from 'coap'
 import { assetTrackerFirmwareV2 } from '../assetTrackerV2.js'
 import {
 	manageCoioteRequest,
+	manageResponse,
 	readObject,
 	register,
 	type serverRequest,
@@ -26,6 +27,26 @@ describe('register', () => {
 
 		expect(createRegisterQuery).toHaveBeenCalled()
 		expect(sendRegistrationRequest).toHaveBeenCalledWith(query)
+	})
+})
+
+describe('manageResponse', () => {
+	it('should stablish a socket connection in case the response is sucess', () => {
+		const response = {
+			code: '2.01',
+			rsinfo: { address: 'unknown', port: 5683 },
+			headers: { x: 'y' },
+			outSocket: { address: 'unknown', port: 5683 },
+		}
+
+		const createServer = jest.fn().mockImplementation(() => ({
+			listen: jest.fn(),
+			on: jest.fn(),
+		})) as () => coap.Server
+
+		manageResponse(response, createServer)
+
+		expect(createServer).toHaveBeenCalled()
 	})
 })
 
