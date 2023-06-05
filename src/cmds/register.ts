@@ -6,7 +6,7 @@ import { createParamsRequest } from '../utils/createParamsRequest.js'
 import { getBracketFormat } from '../utils/getBracketFormat.js'
 import { getElementPath } from '../utils/getElementPath.js'
 import { getLibUrn } from '../utils/getLibUrn.js'
-import { requestParser } from '../utils/requestParser.js'
+import { requestParser, type request } from '../utils/requestParser.js'
 import { typeOfElement } from '../utils/typeOfElement.js'
 
 type registrationResponse = {
@@ -42,7 +42,7 @@ export const register = (
 
 	registerRequest.end(payload)
 
-	registerRequest.on('error', (err: any) => {
+	registerRequest.on('error', (err: unknown) => {
 		console.log({ err })
 	})
 
@@ -104,7 +104,7 @@ export const manageCoioteRequest = (
 	response: serverRespose,
 	objectList: assetTracker | undefined = assetTrackerObjects,
 ): void => {
-	const actionRequested = requestParser(request as any) // TODO: improve this
+	const actionRequested = requestParser(request as request)
 	console.log('Coiote request ', actionRequested, ' element ', request.url)
 
 	let payload: Buffer = Buffer.from('')

@@ -1,4 +1,4 @@
-type request = {
+export type request = {
 	code: string
 	_packet: { confirmable: unknown }
 	payload: string | unknown[]
