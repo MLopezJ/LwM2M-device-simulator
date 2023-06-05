@@ -7,7 +7,7 @@ import { getUserInput } from './getUserInput.js'
  * Command Line Interface
  */
 const cli = () => {
-	let assetTrackerObjects = structuredClone(assetTrackerFirmwareV2)
+	let assetTrackerObjects = assetTrackerFirmwareV2
 
 	const rl = readline.createInterface({
 		input: process.stdin,

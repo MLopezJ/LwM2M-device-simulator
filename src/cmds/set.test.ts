@@ -14,7 +14,7 @@ describe('Set', () => {
 			resourceId: 0,
 		}
 		const value = 'new value'
-		const list = structuredClone(assetTrackerFirmwareV2)
+		const list = assetTrackerFirmwareV2
 		const result = set(list, element, value)
 		expect(result?.[Device_3_urn]?.['0']).toBe(value)
 	})
@@ -26,7 +26,7 @@ describe('Set', () => {
 			resourceId: 9,
 		}
 		const value = '100'
-		const list = structuredClone(assetTrackerFirmwareV2)
+		const list = assetTrackerFirmwareV2
 		const result = set(list, element, value)
 		expect(result?.[Device_3_urn]?.['9']).toBe(Number(value))
 	})
@@ -38,7 +38,7 @@ describe('Set', () => {
 			resourceId: 5701,
 		}
 		const value = 'new value'
-		const list = structuredClone(assetTrackerFirmwareV2)
+		const list = assetTrackerFirmwareV2
 		const result = set(list, element, value)
 		expect(result?.[Temperature_3303_urn]?.[0]?.['5701']).toBe(value)
 	})
@@ -50,7 +50,7 @@ describe('Set', () => {
 			resourceId: 5700,
 		}
 		const value = '100'
-		const list = structuredClone(assetTrackerFirmwareV2)
+		const list = assetTrackerFirmwareV2
 		const result = set(list, element, value)
 		expect(result?.[Temperature_3303_urn]?.[0]?.['5700']).toBe(Number(value))
 	})
@@ -95,7 +95,7 @@ describe('Set', () => {
 		'Should return undefined when element do not exist: %p',
 		(element: element) => {
 			const value = 'new value'
-			const list = structuredClone(assetTrackerFirmwareV2)
+			const list = assetTrackerFirmwareV2
 			const result = set(list, element, value)
 			expect(result).toBe(undefined)
 		},

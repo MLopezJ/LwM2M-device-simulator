@@ -19,7 +19,7 @@ describe('Check Object', () => {
 			},
 		],
 	])('Should check that object exist in asset tracker: %p', (path: element) => {
-		const list = structuredClone(assetTrackerFirmwareV2)
+		const list = assetTrackerFirmwareV2
 		expect(checkObject(path, list)).not.toBe(undefined)
 	})
 
@@ -29,7 +29,7 @@ describe('Check Object', () => {
 			instanceId: 0,
 			resourceId: 0,
 		}
-		const list = structuredClone(assetTrackerFirmwareV2)
+		const list = assetTrackerFirmwareV2
 		expect(checkObject(path, list)).toBe(undefined)
 	})
 })
