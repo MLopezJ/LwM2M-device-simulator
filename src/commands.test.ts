@@ -10,7 +10,6 @@ describe('executeCommand', () => {
 
 	it.each([
 		['help', ['']],
-		//['quit', ['']],
 		['clear', ['']],
 		['list', ['list']],
 	])(`should return void when execute '%s' command`, (command, params) => {
