@@ -134,11 +134,12 @@ not recommended for production enviroments.
 
 #### Content format
 
-The data format used for transferring resource information is LwM2M+json
-([Documentation - Page 48](http://www.openmobilealliance.org/release/LightweightM2M/V1_0_2-20180209-A/OMA-TS-LightweightM2M-V1_0_2-20180209-A.pdf))
+The data format used for transferring resource information is
+[ LwM2M+json (Doc. Page 48)](http://www.openmobilealliance.org/release/LightweightM2M/V1_0_2-20180209-A/OMA-TS-LightweightM2M-V1_0_2-20180209-A.pdf)
 
 #### No implemented interface
 
-The "Information Reporting” interface is not implemented in the device
-simulator, for this reason is not possible to performance "observe" action on
-the LwM2M objects.
+The
+[Information Reporting (Doc. Pag 38)](http://www.openmobilealliance.org/release/LightweightM2M/V1_0_2-20180209-A/OMA-TS-LightweightM2M-V1_0_2-20180209-A.pdf)
+interface is not implemented in the device simulator, for this reason is not
+possible to performance "observe" action on the LwM2M objects.
