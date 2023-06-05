@@ -7,10 +7,10 @@ describe('getUserInput', () => {
 		['list /3/0', 'list', ['/3/0']],
 		['list /3/0/0', 'list', ['/3/0/0']],
 		['list ', 'list', ['']],
-		['list /3/0 /0', 'list', ['/3/0', '/0']], // TODO: test error
+		['list /3/0 /0', 'list', ['/3/0', '/0']],
 
 		['set /3/0/0 Nordic', 'set', ['/3/0/0', 'Nordic']],
-		['set /3 Nordic', 'set', ['/3', 'Nordic']], // TODO: test error
+		['set /3 Nordic', 'set', ['/3', 'Nordic']],
 
 		['register', 'register', []],
 		['register ', 'register', ['']],
