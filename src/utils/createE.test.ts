@@ -26,8 +26,8 @@ describe('createE', () => {
 		expect(e).toMatchObject(result)
 		expect(e[0]).toHaveProperty('n', '0/5700')
 		expect(e[0]).toHaveProperty('v', 24.57)
-		expect(e[5]).toHaveProperty('n', '2/5701') // '0/5700'
-		expect(e[5]).toHaveProperty('sv', 'Celsius degrees') // '0/5700'
+		expect(e[5]).toHaveProperty('n', '2/5701')
+		expect(e[5]).toHaveProperty('sv', 'Celsius degrees')
 	})
 
 	it("Should create the 'e' value from single instance object", () => {
