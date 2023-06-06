@@ -1,8 +1,8 @@
 import type { LwM2MDocument } from '@nordicsemiconductor/lwm2m-types'
 import coap, { OutgoingMessage } from 'coap' // type Agent,
 import { type assetTracker } from '../assetTrackerV2.js'
-import { createE, type e } from '../utils/createE.js'
 import { createParamsRequest } from '../utils/createParamsRequest.js'
+import { createResourceList, type e } from '../utils/createResourceList.js'
 import { getBracketFormat } from '../utils/getBracketFormat.js'
 import { getElementPath } from '../utils/getElementPath.js'
 import { getLibUrn } from '../utils/getLibUrn.js'
@@ -152,7 +152,7 @@ export const readObject = (url: string, objectList: assetTracker): Buffer => {
 		bn: url,
 		e:
 			elementType !== undefined
-				? createE(object ?? {}, elementType, elementPath)
+				? createResourceList(object ?? {}, elementType, elementPath)
 				: [],
 	}
 

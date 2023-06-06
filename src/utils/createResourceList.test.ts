@@ -3,10 +3,10 @@ import {
 	Temperature_3303_urn,
 } from '@nordicsemiconductor/lwm2m-types'
 import { assetTrackerFirmwareV2 } from '../assetTrackerV2.js'
-import { createE, type e } from './createE.js'
+import { createResourceList, type e } from './createResourceList.js'
 
-describe('createE', () => {
-	it("Should create the 'e' value from multiple instance object", () => {
+describe('createResourceList', () => {
+	it("Should create the 'resourceList' value from multiple instance object", () => {
 		const multipleInstance = [
 			{ '5700': 24.57, '5701': 'Celsius degrees' },
 			{ '5700': 20, '5701': 'Celsius degrees' },
@@ -22,15 +22,15 @@ describe('createE', () => {
 			{ n: '2/5701', sv: 'Celsius degrees' },
 		]
 
-		const e = createE(multipleInstance, 'object')
-		expect(e).toMatchObject(result)
-		expect(e[0]).toHaveProperty('n', '0/5700')
-		expect(e[0]).toHaveProperty('v', 24.57)
-		expect(e[5]).toHaveProperty('n', '2/5701')
-		expect(e[5]).toHaveProperty('sv', 'Celsius degrees')
+		const resourceList = createResourceList(multipleInstance, 'object')
+		expect(resourceList).toMatchObject(result)
+		expect(resourceList[0]).toHaveProperty('n', '0/5700')
+		expect(resourceList[0]).toHaveProperty('v', 24.57)
+		expect(resourceList[5]).toHaveProperty('n', '2/5701')
+		expect(resourceList[5]).toHaveProperty('sv', 'Celsius degrees')
 	})
 
-	it("Should create the 'e' value from single instance object", () => {
+	it("Should create the 'resourceList' value from single instance object", () => {
 		const singleInstance = {
 			'0': 'Nordic',
 			'1': '00010',
@@ -59,24 +59,27 @@ describe('createE', () => {
 			{ n: '0/19', sv: '0.0' },
 		]
 
-		const e = createE(singleInstance, 'object')
-		expect(e).toMatchObject(result)
+		const resourceList = createResourceList(singleInstance, 'object')
+		expect(resourceList).toMatchObject(result)
 	})
 
-	it("Should create the 'e' value from empty single instance object", () => {
+	it("Should create the 'resourceList' value from empty single instance object", () => {
 		const singleInstance = {}
-		const e = createE(singleInstance, 'object')
-		expect(e.length).toBe(0)
+		const resourceList = createResourceList(singleInstance, 'object')
+		expect(resourceList.length).toBe(0)
 	})
 
-	it("Should create the 'e' value from empty multiple instance object", () => {
+	it("Should create the 'resourceList' value from empty multiple instance object", () => {
 		const multipleInstance = [{}]
-		const e = createE(multipleInstance, 'object')
-		expect(e.length).toBe(0)
+		const resourceList = createResourceList(multipleInstance, 'object')
+		expect(resourceList.length).toBe(0)
 	})
 
-	it("Should create the 'e' value from  Instance id", () => {
-		const e = createE(assetTrackerFirmwareV2[Device_3_urn] ?? {}, 'instance')
+	it("Should create the 'resourceList' value from  Instance id", () => {
+		const resourceList = createResourceList(
+			assetTrackerFirmwareV2[Device_3_urn] ?? {},
+			'instance',
+		)
 		const result: e[] = [
 			{ n: '0', sv: 'Nordic' },
 			{ n: '1', sv: '00010' },
@@ -90,12 +93,12 @@ describe('createE', () => {
 			{ n: '18', sv: '0.0' },
 			{ n: '19', sv: '0.0' },
 		]
-		expect(e).toMatchObject(result)
+		expect(resourceList).toMatchObject(result)
 	})
 
-	it("Should create the 'e' value from rersource id", () => {
+	it("Should create the 'resourceList' value from rersource id", () => {
 		const elementPath = { objectId: 3, instanceId: 0, resourceId: 0 }
-		const list = createE(
+		const list = createResourceList(
 			assetTrackerFirmwareV2[Device_3_urn] ?? {},
 			'resource',
 			elementPath,
@@ -104,14 +107,14 @@ describe('createE', () => {
 		expect(list).toMatchObject(result)
 	})
 
-	it("Should create the 'e' value from rersource id (multiple instance)", () => {
+	it("Should create the 'resourceList' value from rersource id (multiple instance)", () => {
 		const elementPath = { objectId: 3303, instanceId: 0, resourceId: 5700 }
-		const e = createE(
+		const resourceList = createResourceList(
 			assetTrackerFirmwareV2[Temperature_3303_urn] ?? {},
 			'resource',
 			elementPath,
 		)
 		const result: e[] = [{ v: 24.57 }]
-		expect(e).toMatchObject(result)
+		expect(resourceList).toMatchObject(result)
 	})
 })
