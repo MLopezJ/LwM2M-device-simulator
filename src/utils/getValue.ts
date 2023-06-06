@@ -55,9 +55,10 @@ export const getValue = (
  */
 const getInstance = (
 	isSingleInstance: boolean,
-	instanceId: number,
+	instanceId: number | undefined,
 	instance: instance | instance[],
 ): instance | undefined => {
+	if (instanceId === undefined) return undefined
 	if (isSingleInstance === true) {
 		if (instanceId !== 0) {
 			console.log('Error: element is single instance')
@@ -75,8 +76,8 @@ const getInstance = (
  */
 const getResource = (
 	isSingleInstance: boolean,
-	instanceId: number,
-	resourceId: number,
+	instanceId: number | undefined,
+	resourceId: number | undefined,
 	instance: instance | instance[],
 ): string | number | boolean | undefined => {
 	const key = `${resourceId}` as keyof instance
@@ -88,6 +89,7 @@ const getResource = (
 
 	// multiple instance resource
 	const list = instance as instance[]
+	if (instanceId === undefined) return undefined
 	return getSingleResource(list[instanceId], key)
 }
 

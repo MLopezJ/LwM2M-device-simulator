@@ -18,14 +18,17 @@ export const set = (
 	value: string,
 ): assetTracker | undefined => {
 	// check if object exist
+	if (path.objectId === undefined) return undefined
 	const object = checkObject(path, objectList)
 	if (object === undefined) return undefined
 
 	// check if instance exist
+	if (path.instanceId === undefined) return undefined
 	const instance = checkInstance(object, path.instanceId)
 	if (instance === undefined) return undefined
 
 	// check if resource exist
+	if (path.resourceId === undefined) return undefined
 	const resource = checkResource(instance, path.resourceId)
 	if (resource === undefined) return undefined
 

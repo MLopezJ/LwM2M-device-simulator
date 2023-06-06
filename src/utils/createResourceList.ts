@@ -31,7 +31,11 @@ export const createResourceList = (
 	typeOfElement: elementType,
 	resourcePath?: element,
 ): e[] => {
-	if (typeOfElement === 'resource' && resourcePath !== undefined) {
+	if (
+		typeOfElement === 'resource' &&
+		resourcePath?.instanceId !== undefined &&
+		resourcePath.resourceId !== undefined
+	) {
 		const obj = Array.isArray(values) ? values[resourcePath.instanceId] : values
 		return createFromResource(obj, resourcePath.resourceId)
 	}
