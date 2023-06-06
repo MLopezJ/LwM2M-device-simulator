@@ -1,11 +1,9 @@
 import type { assetTracker } from '../assetTrackerV2.js'
 import { commands } from '../commands.js'
 import { createRegisterQuery } from '../utils/createRegisterQuery.js'
-import { getElementPath } from '../utils/getElementPath.js'
 import { help as helpCmd } from './help.js'
 import { list as listCmd } from './list.js'
 import { register as registerCmd, sendRegistrationRequest } from './register.js'
-import { set as setCmd } from './set.js'
 
 /**
  * Clear console
@@ -24,21 +22,6 @@ export const quit = (): void => {
  * Connector method to list info about available commands
  */
 export const help = (): void => helpCmd()
-
-/**
- * Connector method to update the resource value of an object
- */
-export const set = (
-	userInput: string[],
-	list: assetTracker,
-): assetTracker | undefined => {
-	const path = getElementPath(userInput[0] ?? '')
-	const value = userInput[1]
-
-	const result = setCmd(list, path, value ?? '')
-
-	return result
-}
 
 /**
  * Connector method to execute list of objects

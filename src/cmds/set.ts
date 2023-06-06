@@ -1,52 +1,29 @@
-import type { assetTracker } from '../assetTrackerV2.js'
-import { checkInstance } from '../utils/checkInstance.js'
-import { checkObject } from '../utils/checkObject.js'
-import { checkResource } from '../utils/checkResource.js'
-import type { element } from '../utils/getElementPath.js'
-import { getUrn } from '../utils/getUrn.js'
-import { type resourceValue } from '../utils/getValue.js'
-
-type instance = Record<string, resourceValue>
-type resource = Record<string, unknown>
+import { type assetTracker } from '../assetTrackerV2.js'
+import { getElementPath, type element } from '../utils/getElementPath.js'
+import { updateResource } from '../utils/updateResource.js'
 
 /**
- * Set new value in LwM2M object list
+ * Execute the Set action
  */
 export const set = (
-	objectList: assetTracker,
-	path: element,
-	value: string,
+	userInput: string[],
+	list: assetTracker,
+	getPath = (url: string) => getElementPath(url),
+	changeResourceValue = (list: assetTracker, path: element, value: string) =>
+		updateResource(list, path, value),
+	registerNewValue = (bracketUrl: string, list: assetTracker) => {
+		console.log('TODO', bracketUrl, list)
+	},
 ): assetTracker | undefined => {
-	// check if object exist
-	if (path.objectId === undefined) return undefined
-	const object = checkObject(path, objectList)
-	if (object === undefined) return undefined
+	const url = userInput[0] ?? ''
+	const value = userInput[1] ?? ''
+	const path = getPath(url)
+	const newList = changeResourceValue(list, path, value)
 
-	// check if instance exist
-	if (path.instanceId === undefined) return undefined
-	const instance = checkInstance(object, path.instanceId)
-	if (instance === undefined) return undefined
-
-	// check if resource exist
-	if (path.resourceId === undefined) return undefined
-	const resource = checkResource(instance, path.resourceId)
-	if (resource === undefined) return undefined
-
-	// set new value and return
-
-	// set new data type taking in consideration last data type of element
-	const newValue = typeof resource === 'number' ? Number(value) : value
-	const urn = getUrn(path.objectId)
-
-	// multiple instance
-	if (Array.isArray(object) === true) {
-		;((objectList[`${urn}`] as instance[])[path.instanceId] as resource)[
-			path.resourceId
-		] = newValue
-	} else {
-		// Single instance
-		;(objectList[`${urn}`] as instance)[`${path.resourceId}`] = newValue
+	if (newList !== undefined) {
+		const bracket = `<${url}>`
+		registerNewValue(bracket, newList)
 	}
 
-	return objectList
+	return newList
 }

@@ -1,5 +1,6 @@
 import type { assetTracker } from './assetTrackerV2.js'
-import { clear, help, list, quit, register, set } from './cmds/index.js'
+import { clear, help, list, quit, register } from './cmds/index.js'
+import { set } from './cmds/set.js'
 
 type commandsObject = Record<
 	string,
