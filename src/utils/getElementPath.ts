@@ -10,8 +10,6 @@ export type element = {
 
 /**
  * Split path in object, instance and resource
- *
- * -1 means no defined value
  */
 export const getElementPath = (url: string): element => {
 	const [, objectId, instanceId, resourceId] = url.split('/')
