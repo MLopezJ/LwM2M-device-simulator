@@ -2,6 +2,7 @@ import type { LwM2MDocument } from '@nordicsemiconductor/lwm2m-types'
 import coap, { OutgoingMessage } from 'coap' // type Agent,
 import { type assetTracker } from '../assetTrackerV2.js'
 import { createParamsRequest } from '../utils/createParamsRequest.js'
+import { createRegisterQuery } from '../utils/createRegisterQuery.js'
 import { createResourceList, type e } from '../utils/createResourceList.js'
 import { getBracketFormat } from '../utils/getBracketFormat.js'
 import { getElementPath } from '../utils/getElementPath.js'
@@ -21,28 +22,26 @@ let assetTrackerObjects: undefined | assetTracker = undefined
 
 export const informRegistration = (
 	objectList: assetTracker,
-	//x = (objects: assetTracker) => getBracketFormat(objects),
-	//y = (objects: string) => getPayload(objects),
-	getBracketFormat: (objects: assetTracker) => string,
-	getPayload: (objects: string) => string,
-	createRegisterQuery: () => string,
-	sendRegistrationRequest: (query: string) => OutgoingMessage,
+	createBracketFormat = (objects: assetTracker) => getBracketFormat(objects),
+	createPayload = (objects: string) => getPayload(objects),
+	createQuery = () => createRegisterQuery(),
+	sendRequest = (query: string) => sendRegistrationRequest(query),
 ): coap.OutgoingMessage => {
-	const objects = getBracketFormat(objectList)
+	const objects = createBracketFormat(objectList)
 
-	const payload = getPayload(objects)
+	const query = createQuery()
 
-	const query = createRegisterQuery()
+	const payload = createPayload(objects)
 
-	const registerRequest = sendRegistrationRequest(query)
+	const request = sendRequest(query)
 
-	registerRequest.end(payload)
+	request.end(payload)
 
-	registerRequest.on('error', (err: unknown) => {
+	request.on('error', (err: unknown) => {
 		console.log({ err })
 	})
 
-	const response = registerRequest.on('response', (response) => response)
+	const response = request.on('response', (response) => response)
 
 	return response
 }
@@ -91,7 +90,9 @@ export const register = (
 /**
  * Send registration request to server
  */
-export const sendRegistrationRequest = (query: string): OutgoingMessage => {
+export const sendRegistrationRequest = (
+	query: string,
+): coap.OutgoingMessage => {
 	const params = createParamsRequest(query)
 	const agent = new coap.Agent({ type: udpDefault })
 	const registerRequest = agent.request(params)
