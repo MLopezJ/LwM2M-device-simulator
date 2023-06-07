@@ -37,16 +37,12 @@ export const informRegistration = (
 	createRegisterQuery: () => string,
 	sendRegistrationRequest: (query: string) => OutgoingMessage,
 ): coap.OutgoingMessage => {
-	// get bracket format
 	const objects = getBracketFormat(objectList)
 
-	// getPayload
 	const payload = getPayload(objects)
 
-	// getQuery
 	const query = createRegisterQuery()
 
-	// sendRegistration
 	const registerRequest = sendRegistrationRequest(query)
 
 	registerRequest.end(payload)
