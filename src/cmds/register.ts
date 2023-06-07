@@ -19,6 +19,47 @@ type registrationResponse = {
 const udpDefault = 'udp4'
 let assetTrackerObjects: undefined | assetTracker = undefined
 
+export const getPayload = (objects: string): string => {
+	/**
+	 * Data Format id for Transferring Resource Information as a json
+	 * @see http://www.openmobilealliance.org/release/LightweightM2M/V1_0_2-20180209-A/OMA-TS-LightweightM2M-V1_0_2-20180209-A.pdf Page 48
+	 */
+	const dataFormatId = '11543'
+	return `</>;ct=${dataFormatId};hb,${objects}`
+}
+
+export const informRegistration = (
+	objectList: assetTracker,
+	//x = (objects: assetTracker) => getBracketFormat(objects),
+	//y = (objects: string) => getPayload(objects),
+	getBracketFormat: (objects: assetTracker) => string,
+	getPayload: (objects: string) => string,
+	createRegisterQuery: () => string,
+	sendRegistrationRequest: (query: string) => OutgoingMessage,
+): coap.OutgoingMessage => {
+	// get bracket format
+	const objects = getBracketFormat(objectList)
+
+	// getPayload
+	const payload = getPayload(objects)
+
+	// getQuery
+	const query = createRegisterQuery()
+
+	// sendRegistration
+	const registerRequest = sendRegistrationRequest(query)
+
+	registerRequest.end(payload)
+
+	registerRequest.on('error', (err: unknown) => {
+		console.log({ err })
+	})
+
+	const response = registerRequest.on('response', (response) => response)
+
+	return response
+}
+
 /**
  * Index
  */

@@ -17,7 +17,7 @@ describe('register command', () => {
 })
 
 describe('1) inform', () => {
-	it.only('should send registration request with objects to register and stablish a socket connection with the LwM2M server', () => {
+	it.only('should send registration request with objects to register and return what the LwM2M server response', () => {
 		// const deviceObjects = assetTrackerFirmwareV2
 
 		// register(deviceObjects,)
@@ -35,7 +35,7 @@ describe('1) inform', () => {
 		expect(true).toBe(true)
 	})
 
-	it.only('should send registration request with resource to register and stablish a socket connection with the LwM2M server', () => {
+	it.only('should send registration request with resource to register and return what the LwM2M server response', () => {
 		expect(true).toBe(true)
 	})
 })
