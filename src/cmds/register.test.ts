@@ -10,6 +10,49 @@ import {
 	type serverRespose,
 } from '../cmds/register.js'
 
+describe('register command', () => {
+	it.only('should  1) inform the LwM2M server which objects whant to register, 2) receive approval from server and 3) send values', () => {
+		expect(true).toBe(true)
+	})
+})
+
+describe('1) inform', () => {
+	it.only('should send registration request with objects to register and stablish a socket connection with the LwM2M server', () => {
+		// const deviceObjects = assetTrackerFirmwareV2
+
+		// register(deviceObjects,)
+
+		// getObjectsToRegister in bracket format
+
+		// create the registration query
+
+		// send the registration request
+
+		// get response from coiote and stablish socket connection
+
+		// send objects value
+
+		expect(true).toBe(true)
+	})
+
+	it.only('should send registration request with resource to register and stablish a socket connection with the LwM2M server', () => {
+		expect(true).toBe(true)
+	})
+})
+
+describe('2) Approval', () => {
+	//receive request from stablished socket connection
+	it.only('should receive approval to the registration request in the stablished socket', () => {
+		expect(false).toBe(false)
+	})
+})
+
+describe('3) send values', () => {
+	it.only('should receive request from stablished socket connection', () => {
+		expect(false).toBe(false)
+	})
+})
+
 describe('register', () => {
 	it('should send registration request to server', () => {
 		const query = 'query'

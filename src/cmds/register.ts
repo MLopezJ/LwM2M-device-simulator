@@ -69,7 +69,9 @@ export type serverRespose = {
 }
 
 /**
- * Stablish a socket connection in case the response is sucess
+ * Create a socket connection between LwM2M client and LwM2M server
+ *
+ * stablishSocketConnection
  */
 export const manageResponse = (
 	response: registrationResponse,
@@ -98,6 +100,8 @@ export const manageResponse = (
 
 /**
  * Identify the action requested and create payload to response
+ *
+ * sendResponse
  */
 export const manageCoioteRequest = (
 	request: serverRequest,
