@@ -21,19 +21,20 @@ const udpDefault = 'udp4'
 let assetTrackerObjects: undefined | assetTracker = undefined
 
 export const informRegistration = (
-	objectList: assetTracker,
-	createBracketFormat = (objects: assetTracker) => getBracketFormat(objects),
-	createPayload = (objects: string) => getPayload(objects),
+	objectList: assetTracker | string,
 	createQuery = () => createRegisterQuery(),
 	sendRequest = (query: string) => sendRegistrationRequest(query),
+	createBracketFormat = (objects: assetTracker | string) =>
+		getBracketFormat(objects),
+	createPayload = (objects: string) => getPayload(objects),
 ): coap.OutgoingMessage => {
-	const objects = createBracketFormat(objectList)
-
 	const query = createQuery()
 
-	const payload = createPayload(objects)
-
 	const request = sendRequest(query)
+
+	const objects = createBracketFormat(objectList)
+
+	const payload = createPayload(objects)
 
 	request.end(payload)
 
@@ -46,11 +47,13 @@ export const informRegistration = (
 	return response
 }
 
+/**
+ * Create the payload to be used in the registration request
+ *
+ * 11543 is the id for Transferring Resource Information as a json in LwM2M
+ * @see http://www.openmobilealliance.org/release/LightweightM2M/V1_0_2-20180209-A/OMA-TS-LightweightM2M-V1_0_2-20180209-A.pdf Page 48
+ */
 export const getPayload = (objects: string): string => {
-	/**
-	 * Data Format id for Transferring Resource Information as a json
-	 * @see http://www.openmobilealliance.org/release/LightweightM2M/V1_0_2-20180209-A/OMA-TS-LightweightM2M-V1_0_2-20180209-A.pdf Page 48
-	 */
 	const dataFormatId = '11543'
 	return `</>;ct=${dataFormatId};hb,${objects}`
 }

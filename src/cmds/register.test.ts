@@ -18,7 +18,7 @@ describe('register command', () => {
 })
 
 describe('1) inform', () => {
-	it.only('should send registration request with objects to register and return what the LwM2M server response', () => {
+	it('should send registration request with objects to register and return what the LwM2M server response', () => {
 		const deviceObjects = assetTrackerFirmwareV2
 
 		const queryResult = ''
@@ -64,8 +64,50 @@ describe('1) inform', () => {
 		// TODO: return response
 	})
 
-	it('should send registration request with resource to register and return what the LwM2M server response', () => {
-		expect(true).toBe(true)
+	it.only('should send registration request with resource to register and return what the LwM2M server response', () => {
+		const resource = '/3/0/0'
+
+		const queryResult = ''
+		const createQuery = jest.fn().mockReturnValue(queryResult) as () => string
+
+		const sendRequest = jest.fn().mockImplementation(() => ({
+			end: jest.fn(),
+			on: jest.fn(),
+		})) as () => OutgoingMessage
+
+		const bracketResult = ''
+		const createBracketFormat = jest
+			.fn()
+			.mockReturnValue(bracketResult) as () => string
+
+		const payloadResult = ''
+		const createPayload = jest
+			.fn()
+			.mockReturnValue(payloadResult) as () => string
+
+		informRegistration(
+			resource,
+			createQuery,
+			sendRequest,
+			createBracketFormat,
+			createPayload,
+		)
+
+		// create the registration query
+		expect(createQuery).toHaveBeenCalled()
+
+		// send registration
+		expect(sendRequest).toHaveBeenCalledWith(queryResult)
+
+		// create format to register elements
+		expect(createBracketFormat).toHaveBeenCalledWith(resource)
+
+		// create the registration query
+		expect(createPayload).toHaveBeenCalledWith(bracketResult)
+
+		// TODO: request.end to be called with payload
+
+		// TODO: return response
 	})
 })
 

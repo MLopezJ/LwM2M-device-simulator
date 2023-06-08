@@ -8,6 +8,10 @@ describe('getBracketFormat', () => {
 		)
 	})
 
+	it('Should transform resource into string bracket format', () => {
+		expect(getBracketFormat('/3/0/0')).toBe('</3/0/0>')
+	})
+
 	it('Should not add the Security object in the result', () => {
 		const lwM2MObjects = {
 			// Security

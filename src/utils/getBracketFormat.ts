@@ -9,7 +9,9 @@ import type { assetTracker } from '../assetTrackerV2.js'
  *      / is a divider between object id and resource id
  *      Y is the resource id
  */
-export const getBracketFormat = (objectList: assetTracker): string => {
+export const getBracketFormat = (objectList: assetTracker | string): string => {
+	if (typeof objectList === 'string') return `<${objectList}>`
+
 	const ids = Object.keys(objectList)
 
 	return ids.reduce((previus: string, urn: string) => {
