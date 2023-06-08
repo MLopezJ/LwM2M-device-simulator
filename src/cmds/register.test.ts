@@ -7,13 +7,148 @@ import {
 	manageResponse,
 	readObject,
 	register,
+	registerCommand,
 	type serverRequest,
 	type serverRespose,
 } from '../cmds/register.js'
 
 describe('register command', () => {
-	it.only('should  1) inform the LwM2M server which objects whant to register, 2) receive approval from server and 3) send values', () => {
-		expect(true).toBe(true)
+	it.only('should describe registration process', () => {
+		const deviceObjects = assetTrackerFirmwareV2
+
+		const portSocketConnection = 1
+		const inform = jest.fn().mockReturnValue({
+			code: '2.01',
+			outSocket: { port: portSocketConnection },
+		}) as () => coap.OutgoingMessage
+
+		const socketRequest = {
+			code: '2.01',
+		}
+
+		const socketResponse = {
+			code: '2.01',
+		}
+		const socketConnection = jest.fn().mockReturnValue({
+			request: socketRequest,
+			response: socketResponse,
+			setOption: jest.fn(),
+			end: jest.fn(),
+		}) as () => coap.Server
+		const createSocketPayload = jest.fn() as () => Buffer
+
+		registerCommand(
+			deviceObjects,
+			inform,
+			socketConnection,
+			createSocketPayload,
+		)
+
+		// should inform the LwM2M server about intention of register elements
+		expect(inform).toHaveBeenCalledWith(deviceObjects)
+
+		// expect(inform.code).toBe('2.01')
+
+		// should create socket connection with the server if it accept to start the process
+		expect(socketConnection).toHaveBeenCalledWith(portSocketConnection)
+
+		// server ask for the value of one element already told to be register
+		// ...
+
+		// should read from that request and build the payload
+		expect(createSocketPayload).toHaveBeenCalled() // toHaveBeenCalledWith(socketRequest, deviceObjects)
+	})
+
+	describe('steps: ', () => {
+		it.only('should inform the LwM2M server about intention of register elements', () => {
+			const deviceObjects = assetTrackerFirmwareV2
+			const inform = jest.fn().mockReturnValue({
+				code: '',
+			}) as () => coap.OutgoingMessage
+
+			const socketConnection = jest.fn() as () => coap.Server
+			const createSocketPayload = jest.fn() as () => Buffer
+
+			registerCommand(
+				deviceObjects,
+				inform,
+				socketConnection,
+				createSocketPayload,
+			)
+
+			expect(inform).toHaveBeenCalledWith(deviceObjects)
+		})
+
+		it.only('should create socket connection with the server if it accept to start the process', () => {
+			const deviceObjects = assetTrackerFirmwareV2
+
+			const portSocketConnection = 1
+			const inform = jest.fn().mockReturnValue({
+				code: '2.01',
+				outSocket: { port: portSocketConnection },
+			}) as () => coap.OutgoingMessage
+
+			const socketRequest = {
+				code: '2.01',
+			}
+
+			const socketResponse = {
+				code: '2.01',
+			}
+			const socketConnection = jest.fn().mockReturnValue({
+				request: socketRequest,
+				response: socketResponse,
+				setOption: jest.fn(),
+				end: jest.fn(),
+			}) as () => coap.Server
+			const createSocketPayload = jest.fn() as () => Buffer
+
+			registerCommand(
+				deviceObjects,
+				inform,
+				socketConnection,
+				createSocketPayload,
+			)
+
+			expect(socketConnection).toHaveBeenCalledWith(portSocketConnection)
+		})
+
+		it.only('should accept request from socket connection and build payload from requested element', () => {
+			const deviceObjects = assetTrackerFirmwareV2
+
+			const portSocketConnection = 1
+			const inform = jest.fn().mockReturnValue({
+				code: '2.01',
+				outSocket: { port: portSocketConnection },
+			}) as () => coap.OutgoingMessage
+
+			const socketRequest = {
+				code: '2.01',
+			}
+
+			const socketResponse = {
+				code: '2.01',
+			}
+			const socketConnection = jest.fn().mockReturnValue({
+				request: socketRequest,
+				response: socketResponse,
+				setOption: jest.fn(),
+				end: jest.fn(),
+			}) as () => coap.Server
+			const createSocketPayload = jest.fn() as () => Buffer
+
+			registerCommand(
+				deviceObjects,
+				inform,
+				socketConnection,
+				createSocketPayload,
+			)
+
+			// server ask for the value of one element already told to be register
+			// ...
+
+			expect(createSocketPayload).toHaveBeenCalled() // toHaveBeenCalledWith(socketRequest, deviceObjects)
+		})
 	})
 })
 
@@ -64,7 +199,7 @@ describe('1) inform', () => {
 		// TODO: return response
 	})
 
-	it.only('should send registration request with resource to register and return what the LwM2M server response', () => {
+	it('should send registration request with resource to register and return what the LwM2M server response', () => {
 		const resource = '/3/0/0'
 
 		const queryResult = ''

@@ -19,7 +19,45 @@ type registrationResponse = {
 
 const udpDefault = 'udp4'
 let assetTrackerObjects: undefined | assetTracker = undefined
+/**
+ * Json as IANA Media Type
+ * @see http://www.openmobilealliance.org/release/LightweightM2M/V1_0_2-20180209-A/OMA-TS-LightweightM2M-V1_0_2-20180209-A.pdf Page 48
+ */
+const json = 'application/vnd.oma.lwm2m+json'
 
+// new ---
+export const registerCommand = (
+	deviceObjects: assetTracker,
+	inform = (deviceObjects: assetTracker) => informRegistration(deviceObjects),
+	socketConnection = (port: number) => stablishSocketConnection(port),
+	createPayload = (
+		request: coap.OutgoingMessage,
+		deviceObjects: assetTracker,
+	) => createSocketPayload(request, deviceObjects),
+): void => {
+	// inform server about desire of registration
+	const registration = inform(deviceObjects)
+
+	// create socket connection if server approve the registration of values
+	if (registration.code === '2.01') {
+		const port = (registration as any).outSocket.port // TODO: solve this
+
+		// stablish a socket connection
+		const connection = socketConnection(port) as unknown as coap.OutgoingMessage
+
+		const payload = createPayload(
+			connection._request as unknown as OutgoingMessage, // TODO: solve this
+			deviceObjects,
+		)
+
+		connection.setOption('Content-Format', json)
+		connection.end(payload)
+	}
+}
+
+/**
+ * Build a request to registry LwM2M elements in a LwM2M server
+ */
 export const informRegistration = (
 	objectList: assetTracker | string,
 	createQuery = () => createRegisterQuery(),
@@ -46,6 +84,51 @@ export const informRegistration = (
 
 	return response
 }
+
+/**
+ * Create a server listening the port given by params
+ */
+const stablishSocketConnection = (
+	port: number,
+	createServer = () =>
+		coap.createServer({
+			type: udpDefault,
+			proxy: true,
+		}),
+): coap.Server => {
+	// Create a new server to interact with Coiote
+	const server = createServer()
+
+	server.listen(port, (err: unknown) => {
+		console.log({ err })
+	})
+
+	return server.on(
+		'request',
+		(request: serverRequest, response: serverRespose) => {
+			return { request, response }
+		},
+	)
+}
+
+/**
+ *
+ */
+const createSocketPayload = (
+	request: coap.OutgoingMessage,
+	objectList: assetTracker,
+): Buffer => {
+	const actionRequested = requestParser(request as unknown as request)
+	let payload: Buffer = Buffer.from('')
+	switch (actionRequested) {
+		case 'read':
+			payload = readObject(request.url as string, objectList) // TODO: test creation of paylod from read request
+			break
+	}
+	return payload
+}
+
+// old ---
 
 /**
  * Create the payload to be used in the registration request
