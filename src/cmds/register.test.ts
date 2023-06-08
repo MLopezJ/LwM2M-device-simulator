@@ -2,6 +2,7 @@ import coap, { type OutgoingMessage } from 'coap'
 import jest from 'jest-mock'
 import { assetTrackerFirmwareV2 } from '../assetTrackerV2.js'
 import {
+	informRegistration,
 	manageCoioteRequest,
 	manageResponse,
 	readObject,
@@ -18,37 +19,65 @@ describe('register command', () => {
 
 describe('1) inform', () => {
 	it.only('should send registration request with objects to register and return what the LwM2M server response', () => {
-		// const deviceObjects = assetTrackerFirmwareV2
+		const deviceObjects = assetTrackerFirmwareV2
 
-		// register(deviceObjects,)
+		const queryResult = ''
+		const createQuery = jest.fn().mockReturnValue(queryResult) as () => string
 
-		// getObjectsToRegister in bracket format
+		const sendRequest = jest.fn().mockImplementation(() => ({
+			end: jest.fn(),
+			on: jest.fn(),
+		})) as () => OutgoingMessage
+
+		const bracketResult = ''
+		const createBracketFormat = jest
+			.fn()
+			.mockReturnValue(bracketResult) as () => string
+
+		const payloadResult = ''
+		const createPayload = jest
+			.fn()
+			.mockReturnValue(payloadResult) as () => string
+
+		informRegistration(
+			deviceObjects,
+			createQuery,
+			sendRequest,
+			createBracketFormat,
+			createPayload,
+		)
 
 		// create the registration query
+		expect(createQuery).toHaveBeenCalled()
 
-		// send the registration request
+		// send registration
+		expect(sendRequest).toHaveBeenCalledWith(queryResult)
 
-		// get response from coiote and stablish socket connection
+		// create format to register elements
+		expect(createBracketFormat).toHaveBeenCalledWith(deviceObjects)
 
-		// send objects value
+		// create the registration query
+		expect(createPayload).toHaveBeenCalledWith(bracketResult)
 
-		expect(true).toBe(true)
+		// TODO: request.end to be called with payload
+
+		// TODO: return response
 	})
 
-	it.only('should send registration request with resource to register and return what the LwM2M server response', () => {
+	it('should send registration request with resource to register and return what the LwM2M server response', () => {
 		expect(true).toBe(true)
 	})
 })
 
 describe('2) Approval', () => {
 	//receive request from stablished socket connection
-	it.only('should receive approval to the registration request in the stablished socket', () => {
+	it('should receive approval to the registration request in the stablished socket', () => {
 		expect(false).toBe(false)
 	})
 })
 
 describe('3) send values', () => {
-	it.only('should receive request from stablished socket connection', () => {
+	it('should receive request from stablished socket connection', () => {
 		expect(false).toBe(false)
 	})
 })
