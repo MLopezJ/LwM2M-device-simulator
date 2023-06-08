@@ -1,5 +1,5 @@
 import type { assetTracker } from './assetTrackerV2.js'
-import { clear, help, list, quit, register } from './cmds/index.js'
+import { clear, help, list, quit, reg, register } from './cmds/index.js'
 import { set } from './cmds/set.js'
 
 type commandsObject = Record<
@@ -69,6 +69,16 @@ export const commands: commandsObject = {
 		example: 'help',
 		execute: help,
 	},
+	// TODO: remove down
+	reg: {
+		title: 'temporal register command',
+		parameters: [],
+		description: '\tregister objects',
+		format: 'reg',
+		example: 'reg',
+		execute: reg,
+	},
+	// TODO: remove up
 }
 
 export const executeCommand = (

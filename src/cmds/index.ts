@@ -3,6 +3,7 @@ import { commands } from '../commands.js'
 import { createRegisterQuery } from '../utils/createRegisterQuery.js'
 import { help as helpCmd } from './help.js'
 import { list as listCmd } from './list.js'
+import { register as r } from './r.js'
 import { register as registerCmd, sendRegistrationRequest } from './register.js'
 
 /**
@@ -52,3 +53,10 @@ export const list = (
  */
 export const register = (command: string[] | never, list: assetTracker): void =>
 	registerCmd(list, createRegisterQuery, sendRegistrationRequest)
+
+/**
+ * Temporal connector method
+ * TODO: remove this
+ */
+export const reg = (command: string[] | never, list: assetTracker): void =>
+	r(list)
