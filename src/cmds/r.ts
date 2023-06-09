@@ -18,7 +18,8 @@ const udpDefault = 'udp4'
 const json = 'application/vnd.oma.lwm2m+json'
 
 /**
- * outside in register command
+ * init register request
+ * name: initRequest
  */
 export const register = (
 	deviceObjects: assetTracker,
@@ -27,14 +28,8 @@ export const register = (
 		createInitPayload(deviceObjects),
 	sendRegistrationRequest = (params: coap.CoapRequestParams) =>
 		registrationRequest(params),
-	createSocket = () =>
-		coap.createServer({
-			type: udpDefault,
-			proxy: true,
-		}),
-	parseRequest = (request: request) => requestParser(request),
-	read = (url: string, deviceObjects: assetTracker) =>
-		readObject(url, deviceObjects),
+	createSocket = (deviceObjects: assetTracker, response: any) =>
+		openSocketConnection(deviceObjects, response),
 ): void => {
 	const params = getParams()
 	const registration = sendRegistrationRequest(params)
@@ -46,36 +41,74 @@ export const register = (
 		console.log({ err })
 	})
 
-	registration.on('response', (response) => {
-		if (response.code === '2.01') {
-			const port = response.outSocket.port
-			const socket = createSocket()
+	registration.on('response', (response) =>
+		createSocket(deviceObjects, response),
+	)
+}
 
-			socket.listen(port, (err: unknown) => {
-				console.log({ err })
-			})
+type response = {
+	code: string
+	outSocket: {
+		port: number
+	}
+}
 
-			socket.on('request', (request, response) => {
-				const action = parseRequest(request)
+/**
+ * Open socket connection to transfer the values of the already told LwM2M elements to be implemented
+ */
+export const openSocketConnection = (
+	deviceObjects: assetTracker,
+	response: response,
+	createSocket = () =>
+		coap.createServer({
+			type: udpDefault,
+			proxy: true,
+		}),
+	send = (deviceObjects: assetTracker, request: any, response: any) =>
+		sendValues(deviceObjects, request, response),
+): void => {
+	if (response.code === '2.01') {
+		const port = response.outSocket.port
+		const socket = createSocket()
 
-				let result: Buffer = Buffer.from('')
-				switch (action) {
-					case 'read':
-						result = read(request.url, deviceObjects)
-						break
-				}
+		socket.listen(port, (err: unknown) => {
+			console.log({ err })
+		})
 
-				response.setOption('Content-Format', json)
-				response.end(result)
-			})
-		}
-	})
+		socket.on('request', (request, response) =>
+			send(deviceObjects, request, response),
+		)
+	}
+}
+
+/**
+ * send the values of the LwM2M element in the expected format
+ */
+export const sendValues = (
+	deviceObjects: assetTracker,
+	request: coap.IncomingMessage,
+	response: coap.OutgoingMessage,
+	parseRequest = (request: request) => requestParser(request),
+	read = (url: string, deviceObjects: assetTracker) =>
+		readObject(url, deviceObjects),
+): void => {
+	const action = parseRequest(request as any)
+
+	let result: Buffer = Buffer.from('')
+	switch (action) {
+		case 'read':
+			result = read(request.url, deviceObjects)
+			break
+	}
+
+	response.setOption('Content-Format', json)
+	response.end(result)
 }
 
 /**
  *
  */
-const createInitParams = () => {
+const createInitParams = (): coap.CoapRequestParams => {
 	const query = `ep=${config.deviceName}&lt=${config.lifetime}&lwm2m=${config.lwm2mV}&b=${config.biding}`
 	const params = {
 		host: config.host,

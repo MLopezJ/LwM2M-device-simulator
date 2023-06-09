@@ -222,11 +222,11 @@ describe('register command', () => {
 		describe('send value', () => {
 			it('should receive request from socket and parse it to discover which action is requested to be implemented', () => {
 				const deviceObjects = assetTrackerFirmwareV2
-				const request = {}
+				const request = {} as coap.IncomingMessage
 				const response = {
 					setOption: jest.fn(),
 					end: jest.fn(),
-				}
+				} as unknown as coap.OutgoingMessage
 				const parseRequest = jest.fn() as () => string
 				const read = jest.fn() as () => Buffer
 
@@ -239,11 +239,11 @@ describe('register command', () => {
 				const deviceObjects = assetTrackerFirmwareV2
 				const request = {
 					url: '/3',
-				}
+				} as coap.IncomingMessage
 				const response = {
 					setOption: jest.fn(),
 					end: jest.fn(),
-				}
+				} as unknown as coap.OutgoingMessage
 				const parseRequest = jest.fn().mockReturnValue('read') as () => string
 				const read = jest.fn() as () => Buffer
 
@@ -256,13 +256,13 @@ describe('register command', () => {
 				const deviceObjects = assetTrackerFirmwareV2
 				const request = {
 					url: '/3',
-				}
+				} as coap.IncomingMessage
 				const setOption = jest.fn()
 				const end = jest.fn()
 				const response = {
 					setOption: setOption,
 					end: end,
-				}
+				} as unknown as coap.OutgoingMessage
 				const parseRequest = jest.fn().mockReturnValue('read') as () => string
 				const result = Buffer.from('result')
 				const read = jest.fn().mockReturnValue(result) as () => Buffer
