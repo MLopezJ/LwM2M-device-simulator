@@ -1,9 +1,9 @@
 import coap, { OutgoingMessage } from 'coap'
 import jest from 'jest-mock'
 import { assetTrackerFirmwareV2 } from '../assetTrackerV2'
-import { openSocketConnection, register } from './r'
+import { openSocketConnection, register, sendValues } from './r'
 
-describe('register', () => {
+describe('init register request', () => {
 	it('should get the parameters to init the registration request', () => {
 		const deviceObjects = assetTrackerFirmwareV2
 		const getParams = jest.fn().mockReturnValue({
@@ -208,5 +208,60 @@ describe('open socket connection', () => {
 
 		openSocketConnection(deviceObjects, response, createSocket, sendValues)
 		expect(on).toBeCalledWith('request', anonymousFucntion)
+	})
+})
+
+describe('send value', () => {
+	it('should receive request from socket and parse it to discover which action is requested to be implemented', () => {
+		const deviceObjects = assetTrackerFirmwareV2
+		const request = {}
+		const response = {
+			setOption: jest.fn(),
+			end: jest.fn(),
+		}
+		const parseRequest = jest.fn() as () => string
+		const read = jest.fn() as () => Buffer
+
+		sendValues(deviceObjects, request, response, parseRequest, read)
+
+		expect(parseRequest).toBeCalledWith(request)
+	})
+
+	it('should call method to read value from requested element', () => {
+		const deviceObjects = assetTrackerFirmwareV2
+		const request = {
+			url: '/3',
+		}
+		const response = {
+			setOption: jest.fn(),
+			end: jest.fn(),
+		}
+		const parseRequest = jest.fn().mockReturnValue('read') as () => string
+		const read = jest.fn() as () => Buffer
+
+		sendValues(deviceObjects, request, response, parseRequest, read)
+
+		expect(read).toBeCalledWith(request.url, deviceObjects)
+	})
+
+	it('should send result to server using the socket connection', () => {
+		const deviceObjects = assetTrackerFirmwareV2
+		const request = {
+			url: '/3',
+		}
+		const setOption = jest.fn()
+		const end = jest.fn()
+		const response = {
+			setOption: setOption,
+			end: end,
+		}
+		const parseRequest = jest.fn().mockReturnValue('read') as () => string
+		const result = Buffer.from('result')
+		const read = jest.fn().mockReturnValue(result) as () => Buffer
+
+		sendValues(deviceObjects, request, response, parseRequest, read)
+
+		expect(setOption).toBeCalled()
+		expect(end).toBeCalledWith(result)
 	})
 })
