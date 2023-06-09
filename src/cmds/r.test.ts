@@ -1,7 +1,7 @@
 import coap, { OutgoingMessage } from 'coap'
 import jest from 'jest-mock'
 import { assetTrackerFirmwareV2 } from '../assetTrackerV2'
-import { register } from './r'
+import { openSocketConnection, register } from './r'
 
 describe('register', () => {
 	it('should get the parameters to init the registration request', () => {
@@ -132,5 +132,81 @@ describe('register', () => {
 		)
 
 		expect(registrationOn).toBeCalledTimes(2)
+	})
+})
+
+describe('open socket connection', () => {
+	it('should open a socket connection if server agree with that', () => {
+		const deviceObjects = assetTrackerFirmwareV2
+		const response = {
+			code: '2.01',
+			outSocket: {
+				port: 506,
+			},
+		}
+		const createSocket = jest.fn().mockImplementation(() => ({
+			listen: jest.fn(),
+			on: jest.fn(),
+		})) as () => coap.Server
+		const sendValues = jest.fn()
+
+		openSocketConnection(deviceObjects, response, createSocket, sendValues)
+		expect(createSocket).toBeCalled()
+	})
+
+	it('should not open a socket connection if server is not agree with that', () => {
+		const deviceObjects = assetTrackerFirmwareV2
+		const response = {
+			code: '4.04',
+			outSocket: {
+				port: 506,
+			},
+		}
+		const createSocket = jest.fn() as () => coap.Server
+		const sendValues = jest.fn()
+
+		openSocketConnection(deviceObjects, response, createSocket, sendValues)
+		expect(createSocket).not.toBeCalled()
+	})
+
+	it('should listen from given port', () => {
+		const deviceObjects = assetTrackerFirmwareV2
+		const response = {
+			code: '2.01',
+			outSocket: {
+				port: 506,
+			},
+		}
+		const listen = jest.fn()
+		const anonymousFucntion = expect.any(Function)
+		const createSocket = jest.fn().mockImplementation(() => ({
+			listen: listen,
+			on: jest.fn(),
+		})) as () => coap.Server
+		const sendValues = jest.fn()
+
+		openSocketConnection(deviceObjects, response, createSocket, sendValues)
+		expect(listen).toBeCalledWith(response.outSocket.port, anonymousFucntion)
+	})
+
+	it("should call 'request' listener", () => {
+		const deviceObjects = assetTrackerFirmwareV2
+		const response = {
+			code: '2.01',
+			outSocket: {
+				port: 506,
+			},
+		}
+		const listen = jest.fn()
+		const anonymousFucntion = expect.any(Function)
+		const on = jest.fn()
+		const createSocket = jest.fn().mockImplementation(() => ({
+			listen: listen,
+			on: on,
+		})) as () => coap.Server
+		const sendValues = jest.fn()
+
+		openSocketConnection(deviceObjects, response, createSocket, sendValues)
+		expect(on).toBeCalledWith('request', anonymousFucntion)
 	})
 })
