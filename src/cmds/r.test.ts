@@ -17,12 +17,19 @@ describe('register', () => {
 			query: 'ep=deviceName&lt=60&lwm2m=1.1&b=U',
 		}) as () => coap.CoapRequestParams
 
-		register(deviceObjects, getParams)
+		const getPayload = jest.fn() as () => string
+
+		const sendRegistrationRequest = jest.fn().mockImplementation(() => ({
+			end: jest.fn(),
+			on: jest.fn(),
+		})) as () => OutgoingMessage
+
+		register(deviceObjects, getParams, getPayload, sendRegistrationRequest)
 
 		expect(getParams).toBeCalled()
 	})
 
-	it('should call function to tranform objects to register into expected bracket format', () => {
+	it('should call function to tranform objects into expected bracket format', () => {
 		const deviceObjects = assetTrackerFirmwareV2
 		const getParams = jest.fn().mockReturnValue({
 			host: 'host',
@@ -40,12 +47,17 @@ describe('register', () => {
 				'<6/0>, <10256/0>, <50009/0>, <1/0>, <3/0>, <4/0>, <5/0>, <3303/0>, <3304/0>, <3323/0>, <3347/0>',
 			) as () => string
 
-		register(deviceObjects, getParams, getPayload)
+		const sendRegistrationRequest = jest.fn().mockImplementation(() => ({
+			end: jest.fn(),
+			on: jest.fn(),
+		})) as () => OutgoingMessage
+
+		register(deviceObjects, getParams, getPayload, sendRegistrationRequest)
 
 		expect(getPayload).toBeCalledWith(deviceObjects)
 	})
 
-	it('should send registration request to LwM2M server', () => {
+	it('should send registration request with objects in bracket format to LwM2M server', () => {
 		const deviceObjects = assetTrackerFirmwareV2
 		const params: coap.CoapRequestParams = {
 			host: 'host',
@@ -60,22 +72,25 @@ describe('register', () => {
 		const getParams = jest
 			.fn()
 			.mockReturnValue(params) as () => coap.CoapRequestParams
+		const getPayloadResult =
+			'<6/0>, <10256/0>, <50009/0>, <1/0>, <3/0>, <4/0>, <5/0>, <3303/0>, <3304/0>, <3323/0>, <3347/0>'
 		const getPayload = jest
 			.fn()
-			.mockReturnValue(
-				'<6/0>, <10256/0>, <50009/0>, <1/0>, <3/0>, <4/0>, <5/0>, <3303/0>, <3304/0>, <3323/0>, <3347/0>',
-			) as () => string
+			.mockReturnValue(getPayloadResult) as () => string
+
+		const sendRegistrationRequestEnd = jest.fn()
 		const sendRegistrationRequest = jest.fn().mockImplementation(() => ({
-			end: jest.fn(),
+			end: sendRegistrationRequestEnd,
 			on: jest.fn(),
 		})) as () => OutgoingMessage
 
 		register(deviceObjects, getParams, getPayload, sendRegistrationRequest)
 
 		expect(sendRegistrationRequest).toBeCalledWith(params)
+		expect(sendRegistrationRequestEnd).toBeCalledWith(getPayloadResult)
 	})
 
-	it('should send registration request with payload to LwM2M server', () => {
+	it('should call method to create socket connection with server', () => {
 		const deviceObjects = assetTrackerFirmwareV2
 		const params: coap.CoapRequestParams = {
 			host: 'host',
