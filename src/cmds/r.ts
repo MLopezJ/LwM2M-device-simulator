@@ -33,7 +33,8 @@ export const register = (
 			proxy: true,
 		}),
 	parseRequest = (request: request) => requestParser(request),
-	read = (url: string, deviceObjects: assetTracker) => readObject(url,deviceObjects)
+	read = (url: string, deviceObjects: assetTracker) =>
+		readObject(url, deviceObjects),
 ): void => {
 	const params = getParams()
 	const registration = sendRegistrationRequest(params)
@@ -103,7 +104,9 @@ const createInitPayload = (
 	return payload
 }
 
-export const registrationRequest = (params: coap.CoapRequestParams) => {
+export const registrationRequest = (
+	params: coap.CoapRequestParams,
+): coap.OutgoingMessage => {
 	const agent = new coap.Agent({ type: udpDefault })
 	return agent.request(params)
 }
