@@ -90,21 +90,32 @@ describe('register', () => {
 		const getParams = jest
 			.fn()
 			.mockReturnValue(params) as () => coap.CoapRequestParams
-		const getPayloadResult =
-			'<6/0>, <10256/0>, <50009/0>, <1/0>, <3/0>, <4/0>, <5/0>, <3303/0>, <3304/0>, <3323/0>, <3347/0>'
 		const getPayload = jest
 			.fn()
-			.mockReturnValue(getPayloadResult) as () => string
+			.mockReturnValue(
+				'<6/0>, <10256/0>, <50009/0>, <1/0>, <3/0>, <4/0>, <5/0>, <3303/0>, <3304/0>, <3323/0>, <3347/0>',
+			) as () => string
 
-		const sendRegistrationRequestEnd = jest.fn()
+		const registrationOn = jest.fn()
+
 		const sendRegistrationRequest = jest.fn().mockImplementation(() => ({
-			end: sendRegistrationRequestEnd,
-			on: jest.fn(),
+			end: jest.fn(),
+			on: registrationOn,
 		})) as () => OutgoingMessage
 
-		register(deviceObjects, getParams, getPayload, sendRegistrationRequest)
+		const createSocket = jest.fn().mockImplementation(() => ({
+			listen: jest.fn(),
+			on: jest.fn(),
+		})) as () => coap.Server
 
-		expect(sendRegistrationRequest).toBeCalledWith(params)
-		expect(sendRegistrationRequestEnd).toBeCalledWith(getPayloadResult)
+		register(
+			deviceObjects,
+			getParams,
+			getPayload,
+			sendRegistrationRequest,
+			createSocket,
+		)
+
+		expect(registrationOn).toBeCalledTimes(2)
 	})
 })
