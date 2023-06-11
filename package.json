@@ -18,8 +18,8 @@
     "CoAP",
     "device simulator"
   ],
-  "author": "Mauro Lopez",
-  "license": "ISC",
+  "author": "Nordic Semiconductor ASA | nordicsemi.no",
+  "license": "BSD-3-Clause",
   "bugs": {
     "url": "https://github.com/MLopezJ/LwM2M-device-simulator/issues"
   },
