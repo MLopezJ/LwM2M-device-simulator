@@ -9,79 +9,91 @@ import { openSocketConnection, register, sendValues } from './r'
 describe('register command', () => {
 	describe('should describe registration process', () => {
 		describe('init register request', () => {
-			it('should get the parameters to init the registration request', () => {
+			it('should send registration request with parameters', () => {
 				const deviceObjects = assetTrackerFirmwareV2
-				const getParams = jest.fn().mockReturnValue({
-					host: 'host',
-					port: 1234,
+				const host = 'host'
+				const port = 1234
+				const deviceName = 'name'
+				const lifetime = 60
+				const lwm2mVersion = 1.1
+				const biding = 'U'
+				const query = `ep=${deviceName}&lt=${lifetime}&lwm2m=${lwm2mVersion}&b=${biding}`
+				const params = {
+					host,
+					port,
 					pathname: '/rd',
 					method: 'POST',
 					options: {
 						'Content-Format': 'application/link-format',
 					},
-					query: 'ep=deviceName&lt=60&lwm2m=1.1&b=U',
-				}) as () => coap.CoapRequestParams
-
-				const getPayload = jest.fn() as () => string
+					query,
+				}
 
 				const sendRegistrationRequest = jest.fn().mockImplementation(() => ({
 					end: jest.fn(),
 					on: jest.fn(),
 				})) as () => OutgoingMessage
 
-				register(deviceObjects, getParams, getPayload, sendRegistrationRequest)
+				const createBracketFormat = jest.fn() as () => string
 
-				expect(getParams).toBeCalled()
+				register(
+					deviceObjects,
+					deviceName,
+					lifetime,
+					lwm2mVersion,
+					biding,
+					port,
+					host,
+					createBracketFormat,
+					sendRegistrationRequest,
+				)
+
+				expect(sendRegistrationRequest).toHaveBeenCalledWith(params)
 			})
 
 			it('should call function to tranform objects into expected bracket format', () => {
 				const deviceObjects = assetTrackerFirmwareV2
-				const getParams = jest.fn().mockReturnValue({
-					host: 'host',
-					port: 1234,
-					pathname: '/rd',
-					method: 'POST',
-					options: {
-						'Content-Format': 'application/link-format',
-					},
-					query: 'ep=deviceName&lt=60&lwm2m=1.1&b=U',
-				}) as () => coap.CoapRequestParams
-				const getPayload = jest
+				const host = 'host'
+				const port = 1234
+				const deviceName = 'name'
+				const lifetime = 60
+				const lwm2mVersion = 1.1
+				const biding = 'U'
+
+				const sendRegistrationRequest = jest.fn().mockImplementation(() => ({
+					end: jest.fn(),
+					on: jest.fn(),
+				})) as () => OutgoingMessage
+
+				const createBracketFormat = jest
 					.fn()
 					.mockReturnValue(
 						'<6/0>, <10256/0>, <50009/0>, <1/0>, <3/0>, <4/0>, <5/0>, <3303/0>, <3304/0>, <3323/0>, <3347/0>',
 					) as () => string
 
-				const sendRegistrationRequest = jest.fn().mockImplementation(() => ({
-					end: jest.fn(),
-					on: jest.fn(),
-				})) as () => OutgoingMessage
+				register(
+					deviceObjects,
+					deviceName,
+					lifetime,
+					lwm2mVersion,
+					biding,
+					port,
+					host,
+					createBracketFormat,
+					sendRegistrationRequest,
+				)
 
-				register(deviceObjects, getParams, getPayload, sendRegistrationRequest)
-
-				expect(getPayload).toBeCalledWith(deviceObjects)
+				expect(createBracketFormat).toBeCalledWith(deviceObjects)
 			})
 
-			it('should send registration request to LwM2M server', () => {
+			it('should send bracket format to server', () => {
 				const deviceObjects = assetTrackerFirmwareV2
-				const params: coap.CoapRequestParams = {
-					host: 'host',
-					port: 1234,
-					pathname: '/rd',
-					method: 'POST',
-					options: {
-						'Content-Format': 'application/link-format',
-					},
-					query: 'ep=deviceName&lt=60&lwm2m=1.1&b=U',
-				}
-				const getParams = jest
-					.fn()
-					.mockReturnValue(params) as () => coap.CoapRequestParams
-				const getPayloadResult =
-					'<6/0>, <10256/0>, <50009/0>, <1/0>, <3/0>, <4/0>, <5/0>, <3303/0>, <3304/0>, <3323/0>, <3347/0>'
-				const getPayload = jest
-					.fn()
-					.mockReturnValue(getPayloadResult) as () => string
+				const host = 'host'
+				const port = 1234
+				const deviceName = 'name'
+				const lifetime = 60
+				const lwm2mVersion = 1.1
+				const biding = 'U'
 
 				const sendRegistrationRequestEnd = jest.fn()
 				const sendRegistrationRequest = jest.fn().mockImplementation(() => ({
@@ -89,39 +101,48 @@ describe('register command', () => {
 					on: jest.fn(),
 				})) as () => OutgoingMessage
 
-				register(deviceObjects, getParams, getPayload, sendRegistrationRequest)
+				const bracketFormat =
+					'<6/0>, <10256/0>, <50009/0>, <1/0>, <3/0>, <4/0>, <5/0>, <3303/0>, <3304/0>, <3323/0>, <3347/0>'
+				const createBracketFormat = jest
+					.fn()
+					.mockReturnValue(bracketFormat) as () => string
+				const payload = `</>;ct=11543;hb,${bracketFormat}`
 
-				expect(sendRegistrationRequest).toBeCalledWith(params)
-				expect(sendRegistrationRequestEnd).toBeCalledWith(getPayloadResult)
+				register(
+					deviceObjects,
+					deviceName,
+					lifetime,
+					lwm2mVersion,
+					biding,
+					port,
+					host,
+					createBracketFormat,
+					sendRegistrationRequest,
+				)
+
+				expect(sendRegistrationRequestEnd).toBeCalledWith(payload)
 			})
 
 			it('should call method to create socket connection with server', () => {
 				const deviceObjects = assetTrackerFirmwareV2
-				const params: coap.CoapRequestParams = {
-					host: 'host',
-					port: 1234,
-					pathname: '/rd',
-					method: 'POST',
-					options: {
-						'Content-Format': 'application/link-format',
-					},
-					query: 'ep=deviceName&lt=60&lwm2m=1.1&b=U',
-				}
-				const getParams = jest
-					.fn()
-					.mockReturnValue(params) as () => coap.CoapRequestParams
-				const getPayload = jest
-					.fn()
-					.mockReturnValue(
-						'<6/0>, <10256/0>, <50009/0>, <1/0>, <3/0>, <4/0>, <5/0>, <3303/0>, <3304/0>, <3323/0>, <3347/0>',
-					) as () => string
+				const host = 'host'
+				const port = 1234
+				const deviceName = 'name'
+				const lifetime = 60
+				const lwm2mVersion = 1.1
+				const biding = 'U'
 
 				const registrationOn = jest.fn()
-
 				const sendRegistrationRequest = jest.fn().mockImplementation(() => ({
 					end: jest.fn(),
 					on: registrationOn,
 				})) as () => OutgoingMessage
+
+				const bracketFormat =
+					'<6/0>, <10256/0>, <50009/0>, <1/0>, <3/0>, <4/0>, <5/0>, <3303/0>, <3304/0>, <3323/0>, <3347/0>'
+				const createBracketFormat = jest
+					.fn()
+					.mockReturnValue(bracketFormat) as () => string
 
 				const createSocket = jest.fn().mockImplementation(() => ({
 					listen: jest.fn(),
@@ -130,8 +151,13 @@ describe('register command', () => {
 
 				register(
 					deviceObjects,
-					getParams,
-					getPayload,
+					deviceName,
+					lifetime,
+					lwm2mVersion,
+					biding,
+					port,
+					host,
+					createBracketFormat,
 					sendRegistrationRequest,
 					createSocket,
 				)

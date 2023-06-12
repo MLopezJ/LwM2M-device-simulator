@@ -23,18 +23,35 @@ const json = 'application/vnd.oma.lwm2m+json'
  */
 export const register = (
 	deviceObjects: assetTracker,
-	getParams = () => createInitParams(),
-	getPayload = (deviceObjects: assetTracker) =>
-		createInitPayload(deviceObjects),
+	deviceName = config.deviceName,
+	lifetime = config.lifetime,
+	lwm2mVersion = config.lwm2mV,
+	biding = config.biding,
+	port = config.port,
+	host = config.host,
+	createBracketFormat = (deviceObjects: assetTracker) =>
+		getBracketFormat(deviceObjects),
 	sendRegistrationRequest = (params: coap.CoapRequestParams) =>
 		registrationRequest(params),
 	createSocket = (deviceObjects: assetTracker, response: any) =>
 		openSocketConnection(deviceObjects, response),
 ): void => {
-	const params = getParams()
-	const registration = sendRegistrationRequest(params)
+	const query = `ep=${deviceName}&lt=${lifetime}&lwm2m=${lwm2mVersion}&b=${biding}`
+	const params = {
+		host: host,
+		port: port,
+		pathname: '/rd',
+		method: 'POST' as CoapMethod,
+		options: {
+			'Content-Format': 'application/link-format',
+		},
+		query: query,
+	}
 
-	const payload = getPayload(deviceObjects)
+	const registration = sendRegistrationRequest(params)
+	const bracketFormat = createBracketFormat(deviceObjects)
+	const dataFormatId = '11543'
+	const payload = `</>;ct=${dataFormatId};hb,${bracketFormat}`
 	registration.end(payload)
 
 	registration.on('error', (err: unknown) => {
@@ -103,38 +120,6 @@ export const sendValues = (
 
 	response.setOption('Content-Format', json)
 	response.end(result)
-}
-
-/**
- *
- */
-const createInitParams = (): coap.CoapRequestParams => {
-	const query = `ep=${config.deviceName}&lt=${config.lifetime}&lwm2m=${config.lwm2mV}&b=${config.biding}`
-	const params = {
-		host: config.host,
-		port: config.port,
-		pathname: '/rd',
-		method: 'POST' as CoapMethod,
-		options: {
-			'Content-Format': 'application/link-format',
-		},
-		query: query,
-	}
-	return params
-}
-
-/**
- *
- */
-const createInitPayload = (
-	deviceObjects: assetTracker,
-	createBracketFormat = (objects: assetTracker | string) =>
-		getBracketFormat(objects),
-) => {
-	const bracketFormat = createBracketFormat(deviceObjects)
-	const dataFormatId = '11543'
-	const payload = `</>;ct=${dataFormatId};hb,${bracketFormat}`
-	return payload
 }
 
 export const registrationRequest = (
