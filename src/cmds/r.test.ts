@@ -141,7 +141,7 @@ describe('register command', () => {
 		})
 
 		describe('open socket connection', () => {
-			it('should open a socket connection if server agree with that', () => {
+			it('should open a socket connection if server accepts registration request', () => {
 				const deviceObjects = assetTrackerFirmwareV2
 				const response = {
 					code: '2.01',
@@ -159,7 +159,7 @@ describe('register command', () => {
 				expect(createSocket).toBeCalled()
 			})
 
-			it('should not open a socket connection if server is not agree with that', () => {
+			it('should not open a socket connection if server does not accept registration request', () => {
 				const deviceObjects = assetTrackerFirmwareV2
 				const response = {
 					code: '4.04',
