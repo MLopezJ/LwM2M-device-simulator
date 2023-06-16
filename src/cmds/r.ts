@@ -1,7 +1,6 @@
 import type { LwM2MDocument } from '@nordicsemiconductor/lwm2m-types'
 import coap from 'coap'
 import { type CoapMethod } from 'coap-packet'
-import { config } from '../../config'
 import type { assetTracker } from '../assetTrackerV2'
 import { createResourceList, type e } from '../utils/createResourceList'
 import { getBracketFormat } from '../utils/getBracketFormat'
@@ -23,12 +22,16 @@ const json = 'application/vnd.oma.lwm2m+json'
  */
 export const register = (
 	deviceObjects: assetTracker,
-	deviceName = config.deviceName,
-	lifetime = config.lifetime,
-	lwm2mVersion = config.lwm2mV,
-	biding = config.biding,
-	port = config.port,
-	host = config.host,
+	deviceName: string = process.env.deviceName ?? '',
+	lifetime: number = process.env.lifetime !== undefined
+		? Number(process.env.lifetime)
+		: 0,
+	lwm2mVersion: number = process.env.lwm2mV !== undefined
+		? Number(process.env.lwm2mV)
+		: 0.0,
+	biding: string = process.env.biding ?? '',
+	port = process.env.port !== undefined ? Number(process.env.port) : 0,
+	host = process.env.host ?? '',
 	createBracketFormat = (deviceObjects: assetTracker) =>
 		getBracketFormat(deviceObjects),
 	sendRegistrationRequest = (params: coap.CoapRequestParams) =>

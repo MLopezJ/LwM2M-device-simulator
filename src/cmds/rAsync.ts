@@ -1,7 +1,6 @@
 import type { LwM2MDocument } from '@nordicsemiconductor/lwm2m-types'
 import coap, { IncomingMessage } from 'coap'
 import { type CoapMethod } from 'coap-packet'
-import { config } from '../../config'
 import type { assetTracker } from '../assetTrackerV2'
 import { createResourceList } from '../utils/createResourceList'
 import { getBracketFormat } from '../utils/getBracketFormat'
@@ -21,7 +20,9 @@ const json = 'application/vnd.oma.lwm2m+json'
 /**
  *
  */
-export const main = async (deviceObjects: assetTracker) => {
+export const main = async (
+	deviceObjects: assetTracker,
+): Promise<void | 'error'> => {
 	console.log('\n... Init registration')
 	const bracketFormat = getBracketFormat(deviceObjects)
 	const initialHandShake = await handShake(bracketFormat)
@@ -33,9 +34,9 @@ export const main = async (deviceObjects: assetTracker) => {
 		if (port === undefined) return 'error'
 
 		const socketConnection = await createSocketConnection(port, deviceObjects)
-        console.log(socketConnection)
+		console.log(socketConnection)
 
-        /*
+		/*
         const action = requestParser(socketConnection.request)
 		const url = socketConnection.request.url
 		console.log(`\nLwM2M server is requesting to ${action} from ${url}`)
@@ -47,13 +48,25 @@ export const main = async (deviceObjects: assetTracker) => {
 		socketConnection.response.end(result)
         */
 	}
+	// mocking
+	return new Promise((resolve) => resolve)
 }
 
-export const handShake = (bracketFormat: string): Promise<IncomingMessage> => {
-	const query = `ep=${config.deviceName}&lt=${config.lifetime}&lwm2m=${config.lwm2mV}&b=${config.biding}`
+export const handShake = async (
+	bracketFormat: string,
+): Promise<IncomingMessage> => {
+	const deviceName = process.env.deviceName ?? ''
+	const lifetime =
+		process.env.lifetime !== undefined ? Number(process.env.lifetime) : 0
+	const lwm2mV =
+		process.env.lwm2mV !== undefined ? Number(process.env.lwm2mV) : 0.0
+	const biding = process.env.biding ?? ''
+	const query = `ep=${deviceName}&lt=${lifetime}&lwm2m=${lwm2mV}&b=${biding}`
+	const port = process.env.port !== undefined ? Number(process.env.port) : 0
+	const host = process.env.host ?? ''
 	const params = {
-		host: config.host,
-		port: config.port,
+		host: host,
+		port: port,
 		pathname: '/rd',
 		method: 'POST' as CoapMethod,
 		options: {
@@ -96,7 +109,7 @@ export const createSocketConnection = (
 			proxy: true,
 		}),
 ): Promise<any> | any => {
-    console.log('here')
+	console.log('here')
 	const socket = createSocket()
 
 	socket.listen(port, (err: unknown) => {
@@ -106,7 +119,7 @@ export const createSocketConnection = (
 		if (err !== undefined) console.log({ err })
 	})
 
-    /*
+	/*
     return new Promise((resolve, reject) => {
 		const t = setTimeout(reject, 10 * 1000)
 
@@ -117,19 +130,18 @@ export const createSocketConnection = (
 	})
     */
 
-    /* */
+	/* */
 	socket.on('request', (request, response) => {
 		const action = requestParser(request)
 		const url = request.url
 		console.log(`\nLwM2M server is requesting to ${action} from ${url}`)
-        let result: Buffer = Buffer.from('')
+		let result: Buffer = Buffer.from('')
 		if (action === 'read') {
 			result = createResponse(url, deviceObjects)
 		}
-        response.setOption('Content-Format', json)
+		response.setOption('Content-Format', json)
 		response.end(result)
 	})
-    
 }
 
 /**

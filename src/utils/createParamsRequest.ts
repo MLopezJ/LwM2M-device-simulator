@@ -1,20 +1,20 @@
 import { type CoapRequestParams } from 'coap'
 import { type CoapMethod } from 'coap-packet'
-import { config } from '../../config.js'
 
 /**
  * Create data struct of request params
  */
 export const createParamsRequest = (
 	query: string,
-	host: string = config.host,
-	port: number = config.port,
+	host = process.env.host !== undefined ? process.env.host : 'sdf',
+	port = process.env.port !== undefined ? Number(process.env.port) : 0,
 	pathname = '/rd',
 	method: CoapMethod = 'POST',
 	options: Record<string, string> = {
 		'Content-Format': 'application/link-format',
 	},
 ): CoapRequestParams => {
+	console.log(process.env.host)
 	return {
 		host: host,
 		port: port,

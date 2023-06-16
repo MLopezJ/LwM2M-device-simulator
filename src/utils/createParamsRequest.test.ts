@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import { createParamsRequest } from './createParamsRequest.js'
 
 describe('createParamsRequest', () => {
