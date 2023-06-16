@@ -123,6 +123,13 @@ with the required value.
 npx tsx src/index.ts
 ```
 
+## Usage
+
+see [example](example.md) to see the usage of the CLI and the expected behavior
+in each command.
+
+Also you can type `help` in the CLI in order to get more info about commands.
+
 ## Limitations
 
 #### Security Mode
