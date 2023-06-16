@@ -1,5 +1,7 @@
 # Example of usage
 
+### Action: list device objects
+
 **Input**
 
 ```
@@ -12,6 +14,7 @@ list
 ...
 ```
 
+### Action: register objects in LwM2M server
 **Input**
 
 ```
@@ -23,6 +26,8 @@ register
 ```
 ...
 ```
+
+### Action: list object instance
 
 **Input**
 
@@ -38,6 +43,7 @@ list /3/0
 }
 ```
 
+### Action: update resource value
 **Input**
 
 ```
@@ -53,6 +59,8 @@ set /3/0/0 test
 ...
 ```
 
+### Action: list object instance
+
 **Input**
 
 ```
@@ -67,6 +75,7 @@ list /3/0
 }
 ```
 
+### Action: Exit CLI
 **Input**
 
 ```
