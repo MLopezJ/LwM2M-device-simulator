@@ -5,7 +5,7 @@ import type { assetTracker } from '../assetTrackerV2'
 import { createResourceList } from '../utils/createResourceList'
 import { getBracketFormat } from '../utils/getBracketFormat'
 import { getElementPath } from '../utils/getElementPath'
-import { requestParser } from '../utils/requestParser'
+import { isObjectInAssetTracker } from '../utils/isObjectInAssetTracker'
 import { typeOfElement } from '../utils/typeOfElement'
 import type { lwm2mJson } from './register'
 
@@ -99,64 +99,33 @@ export const handShake = async (
 	})
 }
 
-export const createSocketConnection = (
-	port: number,
-	deviceObjects: assetTracker,
-	createSocket = () =>
-		coap.createServer({
-			type: udpDefault,
-			proxy: true,
-		}),
-): Promise<any> | any => {
-	console.log('here')
-	const socket = createSocket()
-
-	socket.listen(port, (err: unknown) => {
-		console.log(
-			`Socket connection stablished. Listening from port number: ${port}`,
-		)
-		if (err !== undefined) console.log({ err })
+/**
+ * Create a coap server
+ */
+const createSocket = () =>
+	coap.createServer({
+		type: udpDefault,
+		proxy: true,
 	})
-
-	/*
-    return new Promise((resolve, reject) => {
-		const t = setTimeout(reject, 10 * 1000)
-
-		socket.on('request', (request, response) => {
-			clearTimeout(t)
-			return resolve({request, response})
-		})
-	})
-    */
-
-	/* */
-	socket.on('request', (request, response) => {
-		const action = requestParser(request)
-		const url = request.url
-		console.log(`\nLwM2M server is requesting to ${action} from ${url}`)
-		let result: Buffer = Buffer.from('')
-		if (action === 'read') {
-			result = createResponse(url, deviceObjects)
-		}
-		response.setOption('Content-Format', json)
-		response.end(result)
-	})
-}
 
 /**
  * Read value from requested URL and transform it to vnd.oma.lwm2m+json format
  * @see https://www.openmobilealliance.org/release/LightweightM2M/V1_0-20170208-A/OMA-TS-LightweightM2M-V1_0-20170208-A.pdf pag 55
  */
-export const createResponse = (
+export const readObjectValue = async (
 	url: string,
 	objectList: assetTracker,
-): Buffer => {
+): Promise<Buffer> => {
 	const elementPath = getElementPath(url)
-	const urn = getURN(`${elementPath.objectId}`)
+	let urn = await getURN(`${elementPath.objectId}`)
 
-	// element not found in object list
-	if (Boolean(urn) === false)
-		return Buffer.from(JSON.stringify({ bn: null, e: null }))
+	if (urn === undefined) {
+		if (isObjectInAssetTracker(`${elementPath.objectId}`) === false)
+			return Buffer.from(JSON.stringify({ bn: null, e: null }))
+
+		// * if urn is not found in LwM2M-types lib but object id is part of Asset Tracker, it means the object is a custom object of Asset Tracker v2
+		urn = `${elementPath.objectId}`
+	}
 
 	const object = objectList[`${urn}` as keyof LwM2MDocument]
 	const elementType = typeOfElement(url)
