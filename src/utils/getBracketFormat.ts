@@ -2,7 +2,7 @@ import { parseURN } from '@nordicsemiconductor/lwm2m-types'
 import type { assetTracker } from '../assetTrackerV2.js'
 
 /**
- * Transform object from json to the following string format: <X/Y>
+ * Transform objects from json to the following string format: <X/Y>
  * Where:
  *      <> is an object
  *      X is the object id
