@@ -1,11 +1,10 @@
-import type { LwM2MDocument } from '@nordicsemiconductor/lwm2m-types'
+import { getURN, LwM2MDocument } from '@nordicsemiconductor/lwm2m-types'
 import coap from 'coap'
 import { type CoapMethod } from 'coap-packet'
 import type { assetTracker } from '../assetTrackerV2'
 import { createResourceList, type e } from '../utils/createResourceList'
 import { getBracketFormat } from '../utils/getBracketFormat'
 import { getElementPath } from '../utils/getElementPath'
-import { getLibUrn } from '../utils/getLibUrn'
 import { requestParser, type request } from '../utils/requestParser'
 import { typeOfElement } from '../utils/typeOfElement'
 
@@ -143,7 +142,7 @@ type lwm2mJson = {
  */
 export const readObject = (url: string, objectList: assetTracker): Buffer => {
 	const elementPath = getElementPath(url)
-	const urn = getLibUrn(`${elementPath.objectId}`)
+	const urn = getURN(`${elementPath.objectId}`)
 
 	// element not found in object list
 	if (Boolean(urn) === false)

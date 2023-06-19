@@ -1,6 +1,6 @@
+import { getURN } from '@nordicsemiconductor/lwm2m-types'
 import { type assetTracker } from '../assetTrackerV2.js'
 import type { element } from '../utils/getElementPath.js'
-import { getLibUrn } from '../utils/getLibUrn.js'
 import type { elementType } from '../utils/typeOfElement.js'
 
 type ValueOf<T> = T[keyof T]
@@ -18,7 +18,7 @@ export const getValue = (
 	typeOfElement: elementType,
 	objectList: assetTracker,
 ): undefined | instance | resourceValue => {
-	const id = getLibUrn(`${element.objectId}`)
+	const id = getURN(`${element.objectId}`)
 	const value = objectList[
 		`${id}` as keyof assetTracker
 	] as ValueOf<assetTracker>
