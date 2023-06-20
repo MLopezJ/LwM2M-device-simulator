@@ -10,10 +10,10 @@ import { typeOfElement } from '../utils/typeOfElement.js'
 /**
  * List object from object list
  */
-export const list = (
+export const list = async (
 	input: string | undefined,
 	objectList: assetTracker,
-): Partial<assetTracker> | instance | resourceValue | undefined => {
+): Promise<Partial<assetTracker> | instance | resourceValue | undefined> => {
 	if (input === undefined) {
 		return objectList
 	}
@@ -26,6 +26,6 @@ export const list = (
 		return undefined
 	}
 
-	const element = getValue(elementPath, elementType, objectList)
+	const element = await getValue(elementPath, elementType, objectList)
 	return element
 }

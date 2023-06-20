@@ -13,12 +13,12 @@ export type resource =
 /**
  * Given an element and a list, should return the value of the element in list
  */
-export const getValue = (
+export const getValue = async (
 	element: element,
 	typeOfElement: elementType,
 	objectList: assetTracker,
-): undefined | instance | resourceValue => {
-	const id = getURN(`${element.objectId}`)
+): Promise<undefined | instance | resourceValue> => {
+	const id = await getURN(`${element.objectId}`)
 	const value = objectList[
 		`${id}` as keyof assetTracker
 	] as ValueOf<assetTracker>
