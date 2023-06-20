@@ -1,4 +1,4 @@
-import { getURN, LwM2MDocument } from '@nordicsemiconductor/lwm2m-types'
+import { getURN, type LwM2MDocument } from '@nordicsemiconductor/lwm2m-types'
 import coap, { OutgoingMessage } from 'coap' // type Agent,
 import { type assetTracker } from '../assetTrackerV2.js'
 import { createParamsRequest } from '../utils/createParamsRequest.js'
