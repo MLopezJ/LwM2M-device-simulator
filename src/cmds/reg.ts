@@ -71,16 +71,20 @@ export const main = async (
  */
 export const handShake = async (
 	bracketFormat: string,
+	deviceNameParam = process.env.deviceName,
+	lifetimeParam = process.env.lifetime,
+	lwm2mVParam = process.env.lwm2mV,
+	bidingParam = process.env.biding,
+	portParam = process.env.port,
+	hostParam = process.env.host,
 ): Promise<IncomingMessage> => {
-	const deviceName = process.env.deviceName ?? ''
-	const lifetime =
-		process.env.lifetime !== undefined ? Number(process.env.lifetime) : 0
-	const lwm2mV =
-		process.env.lwm2mV !== undefined ? Number(process.env.lwm2mV) : 0.0
-	const biding = process.env.biding ?? ''
+	const deviceName = deviceNameParam ?? ''
+	const lifetime = lifetimeParam !== undefined ? Number(lifetimeParam) : 0
+	const lwm2mV = lwm2mVParam !== undefined ? Number(lwm2mVParam) : 0.0
+	const biding = bidingParam ?? ''
 	const query = `ep=${deviceName}&lt=${lifetime}&lwm2m=${lwm2mV}&b=${biding}`
-	const port = process.env.port !== undefined ? Number(process.env.port) : 0
-	const host = process.env.host ?? ''
+	const port = portParam !== undefined ? Number(portParam) : 0
+	const host = hostParam ?? ''
 	const params = {
 		host: host,
 		port: port,
@@ -109,7 +113,8 @@ export const handShake = async (
 
 		request.on('response', (response) => {
 			clearTimeout(t)
-			if (response.code === '2.01') {
+			if (response.code === '2.01' || response.code === '2.05') {
+				console.log('here', params)
 				return resolve(response)
 			}
 			return reject(new Error('Server does not accept the request'))
