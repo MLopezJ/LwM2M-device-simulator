@@ -1,7 +1,15 @@
 import * as readline from 'readline'
-import { assetTrackerFirmwareV2 } from './assetTrackerV2.js'
+import { assetTrackerFirmwareV2, type assetTracker } from './assetTrackerV2.js'
 import { executeCommand } from './commands.js'
 import { getUserInput } from './getUserInput.js'
+
+/**
+ * check if element is a promise
+ */
+const isPromise = (element: unknown) =>
+	typeof element === 'object' && typeof (element as any).then === 'function'
+		? true
+		: false
 
 /**
  * Command Line Interface
@@ -24,8 +32,12 @@ const cli = () => {
 			instructions.parameters,
 			assetTrackerObjects,
 		)
-		if (instructions.command === 'set' && result !== undefined)
-			assetTrackerObjects = result
+		if (
+			instructions.command === 'set' &&
+			result !== undefined &&
+			isPromise(result) === false
+		)
+			assetTrackerObjects = result as assetTracker
 		rl.prompt()
 	})
 }

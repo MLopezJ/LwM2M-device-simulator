@@ -13,7 +13,7 @@ type commandsObject = Record<
 		execute: (
 			command: string[] | never,
 			objectList: assetTracker,
-		) => void | assetTracker
+		) => void | assetTracker | Promise<void | string>
 	}
 >
 
@@ -85,7 +85,7 @@ export const executeCommand = (
 	command: string,
 	parameters: string[],
 	objectsList: assetTracker,
-): void | assetTracker => {
+): void | assetTracker | Promise<void | string> => {
 	const action = commands[`${command}`]
 	if (action === undefined) {
 		console.log('Wrong command')

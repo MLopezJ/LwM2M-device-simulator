@@ -1,4 +1,4 @@
-import { getURN, LwM2MDocument } from '@nordicsemiconductor/lwm2m-types'
+import { getURN, type LwM2MDocument } from '@nordicsemiconductor/lwm2m-types'
 import coap, { IncomingMessage } from 'coap'
 import { type CoapMethod } from 'coap-packet'
 import type { assetTracker } from '../assetTrackerV2'
@@ -6,6 +6,7 @@ import { createResourceList } from '../utils/createResourceList'
 import { getBracketFormat } from '../utils/getBracketFormat'
 import { getElementPath } from '../utils/getElementPath'
 import { isObjectInAssetTracker } from '../utils/isObjectInAssetTracker'
+import { requestParser } from '../utils/requestParser'
 import { typeOfElement } from '../utils/typeOfElement'
 import type { lwm2mJson } from './register'
 
@@ -17,40 +18,57 @@ const udpDefault = 'udp4'
 const json = 'application/vnd.oma.lwm2m+json'
 
 /**
- *
+ * Request to register the device objects in a LwM2M server
  */
 export const main = async (
 	deviceObjects: assetTracker,
 ): Promise<void | 'error'> => {
-	console.log('\n... Init registration')
 	const bracketFormat = getBracketFormat(deviceObjects)
 	const initialHandShake = await handShake(bracketFormat)
-	//console.log(initialHandShake)
 
-	if (initialHandShake.code === '2.01') {
-		console.log('\nHand shake has been approved')
-		const port = initialHandShake.outSocket?.port
-		if (port === undefined) return 'error'
+	if (initialHandShake.code !== '2.01')
+		return new Promise((resolve, reject) =>
+			reject(new Error('Initial hand shake is not accepted')),
+		)
 
-		const socketConnection = await createSocketConnection(port, deviceObjects)
-		console.log(socketConnection)
+	const socketPort = initialHandShake.outSocket?.port
 
-		/*
-        const action = requestParser(socketConnection.request)
-		const url = socketConnection.request.url
-		console.log(`\nLwM2M server is requesting to ${action} from ${url}`)
-        let result: Buffer = Buffer.from('')
-		if (action === 'read') {
-			result = createResponse(url, deviceObjects)
-		}
-        socketConnection.response.setOption('Content-Format', json)
-		socketConnection.response.end(result)
-        */
+	if (socketPort === undefined) {
+		console.log('Socket connection is not stablish')
+		return 'error'
 	}
-	// mocking
+
+	const socket = createSocket()
+
+	socket.listen(socketPort, (err: unknown) => {
+		console.log(
+			`Socket connection stablished. Listening from port number: ${socketPort}`,
+		)
+		if (err !== undefined) console.log({ err })
+	})
+
+	socket.on('request', async (request, response) => {
+		const action = requestParser(request)
+		const url = request.url
+
+		console.log(`\nLwM2M server is requesting to ${action} from ${url}`)
+
+		let result: Buffer = Buffer.from('')
+
+		if (action === 'read') {
+			result = await readObjectValue(url, deviceObjects)
+		}
+
+		response.setOption('Content-Format', json)
+		response.end(result)
+	})
+
 	return new Promise((resolve) => resolve)
 }
 
+/**
+ * Send hand shake request to LwM2M server
+ */
 export const handShake = async (
 	bracketFormat: string,
 ): Promise<IncomingMessage> => {
