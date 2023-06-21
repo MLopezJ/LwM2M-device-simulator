@@ -41,18 +41,20 @@ export const handshake = async (
 	const dataFormatId = '11543'
 	const payload = `</>;ct=${dataFormatId};hb,${bracketFormat}`
 
-	const handShakeRequest = agent.request(params).end(payload)
+	const handshakeRequest = agent.request(params).end(payload)
 
-	const serverResponse = new Promise<any>((resolve, reject) => {
-		const t = setTimeout(reject, 10 * 1000)
-		handShakeRequest.on('response', (response) => {
-			clearTimeout(t)
-			if (response.code === '2.01' || response.code === '2.05') {
-				return resolve(response)
-			}
-			return reject(new Error('Server does not accept the request'))
-		})
-	})
+	const serverResponse = new Promise<coap.IncomingMessage>(
+		(resolve, reject) => {
+			const t = setTimeout(reject, 10 * 1000)
+			handshakeRequest.on('response', (response) => {
+				clearTimeout(t)
+				if (response.code === '2.01' || response.code === '2.05') {
+					return resolve(response)
+				}
+				return reject(new Error('Server does not accept the request'))
+			})
+		},
+	)
 
 	const response = await serverResponse
 
