@@ -70,6 +70,7 @@ export const main = async (
  * Send hand shake request to LwM2M server
  */
 export const handShake = (
+	agent: coap.Agent,
 	bracketFormat: string,
 	deviceNameParam = process.env.deviceName,
 	lifetimeParam = process.env.lifetime,
@@ -77,7 +78,7 @@ export const handShake = (
 	bidingParam = process.env.biding,
 	portParam = process.env.port,
 	hostParam = process.env.host,
-): void => {
+): coap.Agent => {
 	const deviceName = deviceNameParam ?? ''
 	const lifetime = lifetimeParam !== undefined ? Number(lifetimeParam) : 0
 	const lwm2mV = lwm2mVParam !== undefined ? Number(lwm2mVParam) : 0.0
@@ -105,7 +106,9 @@ export const handShake = (
 	const dataFormatId = '11543'
 	const payload = `</>;ct=${dataFormatId};hb,${bracketFormat}`
 
-	request(params).end(payload)
+	agent.request(params).end(payload)
+
+	return agent
 }
 
 /**

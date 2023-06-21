@@ -45,7 +45,8 @@ describe("handshake", () => {
         expect(await r).toBe('/rd?ep=device_name&lt=3600&lwm2m=1.1&b=U')
     })
 
-    it("should send handshake request to server", async () => {
+    it("should send handshake request to server with agent", async () => {
+        const agent = new coap.Agent({ type: 'udp4' })
         const objects = '<1/0>, <3/0>, <6/0>'
         const deviceName = 'device_name'
         const lifetime = '3600'
@@ -53,7 +54,7 @@ describe("handshake", () => {
         const biding = "U"
         const port = "5683"
         const host = "localhost"
-        handShake(objects, deviceName, lifetime, lwm2mV, biding, port, host)        
+        handShake(agent, objects, deviceName, lifetime, lwm2mV, biding, port, host) 
 
         const serverReceive: Promise<{url: string; payload:string}> = new Promise((resolve, reject) => {
             server.on('request', (req, res) => {
@@ -66,6 +67,6 @@ describe("handshake", () => {
         const result = await serverReceive
         expect(result.url).toBe('/rd?ep=device_name&lt=3600&lwm2m=1.1&b=U')
         expect(result.payload).toBe(`</>;ct=11543;hb,${objects}`)
-    }, 12 * 1000)
+    })
     
 })
