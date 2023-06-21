@@ -4,7 +4,7 @@ import { handShake } from './reg'
 /**
  * Create server to test initial handshake method
  */
-const handShakeTest = () => {
+export const handShakeTest = (): void => {
 	const server = coap.createServer()
 
 	server.listen(async () => {
@@ -28,7 +28,7 @@ const handShakeTest = () => {
 
 // handShakeTest()
 
-const serverTest = () => {
+export const serverTest = (): void => {
 	const server = coap.createServer()
 
 	server.listen(() => {
@@ -50,7 +50,7 @@ const serverTest = () => {
 
 //serverTest()
 
-const s = () => {
+export const s = (): coap.Server => {
 	const server = coap.createServer()
 
 	server.on('request', (req, res) => {
