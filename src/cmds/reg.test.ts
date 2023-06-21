@@ -42,7 +42,7 @@ describe("handshake", () => {
         // client request
         request(params).end()
 
-        const r = new Promise((resolve, reject) => {
+        const r = new Promise((resolve) => {
             server.on('request', (req) => {
                 //console.log("client request", req.url)
                 resolve(req.url)
@@ -55,7 +55,7 @@ describe("handshake", () => {
     it("should send handshake request to server with agent", async () => {
         handShake(agent, objects, deviceName, lifetime, lwm2mV, biding, port, host) 
 
-        const serverReceive: Promise<{url: string; payload:string}> = new Promise((resolve, reject) => {
+        const serverReceive: Promise<{url: string; payload:string}> = new Promise((resolve) => {
             server.on('request', (req, res) => {
                 //console.log('Hanshake request sent. This is received by the server here')
                 res.end()
@@ -68,21 +68,26 @@ describe("handshake", () => {
         expect(result.payload).toBe(`</>;ct=11543;hb,${objects}`)
     })
 
-    it("should receive answer from server after send the handshake request", async () => {
-        
-        handShake(agent, objects, deviceName, lifetime, lwm2mV, biding, port, host) 
+    it("should receive answer from server after init the handshake", async () => {
+        const coap = handShake(agent, objects, deviceName, lifetime, lwm2mV, biding, port, host) 
 
-        const serverReceive: Promise<{url: string; payload:string}> = new Promise((resolve, reject) => {
+        const receiveHandShake: Promise<{url: string; payload:string}> = new Promise((resolve) => {
             server.on('request', (req, res) => {
-                //console.log('Hanshake request sent. This is received by the server here')
+                //res.setOption('code', '2.01').end()
                 res.end()
                 resolve({url:req.url, payload:req.payload.toString()})
             })
         })
 
-        const result = await serverReceive
-        expect(result.url).toBe('/rd?ep=device_name&lt=3600&lwm2m=1.1&b=U')
-        expect(result.payload).toBe(`</>;ct=11543;hb,${objects}`)
+        const serverResponseTheHandShake = new Promise((resolve) => {
+            coap.on('response', (req) =>  resolve(req.code))
+        })
+
+        const receivedHandShake = await receiveHandShake
+        expect(receivedHandShake.url).toBe('/rd?ep=device_name&lt=3600&lwm2m=1.1&b=U')
+        expect(receivedHandShake.payload).toBe(`</>;ct=11543;hb,${objects}`)
+
+        expect(await serverResponseTheHandShake).toBe(`2.05`)
     })
     
 })

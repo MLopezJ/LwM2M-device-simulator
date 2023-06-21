@@ -78,7 +78,7 @@ export const handShake = (
 	bidingParam = process.env.biding,
 	portParam = process.env.port,
 	hostParam = process.env.host,
-): coap.Agent => {
+): coap.OutgoingMessage => {
 	const deviceName = deviceNameParam ?? ''
 	const lifetime = lifetimeParam !== undefined ? Number(lifetimeParam) : 0
 	const lwm2mV = lwm2mVParam !== undefined ? Number(lwm2mVParam) : 0.0
@@ -106,9 +106,9 @@ export const handShake = (
 	const dataFormatId = '11543'
 	const payload = `</>;ct=${dataFormatId};hb,${bracketFormat}`
 
-	agent.request(params).end(payload)
+	return agent.request(params).end(payload)
 
-	return agent
+	//return agent
 }
 
 /**
