@@ -1,7 +1,7 @@
 import coap, { createServer, request, Server } from 'coap'
 import { type CoapMethod } from 'coap-packet'
 import { randomUUID } from 'crypto'
-import { handshake } from './handshake'
+import { handshake, type handshakeParams } from './handshake'
 
 describe('handshake', () => {
 	let server: Server
@@ -12,12 +12,12 @@ describe('handshake', () => {
 	const lifetime = '3600'
 	const lwm2mV = '1.1'
 	const biding = 'U'
-	const port = '5683'
+	const port = 5683
 	const host = 'localhost'
 
 	beforeEach(async () => {
 		server = createServer()
-		server.listen(5683)
+		server.listen(port)
 	})
 
 	it('should receive a request at a path with some query', function (done) {
@@ -63,17 +63,19 @@ describe('handshake', () => {
 			})
 		})
 
-		// When I do the request
-		await handshake(
+		const params: handshakeParams = {
 			agent,
 			objects,
 			deviceName,
 			lifetime,
 			lwm2mV,
-			biding,
 			port,
 			host,
-		)
+			biding,
+		}
+
+		// When I do the request
+		await handshake(params)
 
 		const result = await request
 
@@ -92,16 +94,17 @@ describe('handshake', () => {
 		// When I do the request
 		// Then I should receive an error
 		try {
-			await handshake(
+			const params: handshakeParams = {
 				agent,
 				objects,
 				deviceName,
 				lifetime,
 				lwm2mV,
-				biding,
 				port,
 				host,
-			)
+				biding,
+			}
+			await handshake(params)
 			throw new Error("didn't throw")
 		} catch (error) {
 			expect((error as Error).message).toMatch(

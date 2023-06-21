@@ -1,32 +1,39 @@
 import coap from 'coap'
 import { type CoapMethod } from 'coap-packet'
 
+export type handshakeParams = {
+	agent: coap.Agent
+	objects: string
+	deviceName: string | undefined
+	lifetime: string | undefined
+	biding: string | undefined
+	port: number | undefined
+	host: string | undefined
+	lwm2mV: string | undefined
+}
+
 /**
  * Send handshake request to LwM2M server
  */
 export const handshake = async (
-	agent: coap.Agent,
-	bracketFormat: string,
-	deviceNameParam = process.env.deviceName,
-	lifetimeParam = process.env.lifetime,
-	lwm2mVParam = process.env.lwm2mV,
-	bidingParam = process.env.biding,
-	portParam = process.env.port,
-	hostParam = process.env.host,
+	_: handshakeParams,
 ): Promise<{ socketPort: number }> => {
-	const deviceName = deviceNameParam ?? ''
-	const lifetime = lifetimeParam !== undefined ? Number(lifetimeParam) : 0
-	const lwm2mV = lwm2mVParam !== undefined ? Number(lwm2mVParam) : 0.0
-	const biding = bidingParam ?? ''
+	const deviceName = _.deviceName ?? process.env.deviceName ?? ''
+	const lifetime = _.lifetime ?? process.env.lifetime ?? '0'
+	const lwm2mV = _.lwm2mV ?? process.env.lwm2mV ?? ''
+	const biding = _.biding ?? process.env.biding ?? ''
 
 	const query = new URLSearchParams('')
 	query.set('ep', deviceName)
-	query.set('lt', `${lifetime}`)
-	query.set('lwm2m', `${lwm2mV}`)
+	query.set('lt', lifetime)
+	query.set('lwm2m', lwm2mV)
 	query.set('b', biding)
 
-	const port = portParam !== undefined ? Number(portParam) : 0
-	const host = hostParam ?? ''
+	let port = 0
+	if (_.port !== undefined) port = _.port
+	if (process.env.port !== undefined) port = Number(process.env.port)
+
+	const host = _.host ?? process.env.host ?? ''
 	const params = {
 		host: host,
 		port: port,
@@ -39,9 +46,9 @@ export const handshake = async (
 	}
 
 	const dataFormatId = '11543'
-	const payload = `</>;ct=${dataFormatId};hb,${bracketFormat}`
+	const payload = `</>;ct=${dataFormatId};hb,${_.objects}`
 
-	const handshakeRequest = agent.request(params).end(payload)
+	const handshakeRequest = _.agent.request(params).end(payload)
 
 	const serverResponse = new Promise<coap.IncomingMessage>(
 		(resolve, reject) => {

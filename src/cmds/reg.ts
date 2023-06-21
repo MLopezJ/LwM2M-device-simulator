@@ -24,9 +24,17 @@ export const registerDeviceObjects = async (
 	deviceObjects: assetTracker,
 ): Promise<void | 'error'> => {
 	const agent = new coap.Agent({ type: 'udp4' })
-
-	const bracketFormat = getBracketFormat(deviceObjects)
-	const { socketPort } = await handshake(agent, bracketFormat)
+	const objects = getBracketFormat(deviceObjects)
+	const { socketPort } = await handshake({
+		agent,
+		objects,
+		deviceName: undefined,
+		lifetime: undefined,
+		biding: undefined,
+		port: undefined,
+		host: undefined,
+		lwm2mV: undefined,
+	})
 
 	return new Promise((resolve, reject) => {
 		const socket = createSocket()
