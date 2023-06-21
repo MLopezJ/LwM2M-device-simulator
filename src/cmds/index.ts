@@ -3,7 +3,7 @@ import { commands } from '../commands.js'
 import { createRegisterQuery } from '../utils/createRegisterQuery.js'
 import { help as helpCmd } from './help.js'
 import { list as listCmd } from './list.js'
-import { main } from './reg.js'
+import { registerDeviceObjects } from './reg.js'
 import { register as registerCmd, sendRegistrationRequest } from './register.js'
 
 /**
@@ -58,7 +58,7 @@ export const register = (command: string[] | never, list: assetTracker): void =>
  * Temporal connector method
  * TODO: remove this
  */
-export const reg = async (
+export const registerDevice = async (
 	command: string[] | never,
 	list: assetTracker,
-): Promise<void | string> => await main(list)
+): Promise<void | string> => await registerDeviceObjects(list)

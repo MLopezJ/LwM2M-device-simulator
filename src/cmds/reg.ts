@@ -1,6 +1,5 @@
 import { getURN, type LwM2MDocument } from '@nordicsemiconductor/lwm2m-types'
-import coap, { IncomingMessage, request } from 'coap'
-import { type CoapMethod } from 'coap-packet'
+import coap from 'coap'
 import type { assetTracker } from '../assetTrackerV2'
 import { createResourceList } from '../utils/createResourceList'
 import { getBracketFormat } from '../utils/getBracketFormat'
@@ -8,6 +7,7 @@ import { getElementPath } from '../utils/getElementPath'
 import { isObjectInAssetTracker } from '../utils/isObjectInAssetTracker'
 import { requestParser } from '../utils/requestParser'
 import { typeOfElement } from '../utils/typeOfElement'
+import { handshake } from './handshake'
 import type { lwm2mJson } from './register'
 
 const udpDefault = 'udp4'
@@ -20,95 +20,42 @@ const json = 'application/vnd.oma.lwm2m+json'
 /**
  * Request to register the device objects in a LwM2M server
  */
-export const main = async (
+export const registerDeviceObjects = async (
 	deviceObjects: assetTracker,
 ): Promise<void | 'error'> => {
+	const agent = new coap.Agent({ type: 'udp4' })
+
 	const bracketFormat = getBracketFormat(deviceObjects)
-	const initialHandShake = await handShake(bracketFormat)
+	const { socketPort } = await handshake(agent, bracketFormat)
 
-	if (initialHandShake.code !== '2.01')
-		return new Promise((resolve, reject) =>
-			reject(new Error('Initial hand shake is not accepted')),
-		)
+	return new Promise((resolve, reject) => {
+		const socket = createSocket()
 
-	const socketPort = initialHandShake.outSocket?.port
+		socket.listen(socketPort, (err: unknown) => {
+			console.log(
+				`Socket connection stablished. Listening from port number: ${socketPort}`,
+			)
+			if (err !== undefined) reject(err)
+		})
 
-	if (socketPort === undefined) {
-		console.log('Socket connection is not stablish')
-		return 'error'
-	}
+		socket.on('request', async (request, response) => {
+			const action = requestParser(request)
+			const url = request.url
 
-	const socket = createSocket()
+			console.log(`\nLwM2M server is requesting to ${action} from ${url}`)
 
-	socket.listen(socketPort, (err: unknown) => {
-		console.log(
-			`Socket connection stablished. Listening from port number: ${socketPort}`,
-		)
-		if (err !== undefined) console.log({ err })
+			let result: Buffer = Buffer.from('')
+
+			if (action === 'read') {
+				result = await readObjectValue(url, deviceObjects)
+			}
+
+			response.setOption('Content-Format', json)
+			response.end(result)
+
+			resolve()
+		})
 	})
-
-	socket.on('request', async (request, response) => {
-		const action = requestParser(request)
-		const url = request.url
-
-		console.log(`\nLwM2M server is requesting to ${action} from ${url}`)
-
-		let result: Buffer = Buffer.from('')
-
-		if (action === 'read') {
-			result = await readObjectValue(url, deviceObjects)
-		}
-
-		response.setOption('Content-Format', json)
-		response.end(result)
-	})
-
-	return new Promise((resolve) => resolve)
-}
-
-/**
- * Send hand shake request to LwM2M server
- */
-export const handShake = (
-	agent: coap.Agent,
-	bracketFormat: string,
-	deviceNameParam = process.env.deviceName,
-	lifetimeParam = process.env.lifetime,
-	lwm2mVParam = process.env.lwm2mV,
-	bidingParam = process.env.biding,
-	portParam = process.env.port,
-	hostParam = process.env.host,
-): coap.OutgoingMessage => {
-	const deviceName = deviceNameParam ?? ''
-	const lifetime = lifetimeParam !== undefined ? Number(lifetimeParam) : 0
-	const lwm2mV = lwm2mVParam !== undefined ? Number(lwm2mVParam) : 0.0
-	const biding = bidingParam ?? ''
-
-	const query = new URLSearchParams('')
-	query.set('ep', deviceName)
-	query.set('lt', `${lifetime}`)
-	query.set('lwm2m', `${lwm2mV}`)
-	query.set('b', biding)
-
-	const port = portParam !== undefined ? Number(portParam) : 0
-	const host = hostParam ?? ''
-	const params = {
-		host: host,
-		port: port,
-		pathname: '/rd',
-		method: 'POST' as CoapMethod,
-		options: {
-			'Content-Format': 'application/link-format',
-		},
-		query: query.toString(),
-	}
-
-	const dataFormatId = '11543'
-	const payload = `</>;ct=${dataFormatId};hb,${bracketFormat}`
-
-	return agent.request(params).end(payload)
-
-	//return agent
 }
 
 /**
