@@ -1,5 +1,5 @@
 import { getURN, type LwM2MDocument } from '@nordicsemiconductor/lwm2m-types'
-import coap, { IncomingMessage } from 'coap'
+import coap, { IncomingMessage, request } from 'coap'
 import { type CoapMethod } from 'coap-packet'
 import type { assetTracker } from '../assetTrackerV2'
 import { createResourceList } from '../utils/createResourceList'
@@ -69,7 +69,7 @@ export const main = async (
 /**
  * Send hand shake request to LwM2M server
  */
-export const handShake = async (
+export const handShake = (
 	bracketFormat: string,
 	deviceNameParam = process.env.deviceName,
 	lifetimeParam = process.env.lifetime,
@@ -77,7 +77,7 @@ export const handShake = async (
 	bidingParam = process.env.biding,
 	portParam = process.env.port,
 	hostParam = process.env.host,
-): Promise<IncomingMessage> => {
+): void => {
 	const deviceName = deviceNameParam ?? ''
 	const lifetime = lifetimeParam !== undefined ? Number(lifetimeParam) : 0
 	const lwm2mV = lwm2mVParam !== undefined ? Number(lwm2mVParam) : 0.0
@@ -105,27 +105,7 @@ export const handShake = async (
 	const dataFormatId = '11543'
 	const payload = `</>;ct=${dataFormatId};hb,${bracketFormat}`
 
-	const agent = new coap.Agent({ type: udpDefault })
-	const request = agent.request(params)
-
-	request.end(payload)
-
-	request.on('error', (err: unknown) => {
-		console.log({ err })
-	})
-
-	return new Promise((resolve, reject) => {
-		const t = setTimeout(reject, 10 * 1000)
-
-		request.on('response', (response) => {
-			clearTimeout(t)
-			if (response.code === '2.01' || response.code === '2.05') {
-				console.log('here', params)
-				return resolve(response)
-			}
-			return reject(new Error('Server does not accept the request'))
-		})
-	})
+	request(params).end(payload)
 }
 
 /**
