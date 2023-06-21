@@ -100,11 +100,11 @@ npm install
 Create an .env file in root of the proyect and fill it with custom values
 
 ```
-deviceName="urn:imei:000000000000005" // name of the device
-port=5683 // LwM2M server port
+deviceName="your-device-name" // name of the device
+port="5683" // LwM2M server port
 host="eu.iot.avsystem.cloud" // LwM2M hostmame
-lifetime=3600 // lifetime of the connection between the client and server
-lwm2m2=1.1 // LwM2M version used
+lifetime="3600" // lifetime of the connection between the client and server
+lwm2mV="1.1" // LwM2M version used
 biding="U" // U stands for UDP
 ```
 
