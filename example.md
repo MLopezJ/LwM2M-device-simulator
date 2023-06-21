@@ -15,6 +15,7 @@ list
 ```
 
 ### Action: register objects in LwM2M server
+
 **Input**
 
 ```
@@ -44,6 +45,7 @@ list /3/0
 ```
 
 ### Action: update resource value
+
 **Input**
 
 ```
@@ -76,6 +78,7 @@ list /3/0
 ```
 
 ### Action: Exit CLI
+
 **Input**
 
 ```
