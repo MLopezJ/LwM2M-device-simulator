@@ -82,7 +82,13 @@ export const handShake = async (
 	const lifetime = lifetimeParam !== undefined ? Number(lifetimeParam) : 0
 	const lwm2mV = lwm2mVParam !== undefined ? Number(lwm2mVParam) : 0.0
 	const biding = bidingParam ?? ''
-	const query = `ep=${deviceName}&lt=${lifetime}&lwm2m=${lwm2mV}&b=${biding}`
+
+	const query = new URLSearchParams('')
+	query.set('ep', deviceName)
+	query.set('lt', `${lifetime}`)
+	query.set('lwm2m', `${lwm2mV}`)
+	query.set('b', biding)
+
 	const port = portParam !== undefined ? Number(portParam) : 0
 	const host = hostParam ?? ''
 	const params = {
@@ -93,7 +99,7 @@ export const handShake = async (
 		options: {
 			'Content-Format': 'application/link-format',
 		},
-		query: query,
+		query: query.toString(),
 	}
 
 	const dataFormatId = '11543'
