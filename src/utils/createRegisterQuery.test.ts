@@ -13,3 +13,5 @@ describe('createRegisterQuery', () => {
 		)
 	})
 })
+
+// TODO: should be removed
