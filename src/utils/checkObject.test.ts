@@ -7,27 +7,27 @@ describe('Check Object', () => {
 		[
 			{
 				objectId: 3,
-				instanceId: 0,
-				resourceId: 0,
+				instanceId: undefined,
+				resourceId: undefined,
 			},
 		],
 		[
 			{
 				objectId: 3303,
-				instanceId: 0,
-				resourceId: 0,
+				instanceId: undefined,
+				resourceId: undefined,
 			},
 		],
-	])('Should check that object exist in asset tracker: %p', (path: element) => {
+	])('Should check that object %p exist in given list', (path: element) => {
 		const list = assetTrackerFirmwareV2
 		expect(checkObject(path, list)).not.toBe(undefined)
 	})
 
-	it('Should inform that object do not exist in asset tracker', () => {
+	it('Should return undefined when object does not exist in given list', () => {
 		const path: element = {
 			objectId: 101010101,
-			instanceId: 0,
-			resourceId: 0,
+			instanceId: undefined,
+			resourceId: undefined,
 		}
 		const list = assetTrackerFirmwareV2
 		expect(checkObject(path, list)).toBe(undefined)
