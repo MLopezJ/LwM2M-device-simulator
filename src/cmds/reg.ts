@@ -28,12 +28,12 @@ export const registerDeviceObjects = async (
 	const { socketPort } = await handshake({
 		agent,
 		objects,
-		deviceName: undefined,
-		lifetime: undefined,
-		biding: undefined,
-		port: undefined,
-		host: undefined,
-		lwm2mV: undefined,
+		deviceName: 'test',
+		lifetime: '3600',
+		biding: 'U',
+		port: 5683,
+		host: 'localhost',
+		lwm2mV: '1.1',
 	})
 
 	return new Promise((resolve, reject) => {
