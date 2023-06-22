@@ -7,10 +7,11 @@ import { checkResource } from './checkResource.js'
 import { type instance } from './getValue.js'
 
 describe('Check Resource', () => {
-	it('Should return resource value if resource exist', () => {
-		expect(checkResource(assetTrackerFirmwareV2[Device_3_urn] ?? {}, 0)).toBe(
-			'Nordic',
-		)
+	it('Should return resource value if it exists', () => {
+		const list = assetTrackerFirmwareV2
+		const object = list[Device_3_urn] ?? {}
+		const resourceId = 0
+		expect(checkResource(object, resourceId)).toBe('Nordic')
 	})
 
 	it.each([
@@ -39,7 +40,7 @@ describe('Check Resource', () => {
 				: {},
 		],
 	])(
-		'Should check that resource %p do not exist in object: %p',
+		'Should check that resource %p does not exist in object: %p',
 		(resourceId: number, objectName: string, object: instance) => {
 			expect(checkResource(object, resourceId)).toBe(undefined)
 		},
