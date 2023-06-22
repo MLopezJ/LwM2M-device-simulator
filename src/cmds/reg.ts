@@ -22,9 +22,11 @@ const json = 'application/vnd.oma.lwm2m+json'
  */
 export const registerDeviceObjects = async (
 	deviceObjects: assetTracker,
+	resource: string | undefined = undefined,
 ): Promise<void | 'error'> => {
 	const agent = new coap.Agent({ type: 'udp4' })
-	const objects = getBracketFormat(deviceObjects)
+	const objects =
+		resource !== undefined ? `<${resource}>` : getBracketFormat(deviceObjects)
 	const { socketPort } = await handshake({
 		agent,
 		objects,
