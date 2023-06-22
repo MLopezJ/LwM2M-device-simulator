@@ -1,59 +1,16 @@
-import coap, { createServer, request, Server } from 'coap'
-import { type CoapMethod } from 'coap-packet'
+import coap, { createServer, Server } from 'coap'
 import { randomUUID } from 'crypto'
 import { handshake, type handshakeParams } from './handshake'
 
 describe('handshake', () => {
 	let server: Server
 
-	const agent = new coap.Agent({ type: 'udp4' })
-	const objects = '<1/0>, <3/0>, <6/0>'
-	const deviceName = 'device_name'
-	const lifetime = '3600'
-	const lwm2mV = '1.1'
-	const biding = 'U'
-	const port = 5683
-	const host = 'localhost'
-
 	beforeEach(async () => {
 		server = createServer()
-		server.listen(port)
-	})
-
-	it('should receive a request at a path with some query', function (done) {
-		request(`coap://localhost:${port}/abcd/ef/gh/?foo=bar&beep=bop`).end()
-		server.on('request', (req) => {
-			expect(req.url).toBe('/abcd/ef/gh?foo=bar&beep=bop')
-			setImmediate(done)
-		})
-	})
-
-	it('should receive a request at a path with some query async', async () => {
-		const params = {
-			host: 'localhost',
-			port: 5683,
-			pathname: '/rd',
-			method: 'POST' as CoapMethod,
-			options: { 'Content-Format': 'application/link-format' },
-			query: 'ep=device_name&lt=3600&lwm2m=1.1&b=U',
-		}
-
-		// client request
-		request(params).end()
-
-		const r = new Promise((resolve) => {
-			server.on('request', (req) => {
-				//console.log("client request", req.url)
-				resolve(req.url)
-			})
-		})
-
-		expect(await r).toBe('/rd?ep=device_name&lt=3600&lwm2m=1.1&b=U')
+		server.listen(5683)
 	})
 
 	it('should send handshake request to server with agent', async () => {
-		const deviceName = randomUUID()
-
 		// Given a request arrives, server answers
 		const request = new Promise<{ url: string; payload: string }>((resolve) => {
 			server.on('request', (req, res) => {
@@ -63,15 +20,17 @@ describe('handshake', () => {
 			})
 		})
 
+		const deviceName = randomUUID()
+		const objects = '<1/0>, <3/0>, <6/0>'
 		const params: handshakeParams = {
-			agent,
-			objects,
-			deviceName,
-			lifetime,
-			lwm2mV,
-			port,
-			host,
-			biding,
+			agent: new coap.Agent({ type: 'udp4' }),
+			objects: '<1/0>, <3/0>, <6/0>',
+			deviceName: deviceName,
+			lifetime: '3600',
+			lwm2mV: '1.1',
+			port: 5683,
+			host: 'localhost',
+			biding: 'U',
 		}
 
 		// When I do the request
@@ -95,14 +54,14 @@ describe('handshake', () => {
 		// Then I should receive an error
 		try {
 			const params: handshakeParams = {
-				agent,
-				objects,
-				deviceName,
-				lifetime,
-				lwm2mV,
-				port,
-				host,
-				biding,
+				agent: new coap.Agent({ type: 'udp4' }),
+				objects: '<1/0>, <3/0>, <6/0>',
+				deviceName: randomUUID(),
+				lifetime: '3600',
+				lwm2mV: '1.1',
+				port: 5683,
+				host: 'localhost',
+				biding: 'U',
 			}
 			await handshake(params)
 			throw new Error("didn't throw")
