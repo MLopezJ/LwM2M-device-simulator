@@ -32,9 +32,12 @@ describe('getUserInput', () => {
 		},
 	)
 
-	it(`should return '' as a command and [] as a parameters if input is empty string`, () => {
-		const result = getUserInput('')
-		expect(result.command).toStrictEqual('')
-		expect(result.parameters.length).toBe(0)
+	it(`should return an empty string ('') as a command and an empty list ([]) as a parameters if input is an empty string`, () => {
+		const input = ''
+		const result = getUserInput(input)
+		const expectedCommand = ''
+		const expectedParameters = []
+		expect(result.command).toStrictEqual(expectedCommand)
+		expect(result.parameters.length).toBe(expectedParameters.length)
 	})
 })
