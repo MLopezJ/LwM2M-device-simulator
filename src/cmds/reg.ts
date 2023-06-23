@@ -25,8 +25,10 @@ export const registerDeviceObjects = async (
 	resource: string | undefined = undefined,
 ): Promise<void | 'error'> => {
 	const agent = new coap.Agent({ type: 'udp4' })
-	const objects =
-		resource !== undefined ? `<${resource}>` : getBracketFormat(deviceObjects)
+	const objects = getBracketFormat(
+		resource !== undefined ? resource : deviceObjects,
+	)
+	// resource !== undefined ? `<${resource}>` :
 	const { socketPort } = await handshake({
 		agent,
 		objects,
