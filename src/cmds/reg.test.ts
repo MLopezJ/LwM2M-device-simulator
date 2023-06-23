@@ -1,7 +1,7 @@
 import { OutgoingMessage, Server, createServer, request } from 'coap'
 import { type CoapMethod } from 'coap-packet'
 import { assetTrackerFirmwareV2, type assetTracker } from '../assetTrackerV2'
-import { registerDeviceObjects } from './reg'
+import { registerDeviceObjects, type registrationParams } from './reg'
 
 describe('registerDeviceObjects', () => {
 	let server: Server
@@ -53,7 +53,17 @@ describe('registerDeviceObjects', () => {
 					}),
 			)
 
-		await registerDeviceObjects(objectsList)
+		const params: registrationParams = {
+			deviceObjects: objectsList,
+			resource: undefined,
+			deviceName: 'test',
+			lifetime: '3600',
+			biding: 'U',
+			port: 5683,
+			host: 'localhost',
+			lwm2mV: '1.1',
+		}
+		await registerDeviceObjects(params)
 
 		const result = {
 			bn: '/3/0',
@@ -117,7 +127,17 @@ describe('registerDeviceObjects', () => {
 					}),
 			)
 
-		await registerDeviceObjects(assetTrackerFirmwareV2, deviceManufacter)
+		const params: registrationParams = {
+			deviceObjects: objectsList,
+			resource: deviceManufacter,
+			deviceName: 'test',
+			lifetime: '3600',
+			biding: 'U',
+			port: 5683,
+			host: 'localhost',
+			lwm2mV: '1.1',
+		}
+		await registerDeviceObjects(params)
 
 		expect(await serverExecutionResult).toBe(
 			`{"bn":"/3/0/0","e":[{"sv":"Nordic"}]}`,

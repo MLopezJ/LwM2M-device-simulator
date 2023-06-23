@@ -17,26 +17,45 @@ const udpDefault = 'udp4'
  */
 const json = 'application/vnd.oma.lwm2m+json'
 
+export type registrationParams = {
+	deviceObjects: assetTracker
+	resource: string | undefined
+	deviceName: string | undefined
+	lifetime: string | undefined
+	biding: string | undefined
+	port: number | undefined
+	host: string | undefined
+	lwm2mV: string | undefined
+}
+
 /**
  * Request to register the device objects in a LwM2M server
  */
 export const registerDeviceObjects = async (
-	deviceObjects: assetTracker,
-	resource: string | undefined = undefined,
+	_: registrationParams,
 ): Promise<void | 'error'> => {
 	const agent = new coap.Agent({ type: 'udp4' })
 	const objects = getBracketFormat(
-		resource !== undefined ? resource : deviceObjects,
+		_.resource !== undefined ? _.resource : _.deviceObjects,
 	)
+	const deviceName = _.deviceName ?? process.env.deviceName ?? ''
+	const lifetime = _.lifetime ?? process.env.lifetime ?? '0'
+	const lwm2mV = _.lwm2mV ?? process.env.lwm2mV ?? ''
+	const biding = _.biding ?? process.env.biding ?? ''
+	const host = _.host ?? process.env.host ?? ''
+	let port = 0
+	if (_.port !== undefined) port = _.port
+	if (process.env.port !== undefined) port = Number(process.env.port)
+
 	const { socketPort } = await handshake({
 		agent,
 		objects,
-		deviceName: 'test',
-		lifetime: '3600',
-		biding: 'U',
-		port: 5683,
-		host: 'localhost',
-		lwm2mV: '1.1',
+		deviceName,
+		lifetime,
+		biding,
+		port,
+		host,
+		lwm2mV,
 	})
 
 	return new Promise((resolve, reject) => {
@@ -58,7 +77,7 @@ export const registerDeviceObjects = async (
 			let result: Buffer = Buffer.from('')
 
 			if (action === 'read') {
-				result = await readObjectValue(url, deviceObjects)
+				result = await readObjectValue(url, _.deviceObjects)
 			}
 
 			response.setOption('Content-Format', json)

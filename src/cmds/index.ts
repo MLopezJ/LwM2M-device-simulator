@@ -61,4 +61,14 @@ export const register = (command: string[] | never, list: assetTracker): void =>
 export const registerDevice = async (
 	command: string[] | never,
 	list: assetTracker,
-): Promise<void | string> => await registerDeviceObjects(list)
+): Promise<void | string> =>
+	await registerDeviceObjects({
+		deviceObjects: list,
+		resource: undefined,
+		deviceName: undefined,
+		lifetime: undefined,
+		biding: undefined,
+		port: undefined,
+		host: undefined,
+		lwm2mV: undefined,
+	})
