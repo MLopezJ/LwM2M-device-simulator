@@ -6,6 +6,12 @@ import { assetTrackerFirmwareV2, type assetTracker } from '../assetTrackerV2.js'
 import { getValue } from './getValue.js'
 
 describe('getValue', () => {
+	let objectsList: assetTracker
+
+	beforeEach(async () => {
+		objectsList = assetTrackerFirmwareV2
+	})
+
 	/**
 	 * Object case
 	 */
@@ -17,7 +23,7 @@ describe('getValue', () => {
 				instanceId: undefined,
 				resourceId: undefined,
 			}
-			const from = assetTrackerFirmwareV2
+			const from = objectsList
 
 			expect(await getValue(request, element, from)).toMatchObject(
 				assetTrackerFirmwareV2[
@@ -33,7 +39,7 @@ describe('getValue', () => {
 				instanceId: undefined,
 				resourceId: undefined,
 			}
-			const from = assetTrackerFirmwareV2
+			const from = objectsList
 
 			expect(await getValue(request, element, from)).toBe(undefined)
 		})
@@ -47,7 +53,7 @@ describe('getValue', () => {
 			it('Should return instance value', async () => {
 				const request = 'instance'
 				const element = { objectId: 3, instanceId: 0, resourceId: undefined }
-				const from = assetTrackerFirmwareV2
+				const from = objectsList
 
 				expect(await getValue(request, element, from)).toMatchObject(
 					assetTrackerFirmwareV2[
@@ -59,7 +65,7 @@ describe('getValue', () => {
 			it('Should return undefined when instance does not exist ', async () => {
 				const request = 'instance'
 				const element = { objectId: 3, instanceId: 10, resourceId: undefined }
-				const from = assetTrackerFirmwareV2
+				const from = objectsList
 
 				expect(await getValue(request, element, from)).toBe(undefined)
 			})
@@ -67,7 +73,7 @@ describe('getValue', () => {
 
 		describe('Multiple case', () => {
 			it('Should return instance value', async () => {
-				const objectList: any = assetTrackerFirmwareV2 // TODO: remove this any
+				const list: any = objectsList // TODO: remove this any
 				const newTemperatureInstance = {
 					'5518': 1665149633,
 					'5601': 23.51,
@@ -77,14 +83,14 @@ describe('getValue', () => {
 					'5700': 10,
 					'5701': 'Celsius degrees',
 				}
-				objectList[Temperature_3303_urn as keyof assetTracker] = [
+				list[Temperature_3303_urn as keyof assetTracker] = [
 					...(assetTrackerFirmwareV2[Temperature_3303_urn] ?? ''),
 					newTemperatureInstance,
 				]
 
 				const request = 'instance'
 				const element = { objectId: 3303, instanceId: 1, resourceId: undefined }
-				const from = objectList
+				const from = list
 
 				expect(await getValue(request, element, from)).toMatchObject(
 					newTemperatureInstance,
@@ -98,7 +104,7 @@ describe('getValue', () => {
 					instanceId: 10,
 					resourceId: undefined,
 				}
-				const from = assetTrackerFirmwareV2
+				const from = objectsList
 
 				expect(await getValue(request, element, from)).toBe(undefined)
 			})
@@ -113,7 +119,7 @@ describe('getValue', () => {
 			it('Should return resource value', async () => {
 				const request = 'resource'
 				const element = { objectId: 3, instanceId: 0, resourceId: 0 }
-				const from = assetTrackerFirmwareV2
+				const from = objectsList
 
 				expect(await getValue(request, element, from)).toBe('Nordic')
 			})
@@ -121,25 +127,25 @@ describe('getValue', () => {
 			it('Should return undefined when resource does not exist ', async () => {
 				const request = 'resource'
 				const element = { objectId: 3, instanceId: 0, resourceId: 10101010 }
-				const from = assetTrackerFirmwareV2
+				const from = objectsList
 
 				expect(await getValue(request, element, from)).toBe(undefined)
 			})
 		})
 
 		describe('Multiple case', () => {
-			const request = 'resource'
-			const element = { objectId: 3303, instanceId: 0, resourceId: 5700 }
-			const from = assetTrackerFirmwareV2
-
 			it('Should return resource value', async () => {
+				const request = 'resource'
+				const element = { objectId: 3303, instanceId: 0, resourceId: 5700 }
+				const from = objectsList
+
 				expect(await getValue(request, element, from)).toBe(24.57)
 			})
 
 			it('Should return undefined when resource does not exist ', async () => {
 				const request = 'resource'
 				const element = { objectId: 3303, instanceId: 0, resourceId: 10101010 }
-				const from = assetTrackerFirmwareV2
+				const from = objectsList
 
 				expect(await getValue(request, element, from)).toBe(undefined)
 			})
