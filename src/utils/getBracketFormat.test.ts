@@ -2,7 +2,7 @@ import { assetTrackerFirmwareV2, type assetTracker } from '../assetTrackerV2.js'
 import { getBracketFormat } from './getBracketFormat.js'
 
 describe('getBracketFormat', () => {
-	it('Should transform Asset Tracker into string bracket format', () => {
+	it('Should transform Asset Tracker objects into string bracket format', () => {
 		expect(getBracketFormat(assetTrackerFirmwareV2)).toBe(
 			'<6/0>, <10256/0>, <50009/0>, <1/0>, <3/0>, <4/0>, <5/0>, <3303/0>, <3304/0>, <3323/0>, <3347/0>',
 		)
@@ -12,7 +12,7 @@ describe('getBracketFormat', () => {
 		expect(getBracketFormat('/3/0/0')).toBe('</3/0/0>')
 	})
 
-	it('Should not add the Security object in the result', () => {
+	it('Should exclude the Security object in the result', () => {
 		const lwM2MObjects = {
 			// Security
 			'0': [
