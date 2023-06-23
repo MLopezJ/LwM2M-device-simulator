@@ -42,7 +42,7 @@ export const handshake = async (
 		options: {
 			'Content-Format': 'application/link-format',
 		},
-		query: `ep=${deviceName}&lt=3600&lwm2m=1.1&b=U` //query.toString(), TODO: solve issue with query.toString()
+		query: `ep=${deviceName}&lt=3600&lwm2m=1.1&b=U`, //query.toString(), TODO: solve issue with query.toString()
 	}
 
 	const dataFormatId = '11543'
