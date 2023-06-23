@@ -28,7 +28,6 @@ export const registerDeviceObjects = async (
 	const objects = getBracketFormat(
 		resource !== undefined ? resource : deviceObjects,
 	)
-	// resource !== undefined ? `<${resource}>` :
 	const { socketPort } = await handshake({
 		agent,
 		objects,
