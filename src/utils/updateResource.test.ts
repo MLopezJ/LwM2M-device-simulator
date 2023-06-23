@@ -2,60 +2,84 @@ import {
 	Device_3_urn,
 	Temperature_3303_urn,
 } from '@nordicsemiconductor/lwm2m-types'
-import { assetTrackerFirmwareV2 } from '../assetTrackerV2'
+import { assetTrackerFirmwareV2, type assetTracker } from '../assetTrackerV2'
 import { type element } from './getElementPath'
 import { updateResource } from './updateResource'
 
 describe('Update Resource', () => {
+	let objectsList: assetTracker
+
+	beforeEach(async () => {
+		objectsList = assetTrackerFirmwareV2
+	})
+
 	describe('single instance case', () => {
 		it('Should set new string value to resource', () => {
+			// set this new value
+			const newValue = 'new value'
+			// to this element
 			const element: element = {
 				objectId: 3,
 				instanceId: 0,
 				resourceId: 0,
 			}
-			const value = 'new value'
-			const list = assetTrackerFirmwareV2
-			const result = updateResource(list, element, value)
-			expect(result?.[Device_3_urn]?.['0']).toBe(value)
+			// located here
+			const list = objectsList
+
+			const result = updateResource(newValue, element, list)
+			expect(result?.[Device_3_urn]?.['0']).toBe(newValue)
 		})
 
 		it('Should set new numeric value to resource', () => {
+			// set this new value
+			const newValue = '100'
+			// to this element
 			const element: element = {
 				objectId: 3,
 				instanceId: 0,
 				resourceId: 9,
 			}
-			const value = '100'
-			const list = assetTrackerFirmwareV2
-			const result = updateResource(list, element, value)
-			expect(result?.[Device_3_urn]?.['9']).toBe(Number(value))
+			// located here
+			const list = objectsList
+
+			const result = updateResource(newValue, element, list)
+			expect(result?.[Device_3_urn]?.['9']).toBe(Number(newValue))
 		})
 	})
 
 	describe('multiple instance case', () => {
 		it('Should set new string value to resource ', () => {
+			// set this new value
+			const newValue = 'new value'
+			// to this element
 			const element: element = {
 				objectId: 3303,
 				instanceId: 0,
 				resourceId: 5701,
 			}
-			const value = 'new value'
+			// located here
 			const list = assetTrackerFirmwareV2
-			const result = updateResource(list, element, value)
-			expect(result?.[Temperature_3303_urn]?.[0]?.['5701']).toBe(value)
+
+			const result = updateResource(newValue, element, list)
+			expect(result?.[Temperature_3303_urn]?.[0]?.['5701']).toBe(newValue)
 		})
 
 		it('Should set new numeric value to resource ', () => {
+			// set this new value
+			const newValue = '100'
+			// to this element
 			const element: element = {
 				objectId: 3303,
 				instanceId: 0,
 				resourceId: 5700,
 			}
-			const value = '100'
+			// located here
 			const list = assetTrackerFirmwareV2
-			const result = updateResource(list, element, value)
-			expect(result?.[Temperature_3303_urn]?.[0]?.['5700']).toBe(Number(value))
+
+			const result = updateResource(newValue, element, list)
+			expect(result?.[Temperature_3303_urn]?.[0]?.['5700']).toBe(
+				Number(newValue),
+			)
 		})
 	})
 
@@ -104,9 +128,9 @@ describe('Update Resource', () => {
 		])(
 			'Should return undefined when %p does not exist in input list: %p',
 			(typeCase: string, element: element) => {
-				const value = 'new value'
+				const newValue = 'new value'
 				const list = assetTrackerFirmwareV2
-				const result = updateResource(list, element, value)
+				const result = updateResource(newValue, element, list)
 				expect(result).toBe(undefined)
 			},
 		)

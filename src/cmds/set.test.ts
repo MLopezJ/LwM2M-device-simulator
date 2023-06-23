@@ -20,8 +20,8 @@ describe('Set command', () => {
 		const getPath = jest.fn().mockReturnValue(path) as () => element
 
 		const changeResourceValue = jest.fn().mockImplementationOnce(() => {
-			const newDeviceObjects = structuredClone(deviceObjects)
-			return updateResource(newDeviceObjects, path, newValue ?? '')
+			const list = structuredClone(deviceObjects)
+			return updateResource(newValue ?? '', path, list)
 			/*
 				const newDeviceObjects = structuredClone(deviceObjects)
 				// @ts-ignore: TODO: solve this. Remove readonly
@@ -45,9 +45,9 @@ describe('Set command', () => {
 
 		// update the value in Device Objects
 		expect(changeResourceValue).toHaveBeenCalledWith(
-			deviceObjects,
-			path,
 			newValue,
+			path,
+			deviceObjects,
 		)
 
 		const bracket = `<${url}>`

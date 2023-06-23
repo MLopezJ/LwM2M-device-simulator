@@ -9,16 +9,16 @@ export const set = (
 	userInput: string[],
 	list: assetTracker,
 	getPath = (url: string) => getElementPath(url),
-	changeResourceValue = (list: assetTracker, path: element, value: string) =>
-		updateResource(list, path, value),
+	changeResourceValue = (value: string, path: element, list: assetTracker) =>
+		updateResource(value, path, list),
 	registerNewValue = (bracketUrl: string, list: assetTracker) => {
 		console.log('TODO', bracketUrl, list)
 	},
 ): assetTracker | undefined => {
 	const url = userInput[0] ?? ''
-	const value = userInput[1] ?? ''
-	const path = getPath(url)
-	const newList = changeResourceValue(list, path, value)
+	const newValue = userInput[1] ?? ''
+	const element = getPath(url)
+	const newList = changeResourceValue(newValue, element, list)
 
 	if (newList !== undefined) {
 		const bracket = `<${url}>`

@@ -13,9 +13,9 @@ type resource = Record<string, unknown>
  * Update resource value
  */
 export const updateResource = (
-	objectList: assetTracker,
+	newValue: string,
 	path: element,
-	value: string,
+	objectList: assetTracker,
 ): assetTracker | undefined => {
 	// check if object exist
 	if (path.objectId === undefined) return undefined
@@ -34,18 +34,18 @@ export const updateResource = (
 
 	// set new value and return
 
-	// Take in consideration last data type of element
-	const newValue = typeof resource === 'number' ? Number(value) : value
+	// Take in consideration last data type of the resource
+	const value = typeof resource === 'number' ? Number(newValue) : newValue
 	const urn = getUrn(path.objectId)
 
 	// multiple instance case
 	if (Array.isArray(object) === true) {
 		;((objectList[`${urn}`] as instance[])[path.instanceId] as resource)[
 			path.resourceId
-		] = newValue
+		] = value
 	} else {
 		// Single instance case
-		;(objectList[`${urn}`] as instance)[`${path.resourceId}`] = newValue
+		;(objectList[`${urn}`] as instance)[`${path.resourceId}`] = value
 	}
 
 	return objectList
