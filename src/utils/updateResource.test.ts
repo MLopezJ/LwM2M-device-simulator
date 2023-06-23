@@ -64,7 +64,7 @@ describe('Update Resource', () => {
 			[
 				'object',
 				{
-					objectId: 10101, // object do not exist
+					objectId: 10101, // object does not exist
 					instanceId: 0,
 					resourceId: 0,
 				},
@@ -73,7 +73,7 @@ describe('Update Resource', () => {
 				'instance',
 				{
 					objectId: 3,
-					instanceId: 10101, // instance do not exist
+					instanceId: 10101, // instance does not exist
 					resourceId: 0,
 				},
 			],
@@ -82,14 +82,14 @@ describe('Update Resource', () => {
 				{
 					objectId: 3,
 					instanceId: 0,
-					resourceId: 10101, // resource do not exist
+					resourceId: 10101, // resource does not exist
 				},
 			],
 			[
 				'instance',
 				{
 					objectId: 3303,
-					instanceId: 10101, // instance do not exist
+					instanceId: 10101, // instance does not exist
 					resourceId: 0,
 				},
 			],
@@ -98,11 +98,11 @@ describe('Update Resource', () => {
 				{
 					objectId: 3303,
 					instanceId: 0,
-					resourceId: 10101, // resource do not exist
+					resourceId: 10101, // resource does not exist
 				},
 			],
 		])(
-			'Should return undefined when %p do not exist in input list: %p',
+			'Should return undefined when %p does not exist in input list: %p',
 			(typeCase: string, element: element) => {
 				const value = 'new value'
 				const list = assetTrackerFirmwareV2
