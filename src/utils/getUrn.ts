@@ -6,3 +6,4 @@ import { correlationTable } from '../assetTrackerV2.js'
  */
 export const getUrn = (objectId: number): keyof LwM2MDocument =>
 	correlationTable[`${objectId}`] as keyof LwM2MDocument
+// TODO: uses getURN method from @nordicsemiconductor/lwm2m-types
