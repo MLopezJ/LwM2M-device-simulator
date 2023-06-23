@@ -1,12 +1,14 @@
 import { OutgoingMessage, Server, createServer, request } from 'coap'
 import { type CoapMethod } from 'coap-packet'
-import { assetTrackerFirmwareV2 } from '../assetTrackerV2'
+import { assetTrackerFirmwareV2, type assetTracker } from '../assetTrackerV2'
 import { registerDeviceObjects } from './reg'
 
 describe('registerDeviceObjects', () => {
 	let server: Server
+	let objectsList: assetTracker
 
 	beforeEach(async () => {
+		objectsList = assetTrackerFirmwareV2
 		server = createServer()
 		server.listen(5683)
 	})
@@ -51,7 +53,7 @@ describe('registerDeviceObjects', () => {
 					}),
 			)
 
-		await registerDeviceObjects(assetTrackerFirmwareV2)
+		await registerDeviceObjects(objectsList)
 
 		const result = {
 			bn: '/3/0',

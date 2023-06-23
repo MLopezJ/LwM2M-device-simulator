@@ -2,25 +2,30 @@ import {
 	Device_3_urn,
 	Temperature_3303_urn,
 } from '@nordicsemiconductor/lwm2m-types'
-import { assetTrackerFirmwareV2 } from '../assetTrackerV2.js'
+import { assetTrackerFirmwareV2, type assetTracker } from '../assetTrackerV2.js'
 import { checkResource } from './checkResource.js'
 import { type instance } from './getValue.js'
 
 describe('Check Resource', () => {
+	let objectsList: assetTracker = assetTrackerFirmwareV2
+
+	beforeEach(async () => {
+		objectsList = assetTrackerFirmwareV2
+	})
+
 	it('Should return resource value if it exists', () => {
-		const list = assetTrackerFirmwareV2
-		const object = list[Device_3_urn] ?? {}
+		const object = objectsList[Device_3_urn] ?? {}
 		const resourceId = 0
 		expect(checkResource(object, resourceId)).toBe('Nordic')
 	})
 
 	it.each([
-		[1, 'Device', assetTrackerFirmwareV2[Device_3_urn]],
+		[1, 'Device', objectsList[Device_3_urn]],
 		[
 			5700,
 			'Temperature',
-			assetTrackerFirmwareV2[Temperature_3303_urn]
-				? assetTrackerFirmwareV2[Temperature_3303_urn][0]
+			objectsList[Temperature_3303_urn]
+				? objectsList[Temperature_3303_urn][0]
 				: {},
 		],
 	])(
@@ -31,12 +36,12 @@ describe('Check Resource', () => {
 	)
 
 	it.each([
-		[404, 'Device', assetTrackerFirmwareV2[Device_3_urn]],
+		[404, 'Device', objectsList[Device_3_urn]],
 		[
 			10101010,
 			'Temperature',
-			assetTrackerFirmwareV2[Temperature_3303_urn]
-				? assetTrackerFirmwareV2[Temperature_3303_urn][0]
+			objectsList[Temperature_3303_urn]
+				? objectsList[Temperature_3303_urn][0]
 				: {},
 		],
 	])(

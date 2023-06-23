@@ -2,10 +2,16 @@ import {
 	Device_3_urn,
 	Temperature_3303_urn,
 } from '@nordicsemiconductor/lwm2m-types'
-import { assetTrackerFirmwareV2 } from '../assetTrackerV2.js'
+import { assetTrackerFirmwareV2, type assetTracker } from '../assetTrackerV2.js'
 import { createResourceList, type e } from './createResourceList.js'
 
 describe('createResourceList', () => {
+	let objectsList: assetTracker
+
+	beforeEach(async () => {
+		objectsList = assetTrackerFirmwareV2
+	})
+
 	describe('single instance', () => {
 		it('Should create the expected format from object', () => {
 			const input = {
@@ -45,7 +51,7 @@ describe('createResourceList', () => {
 		it('Should create the expected format from resource', () => {
 			const elementPath = { objectId: 3, instanceId: 0, resourceId: 0 }
 			const result = createResourceList(
-				assetTrackerFirmwareV2[Device_3_urn] ?? {},
+				objectsList[Device_3_urn] ?? {},
 				'resource',
 				elementPath,
 			)
@@ -88,7 +94,7 @@ describe('createResourceList', () => {
 		it('Should create the expected format from resource', () => {
 			const elementPath = { objectId: 3303, instanceId: 0, resourceId: 5700 }
 			const result = createResourceList(
-				assetTrackerFirmwareV2[Temperature_3303_urn] ?? {},
+				objectsList[Temperature_3303_urn] ?? {},
 				'resource',
 				elementPath,
 			)
@@ -99,7 +105,7 @@ describe('createResourceList', () => {
 
 	it('Should create the expected format from instance', () => {
 		const result = createResourceList(
-			assetTrackerFirmwareV2[Device_3_urn] ?? {},
+			objectsList[Device_3_urn] ?? {},
 			'instance',
 		)
 

@@ -6,6 +6,12 @@ import { updateResource } from '../utils/updateResource.js'
 import { set } from './set'
 
 describe('Set command', () => {
+	let objectsList: assetTracker
+
+	beforeEach(async () => {
+		objectsList = assetTrackerFirmwareV2
+	})
+
 	it('should update resource with value, register it in server and return list with new value as part of the state of Device Objects', () => {
 		const userInput = ['/3/0/0', 'Mauro']
 		const url = userInput[0]
@@ -15,12 +21,11 @@ describe('Set command', () => {
 			instanceId: 0,
 			resourceId: 0,
 		}
-		const deviceObjects = assetTrackerFirmwareV2
 
 		const getPath = jest.fn().mockReturnValue(path) as () => element
 
 		const changeResourceValue = jest.fn().mockImplementationOnce(() => {
-			const list = structuredClone(deviceObjects)
+			const list = structuredClone(objectsList)
 			return updateResource(newValue ?? '', path, list)
 			/*
 				const newDeviceObjects = structuredClone(deviceObjects)
@@ -34,7 +39,7 @@ describe('Set command', () => {
 
 		const result = set(
 			userInput,
-			deviceObjects,
+			objectsList,
 			getPath,
 			changeResourceValue,
 			registerNewValue,
@@ -47,7 +52,7 @@ describe('Set command', () => {
 		expect(changeResourceValue).toHaveBeenCalledWith(
 			newValue,
 			path,
-			deviceObjects,
+			objectsList,
 		)
 
 		const bracket = `<${url}>`
@@ -56,6 +61,6 @@ describe('Set command', () => {
 
 		// expect to return a new state of Device Objects
 		expect(result?.[Device_3_urn]?.['0']).toBe(newValue)
-		expect(deviceObjects?.[Device_3_urn]?.['0']).not.toBe(newValue)
+		expect(objectsList?.[Device_3_urn]?.['0']).not.toBe(newValue)
 	})
 })
