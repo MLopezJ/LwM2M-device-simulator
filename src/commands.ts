@@ -31,7 +31,7 @@ export const commands: commandsObject = {
 	list: {
 		title: 'List',
 		parameters: ['objectId', 'instanceId', 'resourceId'],
-		description: '\tList values',
+		description: 'List values',
 		format: 'list /[object-id]/[instance-id]/[resource-id]',
 		example: ['list', 'list /3', 'list /3/0', 'list /3/0/0'],
 		execute: list,
@@ -39,7 +39,7 @@ export const commands: commandsObject = {
 	set: {
 		title: 'Set',
 		parameters: ['objectId', 'instanceId', 'resourceId'],
-		description: '\tSet resource value',
+		description: 'Set resource value',
 		format: 'set object-id/instance-id/resource-id value',
 		example: 'set /3/0/0 Nordic',
 		execute: set,
@@ -47,7 +47,7 @@ export const commands: commandsObject = {
 	register: {
 		title: 'Register',
 		parameters: [],
-		description: '\tExecute registation to server',
+		description: 'Execute registation to server',
 		format: 'register',
 		example: 'register',
 		execute: register,
@@ -55,7 +55,7 @@ export const commands: commandsObject = {
 	clear: {
 		title: 'Clear',
 		parameters: [],
-		description: '\tClear console',
+		description: 'Clear console',
 		format: 'clear',
 		example: 'clear',
 		execute: clear,
@@ -63,7 +63,7 @@ export const commands: commandsObject = {
 	quit: {
 		title: 'Quit',
 		parameters: [],
-		description: '\tExit the client',
+		description: 'Exit the client',
 		format: 'quit',
 		example: 'quit',
 		execute: quit,
@@ -71,7 +71,7 @@ export const commands: commandsObject = {
 	help: {
 		title: 'Help',
 		parameters: [],
-		description: '\tList all possible commands',
+		description: 'List all possible commands',
 		format: 'help',
 		example: 'help',
 		execute: help,
@@ -80,7 +80,7 @@ export const commands: commandsObject = {
 	reg: {
 		title: 'temporal register command',
 		parameters: [],
-		description: '\tregister objects',
+		description: 'register objects',
 		format: 'reg',
 		example: 'reg',
 		execute: registerDevice,

@@ -8,7 +8,7 @@ export const help = (): void => {
 	console.log(`Options:\n`)
 	Object.values(commands).map((element) => {
 		console.log(`\t${element.title}\n`)
-		console.log(`\t${element.description}\n`)
+		console.log(`\t\t${element.description}\n`)
 		console.log(`\tFormat: ${element.format}`)
 		if (Array.isArray(element.example)) {
 			console.log(`\tExample:`)
