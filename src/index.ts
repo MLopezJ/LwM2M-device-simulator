@@ -15,7 +15,7 @@ const isPromise = (element: unknown) =>
  * Command Line Interface
  */
 const cli = () => {
-	let assetTrackerObjects = assetTrackerFirmwareV2
+	let objectsList = assetTrackerFirmwareV2
 
 	const rl = readline.createInterface({
 		input: process.stdin,
@@ -30,14 +30,14 @@ const cli = () => {
 		const result = executeCommand(
 			instructions.command,
 			instructions.parameters,
-			assetTrackerObjects,
+			objectsList,
 		)
 		if (
 			instructions.command === 'set' &&
 			result !== undefined &&
 			isPromise(result) === false
 		)
-			assetTrackerObjects = result as assetTracker
+			objectsList = result as assetTracker
 		rl.prompt()
 	})
 }
