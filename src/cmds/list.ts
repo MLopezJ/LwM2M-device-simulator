@@ -18,14 +18,16 @@ export const list = async (
 		return objectList
 	}
 
-	const elementPath = getElementPath(input)
-	const elementType = typeOfElement(input)
+	const request = typeOfElement(input)
+	const element = getElementPath(input)
 
-	if (elementType === undefined) {
+	if (request === undefined) {
 		console.log('Error: element type does not exist')
 		return undefined
 	}
 
-	const element = await getValue(elementPath, elementType, objectList)
-	return element
+	const from = objectList
+
+	const result = await getValue(request, element, from)
+	return result
 }

@@ -14,14 +14,12 @@ export type resource =
  * Given an element and a list, should return the value of the element in list
  */
 export const getValue = async (
+	request: elementType,
 	element: element,
-	typeOfElement: elementType,
-	objectList: assetTracker,
+	from: assetTracker,
 ): Promise<undefined | instance | resourceValue> => {
 	const id = await getURN(`${element.objectId}`)
-	const value = objectList[
-		`${id}` as keyof assetTracker
-	] as ValueOf<assetTracker>
+	const value = from[`${id}` as keyof assetTracker] as ValueOf<assetTracker>
 
 	if (value === undefined) {
 		console.log('Error: object does not exist')
@@ -30,14 +28,14 @@ export const getValue = async (
 
 	const isSingleInstance = Array.isArray(value) === false
 
-	switch (typeOfElement) {
-		// <X/y/y>
+	switch (request) {
+		// <X/y/z>
 		case 'object':
 			return value
-		// <y/X/y>
+		// <x/Y/z>
 		case 'instance':
 			return getInstance(isSingleInstance, element.instanceId, value)
-		// <y/y/X>
+		// <x/y/Z>
 		case 'resource':
 			return getResource(
 				isSingleInstance,
@@ -94,7 +92,7 @@ const getResource = (
 }
 
 /**
- *
+ * Get resource from single instance
  */
 const getSingleResource = (
 	instance: instance | undefined,
