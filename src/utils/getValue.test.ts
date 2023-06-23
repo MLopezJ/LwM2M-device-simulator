@@ -67,7 +67,7 @@ describe('getValue', () => {
 
 		describe('Multiple case', () => {
 			it('Should return instance ', async () => {
-				const objectList: any = assetTrackerFirmwareV2 // this any is intentional
+				const objectList: any = assetTrackerFirmwareV2 // TODO: remove this any
 				const newTemp = {
 					'5518': 1665149633,
 					'5601': 23.51,
