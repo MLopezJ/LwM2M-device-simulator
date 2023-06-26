@@ -97,16 +97,26 @@ npm install
 
 ## Enviroment variables
 
-Create an .env file in root of the proyect and fill it with custom values
+Create a `.env` file in the root of the proyect with the following keys
 
 ```
-deviceName="your-device-name" // name of the device
-port="5683" // LwM2M server port
-host="eu.iot.avsystem.cloud" // LwM2M hostmame
-lifetime="3600" // lifetime of the connection between the client and server
-lwm2mV="1.1" // LwM2M version used
-biding="U" // U stands for UDP
+deviceName=
+port=
+host=
+lifetime=
+lwm2mV=
+biding=
 ```
+
+Where 
+
+* `deviceName` should be the name of the device
+* `port` should be the port of the LwM2M server. `5683`, for example.
+* `host` should be the hostname. `eu.iot.avsystem.cloud`, for example.
+* `lifetime` should be the lifetime desire for the connection between the client and the server. It should be in seconds, `3600` for example.
+* `lwm2mV` should be the LwM2M version used by the client. `1.1`, for example.
+* `Biding` should be the type of binding that the client supports for communication with the server. `U` for example, which stands for UDP.
+
 
 ## Test
 
@@ -114,21 +124,6 @@ biding="U" // U stands for UDP
 npm test
 ```
 
-## Prerequisites
-
-The default LwM2M server is Coiote from AV System. If you want to use the device
-simulator with the default configuration, you should:
-
-- Have a
-  [Coiote IoT DM account](https://eu.iot.avsystem.cloud/ui/device/inventory)
-- Create a device in Coiote IoT DM with NoSec security mode
-- Update
-  [config](https://github.com/MLopezJ/LwM2M-device-simulator/blob/saga/config.ts)
-  file with name of created device in `deviceName` property.
-
-If other server is desired to be used, just update the `host` property from
-[config](https://github.com/MLopezJ/LwM2M-device-simulator/blob/saga/config.ts)
-with the required value.
 
 ## Execution
 
