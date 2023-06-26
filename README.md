@@ -115,7 +115,7 @@ Where
 * `host` should be the hostname. `eu.iot.avsystem.cloud`, for example.
 * `lifetime` should be the lifetime desire for the connection between the client and the server. It should be in seconds, `3600` for example.
 * `lwm2mV` should be the LwM2M version used by the client. `1.1`, for example.
-* `Biding` should be the type of binding that the client supports for communication with the server. `U` for example, which stands for UDP.
+* `biding` should be the type of binding that the client supports for communication with the server. `U` for example, which stands for UDP.
 
 
 ## Test
