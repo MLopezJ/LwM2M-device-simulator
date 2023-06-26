@@ -27,13 +27,13 @@ export const help = (): void => helpCmd()
 /**
  * Connector method to execute list of objects
  */
-export const list = (
+export const list = async (
 	userInput: string[],
 	objectsList: assetTracker,
-): void | undefined => {
+): Promise<void | undefined> => {
 	const input = userInput[0]
 
-	const result = listCmd(input, objectsList)
+	const result = await listCmd(input, objectsList)
 
 	if (result === undefined) {
 		console.log(`\nExpected format:  \n\t${commands['list']?.format}`)
