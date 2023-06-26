@@ -341,7 +341,17 @@ list /3/0
 
 ```
 {
-    ...
+  '0': 'Nordic',
+  '1': '00010',
+  '2': '00000',
+  '3': '0.0',
+  '6': 1,
+  '7': 0,
+  '9': 80,
+  '11': 0,
+  '16': 'U',
+  '18': '0.0',
+  '19': '0.0'
 }
 ```
 
@@ -353,8 +363,7 @@ list /3/0
 set /3/0/0 test
 ```
 
-> Registration in the LwM2M server of the new resource updated is triggered with
-> the `set` command
+> Set the new value and update resource in LwM2M server
 
 **Output**
 
@@ -389,5 +398,6 @@ quit
 **Output**
 
 ```
-...
+Exiting client...
+--------------------------------
 ```
