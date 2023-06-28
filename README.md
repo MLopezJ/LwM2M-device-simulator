@@ -11,7 +11,7 @@
 This is a LwM2M device simulator who emulate a
 [Thingy:91](https://www.nordicsemi.com/Products/Development-hardware/Nordic-Thingy-91)
 running with
-[nRF Asset Tracker firmware](https://github.com/nrfconnect/sdk-nrf/tree/main/applications/asset_tracker_v2).
+[nRF Asset Tracker v2](https://github.com/nrfconnect/sdk-nrf/tree/main/applications/asset_tracker_v2) firmware.
 
 The main propose of this project is to facilitate the testing process of
 [LwM2M Asset Tracker](https://github.com/MLopezJ/LwM2M-Asset-Tracker).
