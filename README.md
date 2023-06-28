@@ -8,26 +8,41 @@
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier/)
 [![ESLint: TypeScript](https://img.shields.io/badge/ESLint-TypeScript-blue.svg)](https://github.com/typescript-eslint/typescript-eslint)
 
-This is a LwM2M device simulator who emulate a
+This is a LwM2M device simulator who emulate 4 actions from a
 [Thingy:91](https://www.nordicsemi.com/Products/Development-hardware/Nordic-Thingy-91)
 running with
 [nRF Asset Tracker v2](https://github.com/nrfconnect/sdk-nrf/tree/main/applications/asset_tracker_v2) firmware.
+
+| Action            | Description | LwM2M Interface      | LwM2M Operation   | 
+| -- 		    |  --         |  --                  |   --              |
+| Bootstraping      |             | Bootstrap            | Factory Bootstrap |
+| Connection        |             |                      |                   |
+| --                |             | Client Registration  | Register          |
+| --                |             | Dev Mang & Serv Enab | Discover          | 
+| --                |             | Dev Mang & Serv Enab | Read              | 
+| Secuencial Updates|             | Information Reporting| Send              |
+| Heartbeat         |             | Client Registration  | Update Operation  | 
 
 The main propose of this project is to facilitate the testing process of
 [LwM2M Asset Tracker](https://github.com/MLopezJ/LwM2M-Asset-Tracker).
 
 ## Specifications
 
-This device uses LwM2M as a protocol and has implemented the “Client
-Registration” and “Device Management and Service Enablement” interfaces to
-communicate with the server.
+This device uses LwM2M as a protocol and provides a command line interface for its interaction. Here is one table with the operations from LwM2M protocol implemented by command.
 
-The bootstrap of the device is executed by using the Factory Bootstrap mode with
-the already defined
-[LwM2M objects](https://github.com/MLopezJ/LwM2M-device-simulator/blob/saga/src/assetTrackerV2.ts)
+|Command   | LwM2M Interface      | LwM2M Operation | Action Emulated   | 
+| -- 	   |  --                  |  --             |   --              |
+| clear    |                      |                 |                   |
+| register |                      |                 | Connection        |
+|--        | Client registration  | Register        |                   |
+|--        | Dev Mang & Serv Enab | Discover        |                   |
+|--        | Dev Mang & Serv Enab | Read            |                   |
+| list     |                      |                 |                   |
+| set      | Information Reporting| send            | Secuencial Update |
+| quit     |                      |                 |                   |
+| help     |                      |                 |                   |
+| heartbeat| Client Registration  | Update          | Heartbeat         |
 
-A command line interface is provided for communication with the server and
-objects.
 
 ## CLI reference
 
