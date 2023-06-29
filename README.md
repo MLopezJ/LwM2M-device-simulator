@@ -20,8 +20,8 @@ running with
 | --                |             | Client Registration  | Register          |
 | --                |             | Dev Mang & Serv Enab | Discover          | 
 | --                |             | Dev Mang & Serv Enab | Read              | 
-| Secuencial Updates|             | Information Reporting| Send              |
-| Heartbeat         |             | Client Registration  | Update Operation  | 
+| Sequential Updates|             | Information Reporting| Send              |
+| Heartbeat         |             | Client Registration  | Update            | 
 
 The main propose of this project is to facilitate the testing process of
 [LwM2M Asset Tracker](https://github.com/MLopezJ/LwM2M-Asset-Tracker).
@@ -38,7 +38,7 @@ This device uses LwM2M as a protocol and provides a command line interface for i
 |--        | Dev Mang & Serv Enab | Discover        |                   |
 |--        | Dev Mang & Serv Enab | Read            |                   |
 | list     |                      |                 |                   |
-| set      | Information Reporting| send            | Secuencial Update |
+| set      | Information Reporting| send            | Sequential Update |
 | quit     |                      |                 |                   |
 | help     |                      |                 |                   |
 | heartbeat| Client Registration  | Update          | Heartbeat         |
