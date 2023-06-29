@@ -11,11 +11,11 @@
 This is a LwM2M device simulator who emulate 4 actions from a
 [Thingy:91](https://www.nordicsemi.com/Products/Development-hardware/Nordic-Thingy-91)
 running with
-[nRF Asset Tracker v2](https://github.com/nrfconnect/sdk-nrf/tree/main/applications/asset_tracker_v2) firmware; bootstraping, connection, sequential updates and heartbeat.
+[nRF Asset Tracker v2](https://github.com/nrfconnect/sdk-nrf/tree/main/applications/asset_tracker_v2) firmware; bootstrapping, connection, sequential updates and heartbeat.
 
 | Action            | Description | LwM2M Interface      | LwM2M Operation   | 
 | -- 		    |  --         |  --                  |   --              |
-| Bootstraping      | used to provision essential information into the LwM2M Client to enable it to perform the "Register" operation. The Factory Bootstrap is the default mode to be used | Bootstrap            | Factory Bootstrap |
+| Bootstrapping      | used to provision essential information into the LwM2M Client to enable it to perform the "Register" operation. The Factory Bootstrap is the default mode to be used | Bootstrap            | Factory Bootstrap |
 | Connection        |             |                      |                   |
 | --                |             | Client Registration  | Register          |
 | --                |             | Dev Mang & Serv Enab | Discover          | 
