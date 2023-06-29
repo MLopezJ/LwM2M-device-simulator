@@ -21,7 +21,7 @@ running with
 | --                |             | Dev Mang & Serv Enab | Discover          | 
 | --                |             | Dev Mang & Serv Enab | Read              | 
 | Sequential Updates|             | Information Reporting| Send              |
-| Heartbeat         |             | Client Registration  | Update            | 
+| Heartbeat         | extend the lifetime of a registration | Client Registration  | Update            | 
 
 The main propose of this project is to facilitate the testing process of
 [LwM2M Asset Tracker](https://github.com/MLopezJ/LwM2M-Asset-Tracker).
