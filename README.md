@@ -15,7 +15,7 @@ running with
 
 | Action            | Description | LwM2M Interface      | LwM2M Operation   | 
 | -- 		    |  --         |  --                  |   --              |
-| Bootstraping      |             | Bootstrap            | Factory Bootstrap |
+| Bootstraping      | used to provision essential information into the LwM2M Client to enable it to perform the "Register" operation. The Factory Bootstrap is the default mode to be used | Bootstrap            | Factory Bootstrap |
 | Connection        |             |                      |                   |
 | --                |             | Client Registration  | Register          |
 | --                |             | Dev Mang & Serv Enab | Discover          | 
