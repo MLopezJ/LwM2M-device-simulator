@@ -83,6 +83,7 @@ const server: LwM2MServer_1 = [
 		'6': false, // Notification Storing When Disabled or Offline
 		'7': 'U', // Binding
 		//8: "true",// --> commented because of an issue with Registration Update Trigger
+		'23': false,
 	},
 ]
 
