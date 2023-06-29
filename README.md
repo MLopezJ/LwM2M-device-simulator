@@ -15,13 +15,13 @@ running with
 
 | Action            | Description | LwM2M Interface      | LwM2M Operation   | 
 | -- 		    |  --         |  --                  |   --              |
-| Bootstrapping     | used to provision essential information into the LwM2M Client to enable it to perform the "Register" operation. The Factory Bootstrap is the default mode to be used | Bootstrap            | Factory Bootstrap |
-| Connection        | register the device with a LwM2M server and send the value of the object registered. This action mix 3 operation from 2 different interfaces|                      |                   |
+| Bootstrapping     | Used to provision essential information into the LwM2M Client to enable it to perform the "Register" operation. The Factory Bootstrap is the default mode to be used | Bootstrap            | Factory Bootstrap |
+| Connection        | Register the device with a LwM2M server and send the value of the object registered. This action mix 3 operation from 2 different interfaces|                      |                   |
 | --                |             | Client Registration  | Register          |
 | --                |             | Dev Mang & Serv Enab | Discover          | 
 | --                |             | Dev Mang & Serv Enab | Read              | 
 | Sequential Updates|             | Information Reporting| Send              |
-| Heartbeat         | extend the lifetime of a registration | Client Registration  | Update            | 
+| Heartbeat         | Extend the lifetime of a registration | Client Registration  | Update            | 
 
 The main propose of this project is to facilitate the testing process of
 [LwM2M Asset Tracker](https://github.com/MLopezJ/LwM2M-Asset-Tracker).
@@ -38,7 +38,7 @@ This device uses LwM2M as a protocol and provides a command line interface for i
 |--        | Dev Mang & Serv Enab | Discover        |                   |
 |--        | Dev Mang & Serv Enab | Read            |                   |
 | list     |                      |                 |                   |
-| set      | Information Reporting| send            | Sequential Update |
+| set      | Information Reporting| Send            | Sequential Update |
 | quit     |                      |                 |                   |
 | help     |                      |                 |                   |
 | heartbeat| Client Registration  | Update          | Heartbeat         |
