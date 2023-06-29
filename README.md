@@ -20,7 +20,7 @@ running with
 | --                |             | Client Registration  | Register          |
 | --                |             | Dev Mang & Serv Enab | Discover          | 
 | --                |             | Dev Mang & Serv Enab | Read              | 
-| Sequential Updates|             | Information Reporting| Send              |
+| Sequential Updates| Update the value of an object, instance or resource | Information Reporting| Send              |
 | Heartbeat         | Extend the lifetime of a registration | Client Registration  | Update            | 
 
 The main propose of this project is to facilitate the testing process of
