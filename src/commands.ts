@@ -42,7 +42,7 @@ export const commands: commandsObject = {
 		description: 'Set resource value',
 		format: 'set object-id/instance-id/resource-id value',
 		example: 'set /3/0/0 Nordic',
-		execute: set,
+		execute: set as any, // TODO: fix type
 	},
 	register: {
 		title: 'Register',
