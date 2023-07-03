@@ -42,10 +42,23 @@ export const handshake = async (
 		options: {
 			'Content-Format': 'application/link-format',
 		},
-		query: `ep=${deviceName}&lt=3600&lwm2m=1.1&b=U` //query.toString(), TODO: solve issue with query.toString()
+		query: `ep=${deviceName}&lt=3600&lwm2m=1.1&b=U`, //query.toString(), TODO: solve issue with query.toString()
 	}
 
-	const dataFormatId = '11543'
+	/**
+	 * SenML JSON
+	 * @see https://www.openmobilealliance.org/release/LightweightM2M/V1_1_1-20190617-A/OMA-TS-LightweightM2M_Core-V1_1_1-20190617-A.pdf pag 71
+	 */
+	const SenMLJson = '110'
+
+	/**
+	 * SenML JSON
+	 * @see https://www.openmobilealliance.org/release/LightweightM2M/V1_1_1-20190617-A/OMA-TS-LightweightM2M_Core-V1_1_1-20190617-A.pdf pag 71
+	 */
+	const json = '11543'
+
+	const dataFormatId = `${json},${SenMLJson}`
+	// should add 110 (SenML JSON) too in allowed content type
 	const payload = `</>;ct=${dataFormatId};hb,${_.objects}`
 
 	const handshakeRequest = _.agent.request(params).end(payload)
