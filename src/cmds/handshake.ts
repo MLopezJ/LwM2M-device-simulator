@@ -58,7 +58,6 @@ export const handshake = async (
 	const json = '11543'
 
 	const dataFormatId = `${json},${SenMLJson}`
-	// should add 110 (SenML JSON) too in allowed content type
 	const payload = `</>;ct=${dataFormatId};hb,${_.objects}`
 
 	const handshakeRequest = _.agent.request(params).end(payload)
