@@ -6,6 +6,7 @@ import { checkObject } from '../utils/checkObject'
 import { checkResource } from '../utils/checkResource'
 import { getElementPath } from '../utils/getElementPath'
 import { updateResource } from '../utils/updateResource'
+import { createSenML } from '../utils/createSenMLFormat'
 
 export type sendParams = {
 	resource: string
@@ -51,7 +52,7 @@ export const send = async (
 		},
 	}
 	const agent = new coap.Agent({ type: 'udp4' })
-	const payload = getPayload(_.resource, _.newValue)
+	const payload = createSenML(_.resource, _.newValue)
 	const request = agent.request(params).end(JSON.stringify(payload))
 
 	const serverResponse = new Promise<coap.IncomingMessage>(
@@ -73,11 +74,4 @@ export const send = async (
 		const newList = updateResource(`${_.newValue}`, element, _.objectsList)
 		return newList
 	}
-}
-
-/**
- * Should follow SenML JSON format
- */
-const getPayload = (resource: string, value: string | number | boolean) => {
-	return [{ n: resource, vs: value }]
 }
