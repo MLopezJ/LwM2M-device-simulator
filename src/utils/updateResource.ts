@@ -13,7 +13,7 @@ type resource = Record<string, unknown>
  * Update resource value
  */
 export const updateResource = (
-	newValue: string,
+	newValue: string | number | boolean,
 	path: element,
 	objectList: assetTracker,
 ): assetTracker | undefined => {
