@@ -39,6 +39,11 @@ export const send = async (
 
 	// check if resource exist
 	if (resource === undefined) return undefined
+	const dataType = typeof resource
+	let newValue = _.newValue
+	if (dataType === "number") newValue = Number(newValue)
+	if (dataType === "boolean") newValue = Boolean(newValue)
+	const payload = createSenML(_.resource, _.newValue)
 
 	const SenMLJson = 'application/senml+json'
 	const host = _.host ?? process.env.host ?? ''
@@ -52,7 +57,6 @@ export const send = async (
 		},
 	}
 	const agent = new coap.Agent({ type: 'udp4' })
-	const payload = createSenML(_.resource, _.newValue)
 	const request = agent.request(params).end(JSON.stringify(payload))
 
 	const serverResponse = new Promise<coap.IncomingMessage>(
