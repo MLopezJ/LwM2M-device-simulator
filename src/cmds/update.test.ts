@@ -1,5 +1,8 @@
-import { Device_3_urn, Pushbutton_3347_urn } from '@nordicsemiconductor/lwm2m-types'
-import { createServer, Server } from 'coap'
+import {
+	Device_3_urn,
+	Pushbutton_3347_urn,
+} from '@nordicsemiconductor/lwm2m-types'
+import { Server, createServer } from 'coap'
 import { assetTrackerFirmwareV2, type assetTracker } from '../assetTrackerV2'
 import { send, type sendParams } from './update'
 
@@ -43,7 +46,7 @@ describe('update', () => {
 	})
 
 	it('should update a numeric resource using Send operation from Information Reporting interface', async () => {
-		const resourceId = '3/0/6'
+		const resourceId = '/3/0/6'
 		const inputValue = '2'
 		const input: sendParams = {
 			resource: resourceId,
@@ -52,8 +55,7 @@ describe('update', () => {
 			objectsList: objectsList,
 		}
 
-		const expectedPayload = [{ n: resourceId, v: Number(inputValue) }]
-
+		const expectedPayload = [{ n: resourceId, v: 2 }]
 		const sendResult = await send(input)
 		const newResourceValue = (sendResult as unknown as assetTracker)[
 			Device_3_urn
@@ -61,11 +63,11 @@ describe('update', () => {
 		const req = await request
 
 		expect(JSON.parse(req.payload)).toStrictEqual(expectedPayload)
-		expect(newResourceValue).toBe(Number(inputValue))
+		expect(newResourceValue).toBe(2)
 	})
 
 	it('should update a boolean resource using Send operation from Information Reporting interface', async () => {
-		const resourceId = '3347/0/5500'
+		const resourceId = '/3347/0/5500'
 		const inputValue = 'false'
 		const input: sendParams = {
 			resource: resourceId,
@@ -74,14 +76,16 @@ describe('update', () => {
 			objectsList: objectsList,
 		}
 
-		const expectedPayload = [{ n: resourceId, vs: Boolean(inputValue) }]
+		const expectedPayload = [{ n: resourceId, vb: false }]
 
 		const sendResult = await send(input)
-		const newResourceValue = (sendResult as unknown as assetTracker)[Pushbutton_3347_urn]![0]?.[5500]
+		const newResourceValue = (sendResult as unknown as assetTracker)[
+			Pushbutton_3347_urn
+		]?.[0]?.[5500]
 		const req = await request
 
 		expect(JSON.parse(req.payload)).toStrictEqual(expectedPayload)
-		expect(newResourceValue).toBe(Boolean(inputValue))
+		expect(newResourceValue).toBe(false)
 	})
 
 	it('should return undefined if resource does not exist', async () => {

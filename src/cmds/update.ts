@@ -4,9 +4,9 @@ import { type assetTracker } from '../assetTrackerV2'
 import { checkInstance } from '../utils/checkInstance'
 import { checkObject } from '../utils/checkObject'
 import { checkResource } from '../utils/checkResource'
+import { createSenML } from '../utils/createSenMLFormat'
 import { getElementPath } from '../utils/getElementPath'
 import { updateResource } from '../utils/updateResource'
-import { createSenML } from '../utils/createSenMLFormat'
 
 export type sendParams = {
 	resource: string
@@ -39,11 +39,13 @@ export const send = async (
 
 	// check if resource exist
 	if (resource === undefined) return undefined
+
 	const dataType = typeof resource
 	let newValue = _.newValue
-	if (dataType === "number") newValue = Number(newValue)
-	if (dataType === "boolean") newValue = Boolean(newValue)
-	const payload = createSenML(_.resource, _.newValue)
+	if (dataType === 'number') newValue = Number(newValue)
+	if (dataType === 'boolean')
+		newValue = newValue === 'true' || newValue === 'True' ? true : false
+	const payload = createSenML(_.resource, newValue)
 
 	const SenMLJson = 'application/senml+json'
 	const host = _.host ?? process.env.host ?? ''
@@ -75,7 +77,7 @@ export const send = async (
 	const response = await serverResponse
 
 	if (response !== undefined) {
-		const newList = updateResource(`${_.newValue}`, element, _.objectsList)
+		const newList = updateResource(newValue, element, _.objectsList)
 		return newList
 	}
 }
