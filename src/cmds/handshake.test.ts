@@ -40,7 +40,7 @@ describe('handshake', () => {
 
 		// Then the client should have sent the correct handshake
 		expect(result.url).toBe(`/rd?ep=${deviceName}&lt=3600&lwm2m=1.1&b=U`)
-		expect(result.payload).toBe(`</>;ct=11543,110;hb,${objects}`)
+		expect(result.payload).toBe(`</>;ct=11543,110,112;hb,${objects}`)
 	})
 
 	it('should send handshake request to register a resource', async () => {
@@ -73,7 +73,7 @@ describe('handshake', () => {
 
 		// Then the client should have sent the correct handshake
 		expect(result.url).toBe(`/rd?ep=${deviceName}&lt=3600&lwm2m=1.1&b=U`)
-		expect(result.payload).toBe(`</>;ct=11543,110;hb,${resource}`)
+		expect(result.payload).toBe(`</>;ct=11543,110,112;hb,${resource}`)
 	})
 
 	it('should handle internal server error handshake response ', async () => {
