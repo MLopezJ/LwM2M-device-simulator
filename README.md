@@ -13,15 +13,15 @@ This is a LwM2M device simulator who emulate 4 actions from a
 running with
 [nRF Asset Tracker v2](https://github.com/nrfconnect/sdk-nrf/tree/main/applications/asset_tracker_v2) firmware; bootstrapping, connection, sequential updates and heartbeat.
 
-| Action            | Description | LwM2M Interface      | LwM2M Operation   | 
-| -- 		    |  --         |  --                  |   --              |
-| Bootstrapping     | Used to provision essential information into the LwM2M Client to enable it to perform the "Register" operation. The Factory Bootstrap is the default mode used | Bootstrap            | Factory Bootstrap |
+| Action            | Description | LwM2M Interface      | LwM2M Operation   | Triggered By |
+| -- 		    |  --         |  --                  |   --              | -- |
+| Bootstrapping     | Used to provision essential information into the LwM2M Client to enable it to perform the "Register" operation. The Factory Bootstrap is the default mode used | Bootstrap            | Factory Bootstrap | LwM2M Client | 
 | Connection        | Register the device with a LwM2M server and send the value of the object registered. This action mix 3 operation from 2 different interfaces|                      |                   |
-| --                |             | Client Registration  | Register          |
-| --                |             | Dev Mang & Serv Enab | Discover          | 
-| --                |             | Dev Mang & Serv Enab | Read              | 
-| Sequential Updates| Update the value of an object, instance or resource without explicit request of the LwM2M Server | Information Reporting| Send              |
-| Heartbeat         | Extend the lifetime of a registration | Client Registration  | Update            | 
+| --                |             | Client Registration  | Register          | LwM2M Client |
+| --                |             | Dev Mang & Serv Enab | Discover          | LwM2M Server | 
+| --                |             | Dev Mang & Serv Enab | Read              | LwM2M Server |
+| Sequential Updates| Update the value of an object, instance or resource without explicit request of the LwM2M Server | Information Reporting| Send              | LwM2M Client |
+| Heartbeat         | Extend the lifetime of a registration | Client Registration  | Update            |  LwM2M Client |
 
 The main propose of this project is to facilitate the testing process of
 [LwM2M Asset Tracker](https://github.com/MLopezJ/LwM2M-Asset-Tracker).
