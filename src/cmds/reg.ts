@@ -1,14 +1,14 @@
 import { getURN, type LwM2MDocument } from '@nordicsemiconductor/lwm2m-types'
 import coap from 'coap'
 import type { assetTracker } from '../assetTrackerV2'
-import { createResourceList } from '../utils/createResourceList'
+import { createResourceArray, type e } from '../utils/createResourceArray'
 import { getBracketFormat } from '../utils/getBracketFormat'
-import { getElementPath } from '../utils/getElementPath'
+import { getElementPath, type element } from '../utils/getElementPath'
 import { isObjectInAssetTracker } from '../utils/isObjectInAssetTracker'
 import { requestParser } from '../utils/requestParser'
+import type { elementType } from '../utils/typeOfElement'
 import { typeOfElement } from '../utils/typeOfElement'
 import { handshake } from './handshake'
-import type { lwm2mJson } from './register'
 
 const udpDefault = 'udp4'
 /**
@@ -119,13 +119,45 @@ export const readObjectValue = async (
 	const object = objectList[`${urn}` as keyof LwM2MDocument]
 	const elementType = typeOfElement(url)
 
-	const data: lwm2mJson = {
-		bn: url,
-		e:
-			elementType !== undefined
-				? createResourceList(object ?? {}, elementType, elementPath)
-				: [],
-	}
+	const data: lwm2mJsonContentFormat = createLwm2mJsonFormat(
+		url,
+		Math.floor(Date.now() / 1000),
+		object as Partial<assetTracker>,
+		elementType,
+		elementPath,
+	)
 
 	return Buffer.from(JSON.stringify(data))
+}
+
+export type lwm2mJsonContentFormat = {
+	bn: string
+	bt: number
+	e: e[]
+}
+
+/**
+ * Create the application/vnd.oma.lwm2m+json content format
+ * @see https://www.openmobilealliance.org/release/LightweightM2M/V1_0-20170208-A/OMA-TS-LightweightM2M-V1_0-20170208-A.pdf pag 55
+ */
+export const createLwm2mJsonFormat = (
+	url: string,
+	time: number,
+	object: undefined | Partial<assetTracker>,
+	elementType: elementType | undefined,
+	elementPath: element,
+): any => {
+	return {
+		bn: url,
+		bt: time,
+		e:
+			elementType !== undefined
+				? createResourceArray(
+						object ?? {},
+						elementType,
+						Math.floor(Date.now() / 1000),
+						elementPath,
+				  )
+				: [],
+	}
 }

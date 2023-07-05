@@ -6,6 +6,7 @@ import type { elementType } from './typeOfElement'
  */
 type value = {
 	n?: string
+	t?: number
 }
 
 type stringValue = {
@@ -21,14 +22,16 @@ type numericValue = {
 export type e = stringValue | numericValue | Record<string, never>
 
 /**
- * Transform imput into variable 'e' of the application/vnd.oma.lwm2m+json format.
+ * Transform imput into Resource Array (variable 'e') of the application/vnd.oma.lwm2m+json format.
+ * The Resource list is a JSON value array according to [SENML] with Array parameter extension (Object Link).
  *
  * @see https://www.openmobilealliance.org/release/LightweightM2M/V1_0-20170208-A/OMA-TS-LightweightM2M-V1_0-20170208-A.pdf pag 55
  *
  */
-export const createResourceList = (
+export const createResourceArray = (
 	values: object[] | object,
 	typeOfElement: elementType,
+	time: number,
 	resourcePath?: element,
 ): e[] => {
 	if (
@@ -37,24 +40,28 @@ export const createResourceList = (
 		resourcePath.resourceId !== undefined
 	) {
 		const obj = Array.isArray(values) ? values[resourcePath.instanceId] : values
-		return createFromResource(obj, resourcePath.resourceId)
+		return createFromResource(obj, resourcePath.resourceId, time)
 	}
 
 	if (Array.isArray(values)) {
-		return createFromMultipleInstance(values, typeOfElement) as e[]
+		return createFromMultipleInstance(values, typeOfElement, time) as e[]
 	} else {
-		return createFromSingleInstance(values, typeOfElement)
+		return createFromSingleInstance(values, typeOfElement, undefined, time)
 	}
 }
 
 /**
  * create resource list from a resource element
  */
-const createFromResource = (obj: object, resourceId: number) => {
+const createFromResource = (obj: object, resourceId: number, time: number) => {
 	const id = `${resourceId}` as keyof object
 	const value: string | number = obj[id]
 	const dataType = getDataType(typeof value)
-	return [{ [dataType]: value }] as e[]
+	const array = [{ [dataType]: value }] as e[]
+	if (time !== undefined && array[0] !== undefined) {
+		array[0].t = time
+	}
+	return array
 }
 
 /**
@@ -63,10 +70,11 @@ const createFromResource = (obj: object, resourceId: number) => {
 const createFromMultipleInstance = (
 	values: object[],
 	typeOfElement: elementType,
+	time: number,
 ) =>
 	values
 		.map((element: object, index: number) => {
-			return createMediaType(element, index, typeOfElement)
+			return createMediaType(element, index, typeOfElement, time)
 		})
 		.flat()
 
@@ -77,7 +85,8 @@ const createFromSingleInstance = (
 	values: object,
 	typeOfElement: elementType,
 	index = 0,
-) => createMediaType(values, index, typeOfElement) as e[]
+	time: number,
+) => createMediaType(values, index, typeOfElement, time) as e[]
 
 /**
  * create Media Type of application/vnd.oma.lwm2m+json.
@@ -87,6 +96,7 @@ const createMediaType = (
 	obj: object,
 	index: number,
 	typeOfElement: elementType,
+	time: number,
 ) => {
 	return Object.entries(obj).reduce(
 		(previus: object[], current: [string, string | number]) => {
@@ -96,13 +106,17 @@ const createMediaType = (
 
 			switch (typeOfElement) {
 				case 'object':
-					result = { n: `${index}/${current[0]}`, [dataType]: current[1] }
+					result = {
+						n: `${index}/${current[0]}`,
+						[dataType]: current[1],
+						t: time,
+					}
 					break
 				case 'instance':
-					result = { n: `${current[0]}`, [dataType]: current[1] }
+					result = { n: `${current[0]}`, [dataType]: current[1], t: time }
 					break
 				case 'resource':
-					result = { [dataType]: current[1] }
+					result = { [dataType]: current[1], t: time }
 					break
 			}
 

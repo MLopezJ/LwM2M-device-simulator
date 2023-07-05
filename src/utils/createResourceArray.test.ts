@@ -3,13 +3,15 @@ import {
 	Temperature_3303_urn,
 } from '@nordicsemiconductor/lwm2m-types'
 import { assetTrackerFirmwareV2, type assetTracker } from '../assetTrackerV2.js'
-import { createResourceList, type e } from './createResourceList.js'
+import { createResourceArray, type e } from './createResourceArray.js'
 
-describe('createResourceList', () => {
+describe('createResourceArray', () => {
 	let objectsList: assetTracker
+	let time: number
 
 	beforeEach(async () => {
 		objectsList = assetTrackerFirmwareV2
+		time = Math.floor(Date.now() / 1000)
 	})
 
 	describe('single instance', () => {
@@ -29,33 +31,35 @@ describe('createResourceList', () => {
 			}
 
 			const expected: e[] = [
-				{ n: '0/0', sv: 'Nordic' },
-				{ n: '0/1', sv: '00010' },
-				{ n: '0/2', sv: '00000' },
-				{ n: '0/3', sv: '0.0' },
-				{ n: '0/6', v: 1 },
-				{ n: '0/7', v: 0 },
-				{ n: '0/9', v: 80 },
-				{ n: '0/11', v: 0 },
-				{ n: '0/16', sv: 'U' },
-				{ n: '0/18', sv: '0.0' },
-				{ n: '0/19', sv: '0.0' },
+				{ n: '0/0', sv: 'Nordic', t: time },
+				{ n: '0/1', sv: '00010', t: time },
+				{ n: '0/2', sv: '00000', t: time },
+				{ n: '0/3', sv: '0.0', t: time },
+				{ n: '0/6', v: 1, t: time },
+				{ n: '0/7', v: 0, t: time },
+				{ n: '0/9', v: 80, t: time },
+				{ n: '0/11', v: 0, t: time },
+				{ n: '0/16', sv: 'U', t: time },
+				{ n: '0/18', sv: '0.0', t: time },
+				{ n: '0/19', sv: '0.0', t: time },
 			]
 
-			expect(createResourceList(input, 'object')).toMatchObject(expected)
+			expect(createResourceArray(input, 'object', time)).toMatchObject(expected)
 		})
 
 		it('Should return empty array when input is an empty object', () =>
-			expect(createResourceList({}, 'object').length).toBe(0))
+			expect(createResourceArray({}, 'object', time).length).toBe(0))
 
 		it('Should create the expected format from resource', () => {
 			const elementPath = { objectId: 3, instanceId: 0, resourceId: 0 }
-			const result = createResourceList(
-				objectsList[Device_3_urn] ?? {},
+			const resource = objectsList[Device_3_urn] ?? {}
+			const result = createResourceArray(
+				resource,
 				'resource',
+				time,
 				elementPath,
 			)
-			const expected: e[] = [{ sv: 'Nordic' }]
+			const expected: e[] = [{ sv: 'Nordic', t: time }]
 			expect(result).toMatchObject(expected)
 		})
 	})
@@ -77,50 +81,55 @@ describe('createResourceList', () => {
 				{ n: '2/5701', sv: 'Celsius degrees' },
 			]
 
-			const result = createResourceList(multipleInstance, 'object')
+			const result = createResourceArray(multipleInstance, 'object', time)
 			expect(result).toMatchObject(expected)
 			expect(result[0]).toHaveProperty('n', '0/5700')
 			expect(result[0]).toHaveProperty('v', 24.57)
+			expect(result[0]).toHaveProperty('t', time)
 			expect(result[5]).toHaveProperty('n', '2/5701')
 			expect(result[5]).toHaveProperty('sv', 'Celsius degrees')
+			expect(result[5]).toHaveProperty('t', time)
 		})
 
 		it('Should return empty array when input is an empty object', () => {
 			const emptyMultipleInstance = [{}]
-			const result = createResourceList(emptyMultipleInstance, 'object')
+			const result = createResourceArray(emptyMultipleInstance, 'object', time)
 			expect(result.length).toBe(0)
 		})
 
 		it('Should create the expected format from resource', () => {
 			const elementPath = { objectId: 3303, instanceId: 0, resourceId: 5700 }
-			const result = createResourceList(
-				objectsList[Temperature_3303_urn] ?? {},
+			const resource = objectsList[Temperature_3303_urn] ?? {}
+			const result = createResourceArray(
+				resource,
 				'resource',
+				time,
 				elementPath,
 			)
-			const expected: e[] = [{ v: 24.57 }]
+			const expected: e[] = [{ v: 24.57, t: time }]
 			expect(result).toMatchObject(expected)
 		})
 	})
 
 	it('Should create the expected format from instance', () => {
-		const result = createResourceList(
+		const result = createResourceArray(
 			objectsList[Device_3_urn] ?? {},
 			'instance',
+			time,
 		)
 
 		const expected: e[] = [
-			{ n: '0', sv: 'Nordic' },
-			{ n: '1', sv: '00010' },
-			{ n: '2', sv: '00000' },
-			{ n: '3', sv: '0.0' },
-			{ n: '6', v: 1 },
-			{ n: '7', v: 0 },
-			{ n: '9', v: 80 },
-			{ n: '11', v: 0 },
-			{ n: '16', sv: 'U' },
-			{ n: '18', sv: '0.0' },
-			{ n: '19', sv: '0.0' },
+			{ n: '0', sv: 'Nordic', t: time },
+			{ n: '1', sv: '00010', t: time },
+			{ n: '2', sv: '00000', t: time },
+			{ n: '3', sv: '0.0', t: time },
+			{ n: '6', v: 1, t: time },
+			{ n: '7', v: 0, t: time },
+			{ n: '9', v: 80, t: time },
+			{ n: '11', v: 0, t: time },
+			{ n: '16', sv: 'U', t: time },
+			{ n: '18', sv: '0.0', t: time },
+			{ n: '19', sv: '0.0', t: time },
 		]
 		expect(result).toMatchObject(expected)
 	})

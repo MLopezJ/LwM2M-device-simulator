@@ -3,11 +3,12 @@ import coap, { OutgoingMessage } from 'coap' // type Agent,
 import { type assetTracker } from '../assetTrackerV2.js'
 import { createParamsRequest } from '../utils/createParamsRequest.js'
 import { createRegisterQuery } from '../utils/createRegisterQuery.js'
-import { createResourceList, type e } from '../utils/createResourceList.js'
+import { createResourceArray } from '../utils/createResourceArray.js'
 import { getBracketFormat } from '../utils/getBracketFormat.js'
 import { getElementPath } from '../utils/getElementPath.js'
 import { requestParser, type request } from '../utils/requestParser.js'
 import { typeOfElement } from '../utils/typeOfElement.js'
+import { type lwm2mJsonContentFormat } from './reg.js'
 
 type registrationResponse = {
 	code: string
@@ -255,11 +256,6 @@ export const manageCoioteRequest = (
 	response.end(payload)
 }
 
-export type lwm2mJson = {
-	bn: string
-	e: e[]
-}
-
 /**
  * Read value from requested URL and transform it to vnd.oma.lwm2m+json format
  * @see https://www.openmobilealliance.org/release/LightweightM2M/V1_0-20170208-A/OMA-TS-LightweightM2M-V1_0-20170208-A.pdf pag 55
@@ -275,11 +271,12 @@ export const readObject = (url: string, objectList: assetTracker): Buffer => {
 	const object = objectList[`${urn}` as keyof LwM2MDocument]
 	const elementType = typeOfElement(url)
 
-	const data: lwm2mJson = {
+	const data: lwm2mJsonContentFormat = {
 		bn: url,
+		bt: 1,
 		e:
 			elementType !== undefined
-				? createResourceList(object ?? {}, elementType, elementPath)
+				? createResourceArray(object ?? {}, elementType, 1, elementPath)
 				: [],
 	}
 
