@@ -28,22 +28,20 @@ The main propose of this project is to facilitate the testing process of
 
 ## Specifications
 
-This device uses LwM2M as a protocol and provides a command line interface for its interaction. Here is one table with the operations from the LwM2M protocol implemented by command.
+This device uses LwM2M as a protocol and provides a command line interface for its interaction. This interface offer 7 different commands and here is one table with the operations from the LwM2M protocol implemented by each command.
 
 |Command   | Action Emulated      | LwM2M Interface |  LwM2M Operation  | Content Format |  
 | -- 	   |  --                  |  --             |   --              | --             |
 | clear    |                      |                 |                   |                |
 | register | Connection           |                 |                   |                |
-|--        | Client registration  | Register        |                   | Link Format |                
-|--        | Dev Mang & Serv Enab | Discover        |                   | LwM2M JSON |
-|--        | Dev Mang & Serv Enab | Read            |                   | LwM2M JSON |
-| list     |                      |                 |                   |
-| set      | Information Reporting| Send            | Sequential Update | SenML JSON
-| quit     |                      |                 |                   |
-| help     |                      |                 |                   |
-| heartbeat| Client Registration  | Update          | Heartbeat         | Link Format |
-
-
+|--        | Client registration  | Register        |                   | Link Format    |                
+|--        | Dev Mang & Serv Enab | Discover        |                   | LwM2M JSON     |
+|--        | Dev Mang & Serv Enab | Read            |                   | LwM2M JSON     |
+| list     |                      |                 |                   |                |
+| set      | Information Reporting| Send            | Sequential Update | SenML JSON     |
+| quit     |                      |                 |                   |                |
+| help     |                      |                 |                   |                |
+| heartbeat| Client Registration  | Update          | Heartbeat         | Link Format    |
 
 ## CLI reference
 
