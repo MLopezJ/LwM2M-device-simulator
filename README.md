@@ -28,20 +28,21 @@ The main propose of this project is to facilitate the testing process of
 
 ## Specifications
 
-This device uses LwM2M as a protocol and provides a command line interface for its interaction. Here is one table with the operations from LwM2M protocol implemented by command.
+This device uses LwM2M as a protocol and provides a command line interface for its interaction. Here is one table with the operations from the LwM2M protocol implemented by command.
 
-|Command   | LwM2M Interface      | LwM2M Operation | Action Emulated   | 
-| -- 	   |  --                  |  --             |   --              |
-| clear    |                      |                 |                   |
-| register |                      |                 | Connection        |
-|--        | Client registration  | Register        |                   |
-|--        | Dev Mang & Serv Enab | Discover        |                   |
-|--        | Dev Mang & Serv Enab | Read            |                   |
+|Command   | Action Emulated      | LwM2M Interface |  LwM2M Operation  | Content Format |  
+| -- 	   |  --                  |  --             |   --              | --             |
+| clear    |                      |                 |                   |                |
+| register | Connection           |                 |                   |                |
+|--        | Client registration  | Register        |                   | Link Format |                
+|--        | Dev Mang & Serv Enab | Discover        |                   | LwM2M JSON |
+|--        | Dev Mang & Serv Enab | Read            |                   | LwM2M JSON |
 | list     |                      |                 |                   |
-| set      | Information Reporting| Send            | Sequential Update |
+| set      | Information Reporting| Send            | Sequential Update | SenML JSON
 | quit     |                      |                 |                   |
 | help     |                      |                 |                   |
-| heartbeat| Client Registration  | Update          | Heartbeat         |
+| heartbeat| Client Registration  | Update          | Heartbeat         | Link Format |
+
 
 
 ## CLI reference
