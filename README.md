@@ -30,18 +30,19 @@ The main propose of this project is to facilitate the testing process of
 
 This device uses LwM2M as a protocol and provides a command line interface for its interaction. This interface offer 7 different commands and here is one table with the operations from the LwM2M protocol implemented by each command.
 
-|Command   | Action Emulated      | LwM2M Interface |  LwM2M Operation  | Content Format |  
-| -- 	   |  --                  |  --             |   --              | --             |
-| clear    |                      |                 |                   |                |
-| register | Connection           |                 |                   |                |
-|--        | Client registration  | Register        |                   | Link Format    |                
-|--        | Dev Mang & Serv Enab | Discover        |                   | LwM2M JSON     |
-|--        | Dev Mang & Serv Enab | Read            |                   | LwM2M JSON     |
-| list     |                      |                 |                   |                |
-| set      | Information Reporting| Send            | Sequential Update | SenML JSON     |
-| quit     |                      |                 |                   |                |
-| help     |                      |                 |                   |                |
-| heartbeat| Client Registration  | Update          | Heartbeat         | Link Format    |
+
+|Command   | Action Emulated      | LwM2M Operation     | LwM2M Interface       | Content Format |  
+| -- 	   |  --                  |  --                 |   --                  |  --            |
+| clear    |                      |                     |                       |                |
+| register | Connection           |                     |                       |                |
+|--        |                      | Client registration |  Register             | Link Format    |                
+|--        |                      | Discover            | Dev Mang & Serv Enab  | LwM2M JSON     |
+|--        |                      | Read                | Dev Mang & Serv Enab  | LwM2M JSON     |
+| list     |                      |                     |                       |                |
+| set      |  Sequential Update   | Send                |Information Reporting  | SenML JSON     |
+| quit     |                      |                     |                       |                |
+| help     |                      |                     |                       |                |
+| heartbeat| Heartbeat            | Update              |  Client Registration  | Link Format    |
 
 ## CLI reference
 
