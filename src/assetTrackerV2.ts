@@ -99,7 +99,7 @@ const device: Device_3 = {
 	'7': 0, // Power Source Voltage
 	'9': 80, // Battery Level
 	'11': 0, // error code
-	'13': 1651820400000, // Current Time
+	'13': 1651820400, // Current Time
 	'16': 'U', // Supported Binding and Modes
 	'18': '0.0', // hardware version
 	'19': '0.0', // software version
@@ -142,7 +142,7 @@ const location: Location_6 = {
 	'2': 0, // Altitude
 	'3': 0, // Radius
 	'4': '0', // Velocity
-	'5': 1651820400000, // Timestamp
+	'5': 1651820400, // Timestamp
 	'6': 0, // Speed
 }
 
@@ -151,7 +151,7 @@ const location: Location_6 = {
  */
 const temp: Temperature_3303 = [
 	{
-		'5518': 1651820400000,
+		'5518': 1651820400,
 		'5601': 23.51,
 		'5602': 23.51,
 		'5603': -40,
@@ -166,7 +166,7 @@ const temp: Temperature_3303 = [
  */
 const humidity: Humidity_3304 = [
 	{
-		'5518': 1651820400000,
+		'5518': 1651820400,
 		'5601': 31.06,
 		'5602': 31.06,
 		'5603': 0,
@@ -181,7 +181,7 @@ const humidity: Humidity_3304 = [
  */
 const pressure: Pressure_3323 = [
 	{
-		'5518': 1651820400000,
+		'5518': 1651820400,
 		'5601': 98.24,
 		'5602': 98.24,
 		'5603': 30,
@@ -198,7 +198,7 @@ const pushButton: Pushbutton_3347 = [
 	{
 		'5500': true,
 		'5501': 0,
-		'5518': 1651820400000,
+		'5518': 1651820400,
 		'5750': 'Push button 1',
 	},
 ]
