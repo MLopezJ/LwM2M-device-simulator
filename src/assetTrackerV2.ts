@@ -99,6 +99,7 @@ const device: Device_3 = {
 	'7': 0, // Power Source Voltage
 	'9': 80, // Battery Level
 	'11': 0, // error code
+	'13': 1651820400000, // Current Time
 	'16': 'U', // Supported Binding and Modes
 	'18': '0.0', // hardware version
 	'19': '0.0', // software version
