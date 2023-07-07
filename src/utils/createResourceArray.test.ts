@@ -127,6 +127,7 @@ describe('createResourceArray', () => {
 			{ n: '7', v: 0, t: time },
 			{ n: '9', v: 80, t: time },
 			{ n: '11', v: 0, t: time },
+			{ n: '13', v: 1651820400000, t: time },
 			{ n: '16', sv: 'U', t: time },
 			{ n: '18', sv: '0.0', t: time },
 			{ n: '19', sv: '0.0', t: time },

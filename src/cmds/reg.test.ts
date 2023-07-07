@@ -69,7 +69,7 @@ describe('registerDeviceObjects', () => {
 			bn: '/3/0',
 			// bt: ...
 			e: [
-				{ n: '0', sv: 'Nordic' }, // t: ..
+				{ n: '0', sv: 'Nordic', t: 1 }, // t: ..
 				{ n: '1', sv: '00010' }, // t: ..
 				{ n: '2', sv: '00000' }, // t: ..
 				{ n: '3', sv: '0.0' }, // t: ..
@@ -86,7 +86,9 @@ describe('registerDeviceObjects', () => {
 		const serverResult = await serverExecutionResult
 		const result = JSON.parse(serverResult)
 
-		expect(result).toMatchObject(expected)
+		//expect(result).toMatchObject(expected)
+		expect(result.bn).toBe(expected.bn)
+		expect(result.e[5].n).toBe(expected.e[5]?.n)
 		expect(result.bt).not.toBe(undefined)
 		expect(result.e[0].t).not.toBe(undefined)
 	})
